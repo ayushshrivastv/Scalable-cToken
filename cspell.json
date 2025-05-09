@@ -17,7 +17,8 @@
     "keypair",
     "localnet",
     "qrcode",
-    "animatables"
+    "animatables",
+    "sonner"
   ],
   "ignorePaths": [
     "node_modules/**",

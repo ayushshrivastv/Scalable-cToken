@@ -3,11 +3,11 @@
 import { useEffect, useState, useCallback } from 'react';
 import type { FC, CSSProperties, MouseEvent } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { useWalletModal } from '@solana/wallet-adapter-react-ui';
 import { WalletReadyState } from '@solana/wallet-adapter-base';
 import { Button } from '@/components/ui/button';
 import { formatPublicKey } from '@/lib/utils/solana';
 import { toast } from 'sonner';
+import { DirectWalletSelector } from './direct-wallet-selector';
 
 // Custom styles for the wallet button - Clean style without borders
 const walletButtonStyle: CSSProperties = {
@@ -45,8 +45,8 @@ export const WalletConnectButton: FC<WalletConnectButtonProps> = ({
   // Use client-side only rendering to avoid hydration mismatch
   const [isClient, setIsClient] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
-  const { publicKey, connected, connecting, disconnect, wallets, wallet, select } = useWallet();
-  const { visible, setVisible } = useWalletModal();
+  const [showWalletSelector, setShowWalletSelector] = useState(false);
+  const { publicKey, connected, connecting, disconnect, wallets, wallet } = useWallet();
   
   // Custom wallet button to avoid WalletNotReadyError
   const handleWalletClick = useCallback(() => {
@@ -54,23 +54,61 @@ export const WalletConnectButton: FC<WalletConnectButtonProps> = ({
       // Handle disconnect
       try {
         disconnect();
+        // Dispatch a custom event that the wallet provider will listen for
+        window.dispatchEvent(new Event('wallet-adapter-disconnect'));
       } catch (error) {
         console.error('Disconnect error:', error);
         toast.error('Failed to disconnect wallet');
       }
     } else {
-      // Open wallet selector
+      // Open our custom wallet selector
       setIsConnecting(true);
-      setVisible(true);
+      setShowWalletSelector(true);
     }
-  }, [connected, disconnect, setVisible]);
+  }, [connected, disconnect]);
   
-  // Reset connecting state when modal closes
+  // Close selector handler
+  const handleCloseSelector = useCallback(() => {
+    setShowWalletSelector(false);
+    // Allow a small delay before resetting connecting state
+    setTimeout(() => setIsConnecting(false), 100);
+  }, []);
+  
+  // Track wallet connection events
   useEffect(() => {
-    if (!visible && isConnecting) {
+    // Handle wallet connection event
+    const handleWalletConnected = () => {
       setIsConnecting(false);
+      setShowWalletSelector(false);
+      toast.success('Wallet connected successfully');
+    };
+    
+    // Handle wallet selection event
+    const handleWalletSelected = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      console.log('Wallet selected:', customEvent.detail?.walletName);
+      // Set connecting state for UI feedback
+      setIsConnecting(true);
+    };
+    
+    // Listen for wallet events
+    window.addEventListener('wallet-adapter-connect', handleWalletConnected);
+    window.addEventListener('wallet-selected', handleWalletSelected as EventListener);
+    
+    return () => {
+      window.removeEventListener('wallet-adapter-connect', handleWalletConnected);
+      window.removeEventListener('wallet-selected', handleWalletSelected as EventListener);
+    };
+  }, []);
+  
+  // Track wallet changes
+  useEffect(() => {
+    if (connected && wallet) {
+      // Dispatch a custom event that the wallet provider will listen for
+      window.dispatchEvent(new Event('wallet-adapter-connect'));
+      setShowWalletSelector(false);
     }
-  }, [visible, isConnecting]);
+  }, [connected, wallet]);
   
   // Check if any wallet adapters are ready
   const hasReadyWallet = wallets.some(wallet => 
@@ -127,21 +165,30 @@ export const WalletConnectButton: FC<WalletConnectButtonProps> = ({
   
   if (!connected) {
     return (
-      <div 
-        className="wallet-adapter-button-trigger" 
-        style={walletButtonStyle}
-        onMouseOver={handleMouseOver}
-        onMouseOut={handleMouseOut}
-      >
-        <button 
-          className="wallet-adapter-button-trigger" 
-          style={innerButtonStyle}
-          onClick={handleWalletClick}
-          disabled={connecting || isConnecting}
+      <>
+        <div 
+          className="wallet-adapter-button-trigger wallet-button-wrapper" 
+          style={walletButtonStyle}
+          onMouseOver={handleMouseOver}
+          onMouseOut={handleMouseOut}
         >
-          {buttonContent}
-        </button>
-      </div>
+          <button 
+            className="wallet-adapter-button-trigger wallet-button" 
+            style={innerButtonStyle}
+            onClick={handleWalletClick}
+            disabled={connecting || isConnecting}
+            aria-label="Select wallet"
+            type="button"
+          >
+            {buttonContent}
+          </button>
+        </div>
+        
+        {/* Our custom wallet selector modal */}
+        {showWalletSelector && (
+          <DirectWalletSelector onClose={handleCloseSelector} />
+        )}
+      </>
     );
   }
 

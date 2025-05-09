@@ -35,7 +35,7 @@ const Particles = () => {
   const isDark = theme === 'dark';
   const count = readmeData.length;
   const pointsRef = useRef<THREE.Points>(null);
-  const textRefs = useRef<THREE.Group[]>([]);
+  const textRefs = useRef<any[]>([]);
   
   // Create particle system
   const particles = useMemo(() => {
@@ -113,16 +113,19 @@ const Particles = () => {
         "-=2"
       );
       
-      timeline.fromTo(
-        textRef.material,
-        { opacity: 0 },
-        { 
-          opacity: 0.7,
-          duration: 1,
-          ease: "power2.inOut",
-        },
-        "<"
-      );
+      // Use type assertion for material access
+      if (textRef && (textRef as any).material) {
+        timeline.fromTo(
+          (textRef as any).material,
+          { opacity: 0 },
+          { 
+            opacity: 0.7,
+            duration: 1,
+            ease: "power2.inOut",
+          },
+          "<"
+        );
+      }
     });
     
     return () => {
@@ -151,12 +154,14 @@ const Particles = () => {
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
+            args={[particles.positions, 3]}
             count={particles.positions.length / 3}
             array={particles.positions}
             itemSize={3}
           />
           <bufferAttribute
             attach="attributes-color"
+            args={[particles.colors, 3]}
             count={particles.colors.length / 3}
             array={particles.colors}
             itemSize={3}
@@ -193,8 +198,8 @@ const Particles = () => {
               fontSize={0.2}
               anchorX="center"
               anchorY="middle"
-              opacity={0.7}
-              transparent
+              material-opacity={0.7}
+              material-transparent={true}
             >
               {text}
             </Text>

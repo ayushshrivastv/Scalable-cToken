@@ -23,6 +23,28 @@ The user interface is built to be intuitive across devices and accommodates both
 
 ![Screenshot 2025-05-09 at 2 23 20 PM](https://github.com/user-attachments/assets/235a9be9-e4fa-46f9-989e-1b1ce8cda931)
 
+## QR Codes & Airdrops
+
+### Solana Pay QR Codes
+The application leverages Solana Pay's QR code technology to create a seamless claiming experience:
+
+- **Dynamic Generation**: Each event automatically generates a unique QR code that encodes all necessary transaction data
+- **Instant Recognition**: Compatible with any standard QR scanner or smartphone camera
+- **Transaction Embedding**: QR codes contain pre-formatted transaction instructions for token claiming
+- **Wallet Connectivity**: Scanning initiates an immediate connection to the user's preferred Solana wallet
+- **Security Features**: Each QR code includes validation parameters to prevent unauthorized claims
+
+### Airdrop Capabilities
+The platform offers efficient airdrop functionality for event organizers:
+
+- **Bulk Distribution**: Send tokens to multiple recipients simultaneously with minimal gas costs
+- **Targeted Campaigns**: Create audience segments based on event participation or other criteria
+- **Scheduled Releases**: Set up timed airdrops to coincide with event milestones
+- **Claim Verification**: Monitor real-time claiming statistics through an intuitive dashboard
+- **Flexible Allocation**: Distribute different quantities of tokens to different participant tiers
+
+This combination of QR-based claiming and airdrop functionality makes the platform ideal for both in person events and remote participation scenarios.
+
 ## Setup & Installation
 
 To run this project locally, ensure you have Node.js 16 or later and a compatible Solana wallet (Phantom, Backpack, or Solflare). Clone the repository and install dependencies using:
@@ -90,7 +112,7 @@ npm run start       # Start production server
 4. Monitor real-time claim statistics
 
 ### Attendee Journey
-1. Scan event QR code with any smartphone
+1. Scan event QR code with any Phone
 2. Connect Solana wallet with a single tap
 3. Claim compressed token in seconds
 4. Instantly verify token in wallet

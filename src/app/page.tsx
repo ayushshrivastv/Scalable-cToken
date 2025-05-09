@@ -8,10 +8,10 @@ export default function Home() {
     <PageLayout>
       {/* Hero Section */}
       <section className="container mx-auto py-20 flex flex-col items-center justify-center flex-1 text-center animate-fade-in">
-        <div className="inline-block mb-8 bg-primary/10 px-4 py-2 rounded-full">
+        <div className="inline-block mb-8 bg-secondary px-4 py-2 rounded-full">
           <span className="text-primary font-medium text-sm">Powered by Light Protocol</span>
         </div>
-        <h1 className="text-5xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 animate-slide-up" style={{animationDelay: '100ms'}}>
+        <h1 className="text-5xl font-extrabold mb-6 text-primary animate-slide-up" style={{animationDelay: '100ms'}}>
           Scalable cToken Issuance via Solana Pay
         </h1>
         <p className="text-xl mb-12 max-w-2xl text-muted-foreground animate-slide-up" style={{animationDelay: '200ms'}}>
@@ -41,12 +41,12 @@ export default function Home() {
 
       {/* Features Section */}
       <section className="container mx-auto py-20 border-t border-border">
-        <h2 className="text-3xl font-bold mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70 animate-fade-in">
+        <h2 className="text-3xl font-bold mb-12 text-center text-primary animate-fade-in">
           Features
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="border border-border rounded-lg p-6 shadow-md transition-all duration-300 card-hover animate-slide-up" style={{animationDelay: '100ms'}}>
-            <div className="bg-primary/10 w-12 h-12 flex items-center justify-center rounded-full mb-4">
+            <div className="bg-secondary w-12 h-12 flex items-center justify-center rounded-full mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2V9zM4 7a1 1 0 000 2h6a1 1 0 000-2H4z" clipRule="evenodd" />
               </svg>
@@ -57,7 +57,7 @@ export default function Home() {
             </p>
           </div>
           <div className="border border-border rounded-lg p-6 shadow-md transition-all duration-300 card-hover animate-slide-up" style={{animationDelay: '200ms'}}>
-            <div className="bg-primary/10 w-12 h-12 flex items-center justify-center rounded-full mb-4">
+            <div className="bg-secondary w-12 h-12 flex items-center justify-center rounded-full mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z" clipRule="evenodd" />
               </svg>
@@ -68,7 +68,7 @@ export default function Home() {
             </p>
           </div>
           <div className="border border-border rounded-lg p-6 shadow-md transition-all duration-300 card-hover animate-slide-up" style={{animationDelay: '300ms'}}>
-            <div className="bg-primary/10 w-12 h-12 flex items-center justify-center rounded-full mb-4">
+            <div className="bg-secondary w-12 h-12 flex items-center justify-center rounded-full mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-primary" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
               </svg>
@@ -83,7 +83,7 @@ export default function Home() {
       
       {/* Call to Action */}
       <section className="container mx-auto py-16 text-center animate-fade-in">
-        <div className="max-w-3xl mx-auto bg-gradient-to-r from-primary/10 to-secondary/20 rounded-xl p-8 shadow-lg">
+        <div className="max-w-3xl mx-auto bg-secondary rounded-xl p-8 shadow-lg">
           <h2 className="text-2xl font-bold mb-4">Ready to get started?</h2>
           <p className="text-muted-foreground mb-6">Create your first proof-of-participation token in minutes.</p>
           <Link href={ROUTES.MINT}>

@@ -2,125 +2,93 @@
 
 A modern web application for creating and distributing compressed tokens on Solana blockchain using Solana Pay and Light Protocol's compression technology.
 
-![cToken Banner](./banner.png)
+**[Scalable cToken Page](https://scalable-c-token-ayushshrivastvs-projects.vercel.app/)**
 
+![Screenshot 2025-05-09 at 2 22 47 PM](https://github.com/user-attachments/assets/8b7532fd-1a86-4471-810d-b7e9b3484217)
 
-**[Scalable cToken App](https://scalable-c-token-ayushshrivastvs-projects.vercel.app/)**
+## Overview
 
-## Project Overview
+This project enables event organisers to mint digital proof-of-participation tokens that can be claimed by attendees through a simple scan of a QR code. These tokens are not just symbolic; they represent verifiable, compressed assets living entirely on-chain, making them ideal for airdrops, community rewards, or credentialing at scale.
 
-This application enables event organizers to create digital proof-of-participation tokens that can be distributed to attendees via QR codes. These tokens serve as digital mementos and can be claimed through Solana Pay integration.
+Built for the ZK Compression Track of the Superteam x Solana 1000x Hackathon, this application demonstrates how real-world events can benefit from blockchain technology without compromising on speed, cost, or user experience.
 
-### Key Features
+## Functionality
 
-- Compressed tokens using Light Protocol (significantly cheaper than traditional NFTs)
-- Solana Pay integration for QR code-based token distribution
-- Rich metadata support for event details
-- Modern, responsive UI for both desktop and mobile
+Organisers can log in with their Solana wallet, create a new event, and instantly mint compressed tokens tied to event metadata such as name, time, and location. Upon creation, the system generates a Solana Pay-compatible QR code, which attendees can scan to securely claim their tokens via their own wallet. Each token is issued using Light Protocol's compression infrastructure, drastically reducing storage costs while maintaining full L1 composability.
 
-## Development Setup
+The user interface is built to be intuitive across devices and accommodates both the event creator and attendee journeys—from minting to claiming—with minimal friction.
 
-### Prerequisites
+![Screenshot 2025-05-09 at 2 23 20 PM](https://github.com/user-attachments/assets/235a9be9-e4fa-46f9-989e-1b1ce8cda931)
 
-- Node.js 16+
-- npm
-- A Solana wallet (Phantom, Backpack, or Solflare)
+![Screenshot 2025-05-09 at 2 23 34 PM](https://github.com/user-attachments/assets/0c9807e2-f345-4c51-b399-fb8932c9bcb1)
 
-### Installation
+## Setup & Installation
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/ayushshrivastv/Scalable-cToken.git
-   cd Scalable-cToken
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Set up environment variables:
-   Create a `.env.local` file with:
-   ```
-   NEXT_PUBLIC_CLUSTER=devnet
-   NEXT_PUBLIC_RPC_ENDPOINT=https://api.devnet.solana.com
-   ```
-
-### Running the Application
-
-1. Start the development server:
-   ```bash
-   npm run dev
-   ```
-
-2. Open [http://localhost:3000](http://localhost:3000) in your browser
-
-3. Connect your Solana wallet to interact with the application
-
-## Application Usage
-
-### Creating Event Tokens
-
-1. Connect your Solana wallet
-2. Navigate to the "Create Event" page
-3. Fill out the event details form
-4. Click "Create Token"
-5. Share the generated QR code with your attendees
-
-### Claiming Tokens
-
-1. Scan the QR code provided by the event organizer
-2. Connect your Solana wallet
-3. Click "Claim Token"
-
-## Technology Stack
-
-- **Frontend**: Next.js 15, React 18, TypeScript
-- **UI**: Tailwind CSS with shadcn/ui components
-- **Blockchain**: Solana, Light Protocol for token compression
-- **Wallets**: Solana Wallet Adapter
-
-For detailed technical documentation, please see the [src/README.md](./src/README.md) file.
-
-## Available Scripts
+To run this project locally, ensure you have Node.js 16 or later and a compatible Solana wallet (Phantom, Backpack, or Solflare). Clone the repository and install dependencies using:
 
 ```bash
-# Development server
+git clone https://github.com/ayushshrivastv/Scalable-cToken.git
+cd Scalable-cToken
+npm install
+```
+
+Create a `.env.local` file in the root directory with the following environment variables:
+
+```
+NEXT_PUBLIC_CLUSTER=devnet
+NEXT_PUBLIC_RPC_ENDPOINT=https://api.devnet.solana.com
+```
+
+Then start the development server:
+
+```bash
 npm run dev
+```
 
-# Lint and type check
-npm run lint
+The application will be available at [http://localhost:3000](http://localhost:3000). Connect your wallet to begin creating or claiming tokens.
 
-# Format code
-npm run format
+## Using the Application
 
-# Build for production
-npm run build
+To create tokens, connect your wallet and navigate to the "Create Event" section. Fill out the event information, confirm the transaction, and a QR code will be generated for distribution. Attendees can scan this QR code using any QR reader or camera app, which will launch Solana Pay and guide them through the token claim process in a few simple steps.
 
-# Start production server
-npm run start
+The process is secure, affordable, and designed for high-volume usage at real-world events.
+
+## Technical Stack
+
+This application is built with Next.js 15, React 18, and TypeScript, using Tailwind CSS and shadcn/ui for the frontend. Blockchain functionality is powered by Solana, with Light Protocol handling compression. Wallet interactions are handled via the Solana Wallet Adapter framework.
+
+The architecture allows easy extensibility and is suitable for further enhancements such as event analytics, email confirmations, or token gating.
+
+For more in-depth technical details, refer to the [src/README.md](./src/README.md) file.
+
+## Development Scripts
+
+```bash
+npm run dev         # Run development server
+npm run lint        # Check for code issues
+npm run format      # Auto-format code
+npm run build       # Build application for production
+npm run start       # Start production server
 ```
 
 ## Deployment
 
-The application is currently deployed on Vercel. To deploy your own instance:
+The application is deployed on Vercel. To deploy your own version:
 
-1. Push your code to GitHub
-2. Import your repository on [Vercel](https://vercel.com/)
-3. Set these environment variables:
-   - `NEXT_PUBLIC_CLUSTER`: `devnet` or `mainnet-beta`
-   - `NEXT_PUBLIC_RPC_ENDPOINT`: `https://api.devnet.solana.com`
+1. Push your code to GitHub.
+2. Import the repository into [Vercel](https://vercel.com/).
+3. Add the required environment variables:
+   - `NEXT_PUBLIC_CLUSTER` (e.g., `devnet`)
+   - `NEXT_PUBLIC_RPC_ENDPOINT` (e.g., `https://api.devnet.solana.com`)
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License and is open for extension, experimentation, and contribution.
 
-## Acknowledgements
+## Special Thanks
 
-- [Light Protocol](https://lightprotocol.com/) for compression technology
-- [Solana](https://solana.com/) for blockchain infrastructure
-- [Next.js](https://nextjs.org/) and [shadcn/ui](https://ui.shadcn.com/)
+Gratitude to the teams behind Light Protocol and Solana for their exceptional infrastructure and tools. Additional thanks to the developers of Next.js, the creators of shadcn/ui, and the broader Solana community for their ongoing support and innovation.
 
 ---
 
-Built by Ayush Srivastava
+Crafted with care by Ayush Srivastava

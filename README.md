@@ -1,4 +1,4 @@
-# Scalable cToken Issuance via Solana Pay
+# Scalable cToken (Solana Pay)
 
 A modern web application for creating and distributing compressed tokens on Solana blockchain using Solana Pay and Light Protocol's compression technology.
 

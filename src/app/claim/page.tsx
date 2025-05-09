@@ -3,6 +3,7 @@
 import { PageLayout } from '@/components/layouts/page-layout';
 import { ROUTES } from '@/lib/constants';
 import { ClaimForm } from '@/components/claim/claim-form';
+import { Suspense } from 'react';
 
 export default function ClaimPage() {
   return (
@@ -40,7 +41,9 @@ export default function ClaimPage() {
           {/* Right column - Claim Form */}
           <div className="lg:col-span-2">
             <div className="border border-border rounded-lg p-6">
-              <ClaimForm />
+              <Suspense fallback={<div className="py-8 text-center">Loading claim form...</div>}>
+                <ClaimForm />
+              </Suspense>
             </div>
           </div>
         </div>

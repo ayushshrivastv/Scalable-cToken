@@ -44,7 +44,7 @@ const nextConfig = {
   },
   // Disable development mode specific features like component names
   devIndicators: {
-    buildActivityPosition: 'bottom-right',
+    position: 'bottom-right',
   },
 };
 

@@ -1,0 +1,23 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "Solana",
+    "organisers",
+    "Organisers",
+    "Superteam",
+    "Hackathon",
+    "devnet",
+    "Solflare",
+    "shadcn",
+    "Ayush",
+    "Srivastava",
+    "cToken"
+  ],
+  "ignorePaths": [
+    "node_modules/**",
+    "package-lock.json",
+    "package.json",
+    ".git/**"
+  ]
+}

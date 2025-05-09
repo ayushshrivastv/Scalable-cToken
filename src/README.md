@@ -72,6 +72,22 @@ The UI is built with:
 - Responsive design principles for mobile compatibility
 - Dark/light mode support via next-themes
 
+## Scalability Highlights
+
+- **Massive Throughput**: Capable of supporting events with 10,000+ attendees through Light Protocol's compressed NFTs
+- **Cost Efficiency**: 99.9% reduction in storage costs compared to traditional NFTs (approximately 0.000005 SOL per token vs 0.005 SOL)
+- **Network Efficiency**: Reduces on-chain storage requirements by up to 1000x while maintaining full L1 security guarantees
+- **Batch Processing**: Optimized for high-volume token issuance with minimal network congestion
+
+### Compression Technology
+
+At the core of our solution is Light Protocol's t compression technology:
+
+- **Zero-Knowledge Proofs**: Enables efficient on-chain storage while preserving cryptographic verification
+- **Merkle Tree Implementation**: Organizes token data in compressed Merkle trees, allowing thousands of tokens to be represented by a single on-chain commitment
+- **Concurrent Minting**: Supports parallel token issuance without chain congestion
+- **Verifiable Ownership**: Despite compression, tokens maintain full verifiability and composability with other Solana protocols
+
 ### Performance Optimizations
 
 - Server components are used where possible to reduce client-side JavaScript

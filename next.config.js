@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+// Trigger new Vercel deployment - Updated on May 9, 2025
 const nextConfig = {
   images: {
     unoptimized: true,

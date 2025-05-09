@@ -1,6 +1,6 @@
 "use client";
 
-import { type FC, type ReactNode, useMemo } from 'react';
+import { type FC, type ReactNode, useMemo, useState, useEffect } from 'react';
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import {
@@ -51,9 +51,19 @@ export const SolanaWalletProvider: FC<SolanaWalletProviderProps> = ({
     new SolflareWalletAdapter(),
   ], []);
 
+  // State to determine if the component has been mounted client-side
+  const [mounted, setMounted] = useState(false);
+
+  // Only enable wallet features after component is mounted client-side
+  useEffect(() => {
+    setMounted(true);
+    // This will run after hydration/mounting
+    return () => setMounted(false);
+  }, []);
+
   return (
     <ConnectionProvider endpoint={rpcEndpoint}>
-      <WalletProvider wallets={wallets} autoConnect>
+      <WalletProvider wallets={wallets} autoConnect={mounted}>
         <WalletModalProvider>
           {children}
         </WalletModalProvider>

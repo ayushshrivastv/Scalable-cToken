@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    /* Black and Grey color palette for light theme */
+    /* Light theme not used - we're focusing on dark theme */
     --background: 0 0% 100%;
     --foreground: 0 0% 0%;
     --card: 0 0% 100%;
@@ -24,39 +24,55 @@
     --border: 0 0% 85%;
     --input: 0 0% 85%;
     --ring: 0 0% 0%;
-    --radius: 0.75rem;
-    --chart-1: 0 0% 0%;
-    --chart-2: 0 0% 25%;
-    --chart-3: 0 0% 50%;
-    --chart-4: 0 0% 75%;
-    --chart-5: 0 0% 90%;
+    --radius: 0.5rem;
   }
 
-  .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+  /* Apple-inspired dark theme */
+  .dark, :root {
+    /* Dark background slightly lighter than pure black (like macOS) */
+    --background: 220 20% 2.5%;
+    --foreground: 210 6% 96%;
+    
+    /* Subtle dark card background with slight blue tint */
+    --card: 224 22% 5%;
+    --card-foreground: 210 6% 96%;
+    
+    /* Popover slightly more prominent than cards */
+    --popover: 224 25% 6%;
+    --popover-foreground: 210 6% 96%;
+    
+    /* Apple-like primary colors */
+    --primary: 206 100% 50%; /* Apple blue */
+    --primary-foreground: 0 0% 100%;
+    
+    /* Subtle secondary colors */
+    --secondary: 224 20% 8%;
+    --secondary-foreground: 210 6% 90%;
+    
+    /* Muted elements */
+    --muted: 225 20% 12%;
+    --muted-foreground: 220 10% 65%;
+    
+    /* Accent colors */
+    --accent: 213 90% 45%;
+    --accent-foreground: 0 0% 100%;
+    
+    /* Destructive elements */
+    --destructive: 0 90% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Subtle borders */
+    --border: 225 15% 14%;
+    --input: 225 15% 14%;
+    --ring: 206 100% 50%;
+    
+    /* Apple-like rounded corners - more subtle */
+    --radius: 0.5rem;
+    
+    /* Gradient colors used for highlights */
+    --gradient-1: 206 100% 50%;
+    --gradient-2: 252 100% 65%;
+    --gradient-3: 328 100% 65%;
   }
 }
 

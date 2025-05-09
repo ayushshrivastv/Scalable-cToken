@@ -2,7 +2,7 @@
 
 import type { FC, ReactNode } from 'react';
 import { ThemeProvider } from 'next-themes';
-import { SolanaWalletProvider } from '@/components/providers/wallet-provider';
+import { RouteConditionalWalletProvider } from '@/components/wallet/route-conditional-wallet-provider';
 import { Toaster } from '@/components/ui/sonner';
 import { DEFAULT_CLUSTER } from '@/lib/constants';
 
@@ -14,10 +14,10 @@ interface ClientProviderProps {
 const ClientProvider: FC<ClientProviderProps> = ({ children }) => {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-      <SolanaWalletProvider cluster={DEFAULT_CLUSTER}>
+      <RouteConditionalWalletProvider cluster={DEFAULT_CLUSTER === 'localnet' ? 'devnet' : DEFAULT_CLUSTER}>
         {children}
         <Toaster position="bottom-right" />
-      </SolanaWalletProvider>
+      </RouteConditionalWalletProvider>
     </ThemeProvider>
   );
 };

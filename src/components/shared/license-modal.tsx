@@ -7,7 +7,7 @@ interface LicenseModalProps {
   onClose: () => void;
 }
 
-export const LicenseModal: FC<LicenseModalProps> = ({ isOpen, onClose }) => {
+export const LicenseModal: FC<LicenseModalProps> = ({ isOpen, onClose }: LicenseModalProps) => {
   if (!isOpen) return null;
 
   return (
@@ -31,11 +31,11 @@ export const LicenseModal: FC<LicenseModalProps> = ({ isOpen, onClose }) => {
         {/* License content with whiteboard style */}
         <div className="p-6 bg-white text-black font-mono overflow-y-auto max-h-[70vh] whitespace-pre-wrap">
           <div className="border-l-4 border-gray-900 pl-4 py-1">
-            <p className="mb-4">MIT License</p>
-            
-            <p className="mb-4">Copyright (c) 2025 Ayush Srivastava</p>
-            
-            <p className="mb-4">
+            <pre className="whitespace-pre-wrap">
+MIT License
+
+Copyright (c) 2025 Ayush Srivastava
+
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
@@ -52,7 +52,8 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.</p>
+SOFTWARE.
+            </pre>
           </div>
         </div>
       </div>

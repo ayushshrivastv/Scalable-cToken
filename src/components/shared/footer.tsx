@@ -48,7 +48,7 @@ export const Footer: FC<FooterProps> = ({ className = '' }) => {
           </div>
         </div>
         <div className="pt-4 border-t border-border/50 text-center text-xs">
-          <p>Built for the Solana 1000x Hackathon - ZK Compression Track | &copy; {currentYear} Ayush Srivastava</p>
+          <p>&copy; {currentYear} Ayush Srivastava</p>
         </div>
       </div>
       <LicenseModal isOpen={isLicenseModalOpen} onClose={() => setIsLicenseModalOpen(false)} />

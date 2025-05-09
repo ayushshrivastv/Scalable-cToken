@@ -8,7 +8,7 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo, useCallback } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { PublicKey } from '@solana/web3.js';
@@ -25,7 +25,7 @@ import { Keypair } from '@solana/web3.js';
  * ClaimForm Component
  * Handles the token claiming process, supporting both direct input and URL-based claiming
  */
-export function ClaimForm() {
+export const ClaimForm = memo(function ClaimForm() {
   // Access to the user's Solana wallet
   const { publicKey, connected, signTransaction, sendTransaction } = useWallet();
   // Get URL parameters (used for direct claim links)
@@ -85,7 +85,7 @@ export function ClaimForm() {
    * 
    * @param e - Form event object
    */
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Verify wallet connection
@@ -160,7 +160,7 @@ export function ClaimForm() {
       // Always reset submission state regardless of outcome
       setIsSubmitting(false);
     }
-  };
+  }, [publicKey, connected, eventDetails, claimCode, router]);
 
   /**
    * Success view shown after a successful token claim
@@ -168,7 +168,7 @@ export function ClaimForm() {
    */
   if (claimSuccess) {
     return (
-      <Card className="w-full card-hover animate-fade-in">
+      <Card className="bg-black border-0 text-white w-full">
         <CardHeader>
           <CardTitle className="text-center text-green-600 flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -178,7 +178,7 @@ export function ClaimForm() {
           </CardTitle>
         </CardHeader>
         <CardContent className="text-center">
-          <div className="flex justify-center mb-6 animate-slide-up" style={{animationDelay: '100ms'}}>
+          <div className="flex justify-center mb-6 " style={{animationDelay: '100ms'}}>
             <div className="bg-green-50 rounded-full p-4 shadow-md">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -191,18 +191,18 @@ export function ClaimForm() {
           <p className="font-semibold text-xl mb-6">
             {eventDetails?.name || "Event Token"}
           </p>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-zinc-300">
             The token has been added to your wallet. You can view it in your profile.
           </p>
         </CardContent>
-        <CardFooter className="flex justify-center gap-4 animate-slide-up" style={{animationDelay: '200ms'}}>
+        <CardFooter className="flex justify-center gap-4 " style={{animationDelay: '200ms'}}>
           <Button variant="outline" className="transition-all hover:bg-secondary" onClick={() => router.push('/')}>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
             </svg>
             Back to Home
           </Button>
-          <Button onClick={() => router.push('/profile')} className="transition-all hover:bg-primary/90">
+          <Button onClick={() => router.push('/profile')} className="transition-all bg-white hover:bg-gray-100 text-black border border-gray-300">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
             </svg>
@@ -214,10 +214,10 @@ export function ClaimForm() {
   }
 
   return (
-    <Card className="w-full card-hover animate-fade-in">
+    <Card className="bg-black border-0 text-white w-full">
       <CardHeader>
         <CardTitle className="flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-primary" viewBox="0 0 20 20" fill="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-zinc-300" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M5 5a3 3 0 015-2.236A3 3 0 0114.83 6H16a2 2 0 110 4h-5V9a1 1 0 10-2 0v1H4a2 2 0 110-4h1.17C5.06 5.687 5 5.35 5 5zm4 1V5a1 1 0 10-1 1h1zm3 0a1 1 0 10-1-1v1h1z" clipRule="evenodd" />
             <path d="M9 11H3v5a2 2 0 002 2h4v-7zM11 18h4a2 2 0 002-2v-5h-6v7z" />
           </svg>
@@ -226,28 +226,28 @@ export function ClaimForm() {
       </CardHeader>
       <CardContent>
         {error && (
-          <Alert variant="destructive" className="mb-4 animate-fade-in">
-            <AlertTitle className="flex items-center">
+          <Alert variant="destructive" className="mb-4 ">
+            <AlertTitle className="text-white flex items-center">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
               Error
             </AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
+            <AlertDescription className="text-zinc-300">{error}</AlertDescription>
           </Alert>
         )}
         
         {eventDetails ? (
-          <div className="space-y-4 animate-fade-in">
-            <div className="p-4 bg-muted rounded-lg shadow-sm transition-all hover:shadow-md">
+          <div className="space-y-4 ">
+            <div className="p-4 bg-zinc-900 rounded-lg shadow-sm transition-all hover:shadow-md">
               <p className="font-medium flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-primary" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-zinc-300" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
                 </svg>
                 Event: {eventDetails.name}
               </p>
-              <p className="text-sm text-muted-foreground mt-1 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-muted-foreground/70" viewBox="0 0 20 20" fill="currentColor">
+              <p className="text-sm text-zinc-300 mt-1 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2 text-zinc-400" viewBox="0 0 20 20" fill="currentColor">
                   <path d="M3 12v3c0 1.657 3.134 3 7 3s7-1.343 7-3v-3c0 1.657-3.134 3-7 3s-7-1.343-7-3z" />
                   <path d="M3 7v3c0 1.657 3.134 3 7 3s7-1.343 7-3V7c0 1.657-3.134 3-7 3S3 8.657 3 7z" />
                   <path d="M17 5c0 1.657-3.134 3-7 3S3 6.657 3 5s3.134-3 7-3 7 1.343 7 3z" />
@@ -256,17 +256,17 @@ export function ClaimForm() {
               </p>
             </div>
             
-            <div className="text-center py-2 animate-slide-up" style={{animationDelay: '100ms'}}>
-              <p className="text-sm text-muted-foreground">
+            <div className="text-center py-2 " style={{animationDelay: '100ms'}}>
+              <p className="text-sm text-zinc-300">
                 Connect your wallet and click the button below to claim your token
               </p>
             </div>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="claimCode">Claim Code or Token Address</Label>
-              <Input
+            <div className="space-y-2 text-white">
+              <Label htmlFor="claimCode" className="text-white">Claim Code or Token Address</Label>
+              <Input className="bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500"
                 id="claimCode"
                 placeholder="Enter claim code or paste token address"
                 value={claimCode}
@@ -281,7 +281,7 @@ export function ClaimForm() {
         <Button 
           onClick={handleSubmit} 
           disabled={isSubmitting || !connected}
-          className="relative transition-all hover:bg-primary/90"
+          className="relative transition-all bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-600"
         >
           {isSubmitting ? (
             <span className="flex items-center">
@@ -303,4 +303,4 @@ export function ClaimForm() {
       </CardFooter>
     </Card>
   );
-}
+});

@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
+  compiler: {
+    // Disable component name data attributes
+    reactRemoveProperties: { properties: ['^data-component-name$'] },
+  },
   images: {
     unoptimized: true,
     domains: [
@@ -36,6 +41,10 @@ const nextConfig = {
   },
   eslint: {
     ignoreDuringBuilds: true,
+  },
+  // Disable development mode specific features like component names
+  devIndicators: {
+    buildActivityPosition: 'bottom-right',
   },
 };
 

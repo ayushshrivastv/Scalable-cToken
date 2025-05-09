@@ -7,7 +7,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import React, { useState, memo, useCallback } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -56,7 +56,7 @@ const formSchema = z.object({
  * Handles the token creation process with a multi-step form interface
  * Includes form validation, on-chain token creation, and QR code generation
  */
-export function MintForm() {
+export const MintForm = memo(function MintForm() {
   const { publicKey, connected, signTransaction, sendTransaction } = useWallet();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("event");
@@ -203,27 +203,33 @@ export function MintForm() {
     }
   };
 
-  // Handle tab changes
-  const handleTabChange = (value: string) => {
+  // Handle tab changes - memoized to prevent unnecessary re-renders
+  const handleTabChange = useCallback((value: string) => {
     setActiveTab(value);
-  };
+  }, []);
 
-  // Handle next button in event details tab
-  const handleNextTab = () => {
-    const eventFields = ["eventName", "eventDescription", "eventDate", "organizerName"];
-    const isValid = eventFields.every(field => {
-      const result = form.trigger(field as keyof FormValues);
-      return result;
-    });
-
-    if (isValid) {
-      setActiveTab("token");
+  // Handle next button in event details tab - memoized to prevent unnecessary re-renders
+  const handleNextTab = useCallback(() => {
+    // Validate the current tab fields
+    const eventFields = ['eventName', 'eventDescription', 'eventDate', 'organizerName'] as const;
+    
+    let hasErrors = false;
+    for (const field of eventFields) {
+      const value = form.getValues(field);
+      if (!value) {
+        form.setError(field, { message: 'This field is required' });
+        hasErrors = true;
+      }
     }
-  };
+    
+    if (!hasErrors) {
+      setActiveTab('token');
+    }
+  }, [form]);
 
   if (mintSuccess && qrCodeUrl) {
     return (
-      <div className="space-y-6 animate-fade-in">
+      <div className="space-y-6 ">
         <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-green-800 animate-slide-up">
           <h3 className="font-semibold text-lg flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -237,27 +243,27 @@ export function MintForm() {
         <Card className="p-6 card-hover animate-slide-up" style={{animationDelay: '100ms'}}>
           <div className="text-center space-y-4">
             <h3 className="text-xl font-semibold flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-primary" viewBox="0 0 20 20" fill="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-700" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
               </svg>
               Claim QR Code
             </h3>
-            <p className="text-muted-foreground">Attendees can scan this QR code with any Solana Pay compatible wallet</p>
+            <p className="text-gray-700">Attendees can scan this QR code with any Solana Pay compatible wallet</p>
             
             <div className="flex justify-center my-6">
               <div className="border border-border p-4 rounded-lg inline-block bg-white shadow-lg transition-all hover:shadow-xl">
-                <img src={qrCodeUrl} alt="Solana Pay QR Code" width={250} height={250} className="animate-fade-in" />
+                <img src={qrCodeUrl} alt="Solana Pay QR Code" width={250} height={250} className="" />
               </div>
             </div>
             
             <div className="bg-muted p-3 rounded-md text-sm">
               <p className="font-medium mb-1">💡 How It Works</p>
-              <p className="text-muted-foreground text-xs">This QR code contains a Solana Pay URL that will trigger a token claim transaction when scanned with a compatible wallet app like Phantom or Solflare.</p>
+              <p className="text-gray-700 text-xs">This QR code contains a Solana Pay URL that will trigger a token claim transaction when scanned with a compatible wallet app like Phantom or Solflare.</p>
             </div>
             
             {claimUrl && (
               <div className="mt-4">
-                <p className="text-sm text-muted-foreground mb-2">Claim URL:</p>
+                <p className="text-sm text-gray-700 mb-2">Claim URL:</p>
                 <div className="bg-muted p-2 rounded text-sm overflow-x-auto">
                   <code>{claimUrl}</code>
                 </div>
@@ -280,7 +286,7 @@ export function MintForm() {
                 </svg>
                 Download QR Code
               </Button>
-              <Button onClick={() => router.push('/')} className="transition-all hover:bg-primary/90">
+              <Button onClick={() => router.push('/')} className="transition-all bg-white hover:bg-gray-100 text-black border border-gray-300">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clipRule="evenodd" />
                 </svg>
@@ -295,11 +301,11 @@ export function MintForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 animate-fade-in">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <Tabs value={activeTab} onValueChange={handleTabChange}>
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="event">Event Details</TabsTrigger>
-            <TabsTrigger value="token">Token Configuration</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 bg-zinc-800/50 border-0">
+            <TabsTrigger value="event" className="data-[state=active]:bg-zinc-900 data-[state=active]:text-white text-zinc-400">Event Details</TabsTrigger>
+            <TabsTrigger value="token" className="data-[state=active]:bg-zinc-900 data-[state=active]:text-white text-zinc-400">Token Configuration</TabsTrigger>
           </TabsList>
           
           {/* Event Details Tab */}
@@ -309,12 +315,12 @@ export function MintForm() {
               name="eventName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Event Name</FormLabel>
+                  <FormLabel className="text-white">Event Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Solana Hackathon 2025" {...field} />
+                    <Input className="bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500" placeholder="Solana Hackathon 2025" {...field} />
                   </FormControl>
-                  <FormDescription>The name of your event</FormDescription>
-                  <FormMessage />
+                  <FormDescription className="text-zinc-400">The name of your event</FormDescription>
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
@@ -324,16 +330,16 @@ export function MintForm() {
               name="eventDescription"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Event Description</FormLabel>
+                  <FormLabel className="text-white">Event Description</FormLabel>
                   <FormControl>
                     <Textarea 
+                      className="bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500 min-h-[100px]"
                       placeholder="Join us for an exciting hackathon..." 
-                      className="min-h-[100px]"
                       {...field} 
                     />
                   </FormControl>
-                  <FormDescription>Describe your event</FormDescription>
-                  <FormMessage />
+                  <FormDescription className="text-zinc-400">Describe your event</FormDescription>
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
@@ -344,11 +350,11 @@ export function MintForm() {
                 name="eventDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Event Date</FormLabel>
+                    <FormLabel className="text-white">Event Date</FormLabel>
                     <FormControl>
-                      <Input type="date" {...field} />
+                      <Input className="bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500" type="date" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-red-400" />
                   </FormItem>
                 )}
               />
@@ -358,11 +364,11 @@ export function MintForm() {
                 name="eventLocation"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Location (Optional)</FormLabel>
+                    <FormLabel className="text-white">Location (Optional)</FormLabel>
                     <FormControl>
-                      <Input placeholder="San Francisco, CA" {...field} />
+                      <Input className="bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500" placeholder="San Francisco, CA" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-red-400" />
                   </FormItem>
                 )}
               />
@@ -374,11 +380,11 @@ export function MintForm() {
                 name="organizerName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Organizer Name</FormLabel>
+                    <FormLabel className="text-white">Organizer Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Solana Foundation" {...field} />
+                      <Input className="bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500" placeholder="Solana Foundation" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-red-400" />
                   </FormItem>
                 )}
               />
@@ -388,20 +394,18 @@ export function MintForm() {
                 name="maxAttendees"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Max Attendees (Optional)</FormLabel>
+                    <FormLabel className="text-white">Max Attendees (Optional)</FormLabel>
                     <FormControl>
-                      <Input type="number" min="1" {...field} />
+                      <Input className="bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500" type="number" min="1" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-red-400" />
                   </FormItem>
                 )}
               />
             </div>
             
             <div className="flex justify-end mt-6">
-              <Button type="button" onClick={handleNextTab}>
-                Next: Token Configuration
-              </Button>
+              <Button type="button" variant="outline" className="bg-zinc-800 text-white border-zinc-700 hover:bg-zinc-700 hover:text-white" onClick={() => handleNextTab()}>Next: Token Configuration</Button>
             </div>
           </TabsContent>
           
@@ -412,12 +416,12 @@ export function MintForm() {
               name="tokenName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Token Name</FormLabel>
+                  <FormLabel className="text-white">Token Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Solana Hackathon Token" {...field} />
+                    <Input className="bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500" placeholder="Solana Hackathon Token" {...field} />
                   </FormControl>
-                  <FormDescription>The name of your token</FormDescription>
-                  <FormMessage />
+                  <FormDescription className="text-zinc-400">The name of your token</FormDescription>
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
@@ -428,11 +432,11 @@ export function MintForm() {
                 name="tokenSymbol"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Token Symbol</FormLabel>
+                    <FormLabel className="text-white">Token Symbol</FormLabel>
                     <FormControl>
-                      <Input placeholder="POP" {...field} />
+                      <Input className="bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500" placeholder="POP" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-red-400" />
                   </FormItem>
                 )}
               />
@@ -442,12 +446,12 @@ export function MintForm() {
                 name="tokenSupply"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Token Supply</FormLabel>
+                    <FormLabel className="text-white">Token Supply</FormLabel>
                     <FormControl>
-                      <Input type="number" min="1" {...field} />
+                      <Input className="bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500" type="number" min="1" {...field} />
                     </FormControl>
-                    <FormDescription>Number of tokens to mint</FormDescription>
-                    <FormMessage />
+                    <FormDescription className="text-zinc-400">Number of tokens to mint</FormDescription>
+                    <FormMessage className="text-red-400" />
                   </FormItem>
                 )}
               />
@@ -458,15 +462,15 @@ export function MintForm() {
               name="tokenDescription"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Token Description</FormLabel>
+                  <FormLabel className="text-white">Token Description</FormLabel>
                   <FormControl>
                     <Textarea 
+                      className="bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500 min-h-[100px]"
                       placeholder="This token verifies attendance at the Solana Hackathon 2025" 
-                      className="min-h-[100px]"
                       {...field} 
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
@@ -476,24 +480,24 @@ export function MintForm() {
               name="tokenImage"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Token Image URL (Optional)</FormLabel>
+                  <FormLabel className="text-white">Token Image URL (Optional)</FormLabel>
                   <FormControl>
-                    <Input placeholder="https://example.com/image.png" {...field} />
+                    <Input className="bg-zinc-900/50 border-zinc-800 text-white placeholder:text-zinc-500" placeholder="https://example.com/image.png" {...field} />
                   </FormControl>
-                  <FormDescription>URL to an image for your token</FormDescription>
-                  <FormMessage />
+                  <FormDescription className="text-zinc-400">URL to an image for your token</FormDescription>
+                  <FormMessage className="text-red-400" />
                 </FormItem>
               )}
             />
             
             <div className="flex justify-between mt-6">
-              <Button type="button" variant="outline" onClick={() => setActiveTab("event")}>
+              <Button type="button" variant="outline" className="bg-zinc-800 text-white border-zinc-700 hover:bg-zinc-700 hover:text-white" onClick={() => setActiveTab("event")}>
                 Back to Event Details
               </Button>
               <Button 
                 type="submit" 
                 disabled={isSubmitting} 
-                className="relative transition-all hover:bg-primary/90"
+                className="relative transition-all bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-600"
               >
                 {isSubmitting ? (
                   <>
@@ -520,4 +524,4 @@ export function MintForm() {
       </form>
     </Form>
   );
-}
+});

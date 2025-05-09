@@ -12,7 +12,12 @@
     "shadcn",
     "Ayush",
     "Srivastava",
-    "cToken"
+    "cToken",
+    "Keypair",
+    "keypair",
+    "localnet",
+    "qrcode",
+    "animatables"
   ],
   "ignorePaths": [
     "node_modules/**",

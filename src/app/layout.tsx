@@ -1,11 +1,23 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import ClientProvider from "@/components/providers/client-provider";
 // import { ThemeToggleButton } from "@/components/ui/theme-toggle-button"; // Removed - now in shared/header
 import { APP_NAME, APP_DESCRIPTION } from '@/lib/constants';
 
-const inter = Inter({ subsets: ["latin"] });
+// Primary font - Inter with variable weights
+const inter = Inter({ 
+  subsets: ["latin"],
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+// Secondary font - Outfit for headings
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: '--font-outfit',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: APP_NAME,
@@ -18,8 +30,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>{/* Added suppressHydrationWarning for next-themes */}
-      <body className={`${inter.className} flex flex-col min-h-screen`}>
+    <html lang="en" suppressHydrationWarning className={`${inter.variable} ${outfit.variable}`}>
+      <body className="flex flex-col min-h-screen font-sans antialiased">
         <ClientProvider>
           {/* Header removed - now part of PageLayout via shared/header */}
           <main className="flex-grow">

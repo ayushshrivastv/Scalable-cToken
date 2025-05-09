@@ -13,7 +13,7 @@ interface ClientProviderProps {
 // This component wraps client-side providers that can't be used in server components
 const ClientProvider: FC<ClientProviderProps> = ({ children }) => {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
       <SolanaWalletProvider cluster={DEFAULT_CLUSTER}>
         {children}
         <Toaster position="bottom-right" />

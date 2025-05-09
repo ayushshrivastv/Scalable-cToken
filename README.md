@@ -43,7 +43,9 @@ The platform offers efficient airdrop functionality for event organizers:
 - **Claim Verification**: Monitor real-time claiming statistics through an intuitive dashboard
 - **Flexible Allocation**: Distribute different quantities of tokens to different participant tiers
 
-This combination of QR-based claiming and airdrop functionality makes the platform ideal for both in person events and remote participation scenarios.
+This combination of QR-based claiming and airdrop functionality makes the platform ideal for both in-person events and remote participation scenarios.
+
+**[Try the live demo here](https://scalable-c-token-ayushshrivastvs-projects.vercel.app/)**
 
 ## Setup & Installation
 

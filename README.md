@@ -1,5 +1,7 @@
 # Scalable cToken (Solana Pay)
 
+Scalable cToken Distribution with Solana Pay and ZK Compression on Solana
+
 A high-throughput solution for creating and distributing compressed proof-of-participation tokens at scale on Solana blockchain using Solana Pay and Light Protocol's compression technology.
 
 **[Scalable cToken Page](https://scalable-c-token-ayushshrivastvs-projects.vercel.app/)**
@@ -30,7 +32,7 @@ The user interface is built to be intuitive across devices and accommodates both
 ![Screenshot 2025-05-09 at 2 23 20 PM](https://github.com/user-attachments/assets/235a9be9-e4fa-46f9-989e-1b1ce8cda931)
 ### Compression Technology
 
-At the core of our solution is Light Protocol's state-of-the-art compression technology:
+At the core of our solution is Light Protocol's t compression technology:
 
 - **Zero-Knowledge Proofs**: Enables efficient on-chain storage while preserving cryptographic verification
 - **Merkle Tree Implementation**: Organizes token data in compressed Merkle trees, allowing thousands of tokens to be represented by a single on-chain commitment
@@ -133,3 +135,5 @@ Gratitude to the teams behind Light Protocol and Solana for their exceptional in
 ---
 
 Crafted with care by Ayush Srivastava
+
+*Submission for the 1000x Hackathon - Best cToken Integration for Solana Pay*

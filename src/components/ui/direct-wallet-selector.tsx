@@ -36,7 +36,7 @@ export function DirectWalletSelector({
     wallet.readyState === WalletReadyState.Loadable
   );
   
-  // Simply select a wallet when clicked
+  // Enhanced wallet selection with more reliable handling
   const handleWalletClick = useCallback((walletName: WalletName) => {
     try {
       console.log('Selecting wallet:', walletName);
@@ -47,18 +47,30 @@ export function DirectWalletSelector({
       // This tells the wallet adapter which wallet to use
       select(walletName);
       
-      // The wallet adapter will handle the rest automatically:
-      // - Show the wallet's connection UI
-      // - Handle approval/rejection
-      // - Manage the connection
+      // Wait briefly before checking wallet availability
+      setTimeout(() => {
+        // Get the selected wallet from the current list
+        const selectedWallet = wallets.find(w => w.adapter.name === walletName);
+        
+        if (selectedWallet?.readyState === WalletReadyState.NotDetected) {
+          toast.error(`${walletName} wallet not detected. Please install it first.`);
+        } else if (selectedWallet?.readyState === WalletReadyState.Unsupported) {
+          toast.error(`${walletName} wallet is not supported on this device.`);
+        }
+        
+        // The wallet adapter will handle the rest automatically:
+        // - Show the wallet's connection UI
+        // - Handle approval/rejection
+        // - Manage the connection
+      }, 500);
       
       // After successful connection, the connected state will change
       // which we watch in another effect
     } catch (error) {
       console.error('Error selecting wallet:', error);
-      toast.error('Failed to select wallet');
+      toast.error('Failed to select wallet. Please try again.');
     }
-  }, [select]);
+  }, [select, wallets]);
   
   // Close the modal when connection succeeds
   useEffect(() => {

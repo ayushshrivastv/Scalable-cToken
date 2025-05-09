@@ -65,10 +65,25 @@ export const SolanaWalletProvider: FC<SolanaWalletProviderProps> = ({
     new CloverWalletAdapter()
   ], []);
 
-  // Handle connection errors
+  // Handle connection errors with more specific messages
   const onError = (error: Error) => {
     console.error('Wallet error:', error);
-    toast.error(`Wallet error: ${error.message}`);
+    
+    // Provide more user-friendly error messages
+    if (error.name === 'WalletNotSelectedError') {
+      toast.error('Please select a wallet to continue');
+    } else if (error.name === 'WalletNotConnectedError') {
+      toast.error('Wallet not connected. Please try connecting again');
+    } else if (error.name === 'WalletConnectionError') {
+      toast.error('Failed to connect to wallet. Please try again');
+    } else if (error.name === 'WalletDisconnectedError') {
+      toast.error('Wallet disconnected');
+    } else if (error.name === 'WalletTimeoutError') {
+      toast.error('Wallet connection timed out. Please try again');
+    } else {
+      toast.error(`Wallet error: ${error.message}`);
+    }
+    
     setConnecting(false); // Reset connecting state on error
   };
 

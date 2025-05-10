@@ -4,9 +4,10 @@ Scalable cToken Distribution with Solana Pay and ZK Compression on Solana
 
 A high throughput solution for creating and distributing compressed proof-of-participation tokens at scale on Solana blockchain using Solana Pay and Light Protocol's compression technology.
 
-**[Scalable cToken Page](https://scalable-c-token-ayushshrivastvs-projects.vercel.app/)**
+ **[Scalable cToken Page](https://scalable-c-token-ayushshrivastvs-projects.vercel.app/)**
 
-![Screenshot 2025-05-09 at 2 22 47 PM](https://github.com/user-attachments/assets/8b7532fd-1a86-4471-810d-b7e9b3484217)
+![Screenshot 2025-05-11 at 3 10 50 AM](https://github.com/user-attachments/assets/f3607a9c-9026-46d0-8559-f83740a2eab7)
+
 ## Overview
 
 This project enables event organisers to mint digital proof-of-participation tokens that can be claimed by attendees through a simple scan of a QR code. These tokens are not just symbolic; they represent verifiable, compressed assets living entirely on-chain, making them ideal for airdrops, community rewards, or credentialing at scale.
@@ -23,9 +24,11 @@ Organisers can log in with their Solana wallet, create a new event, and instantl
 
 The user interface is built to be intuitive across devices and accommodates both the event creator and attendee journeys—from minting to claiming—with minimal friction.
 
-![Screenshot 2025-05-09 at 2 23 34 PM](https://github.com/user-attachments/assets/0c9807e2-f345-4c51-b399-fb8932c9bcb1)
+![442056085-235a9be9-e4fa-46f9-989e-1b1ce8cda931](https://github.com/user-attachments/assets/f7a7ba25-3150-4b68-a109-b3f85af91110)
 
-![Screenshot 2025-05-09 at 2 23 20 PM](https://github.com/user-attachments/assets/235a9be9-e4fa-46f9-989e-1b1ce8cda931)
+![442056067-8b7532fd-1a86-4471-810d-b7e9b3484217](https://github.com/user-attachments/assets/e2d11e13-a8b1-4c6c-a7ad-2a3d65d02f86)
+
+![442056106-0c9807e2-f345-4c51-b399-fb8932c9bcb1](https://github.com/user-attachments/assets/ed907b7b-4264-41ea-a7c4-5e3010d846fe)
 
 ## QR Codes & Airdrops
 

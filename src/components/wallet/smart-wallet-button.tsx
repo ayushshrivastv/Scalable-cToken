@@ -49,7 +49,8 @@ export const SmartWalletButton: FC<SmartWalletButtonProps> = ({
   
   if (needsRealWallet) {
     // On wallet-enabled routes, render the real wallet button
-    return <IsolatedWalletButton className={className} showAddress={showAddress} />;
+    const mintClaimClasses = "bg-black text-white hover:bg-gray-800";
+    return <IsolatedWalletButton className={`${className} ${mintClaimClasses}`} />;
   } else {
     // On other routes, render the decoy button
     return <DecoyWalletButton className={className} />;

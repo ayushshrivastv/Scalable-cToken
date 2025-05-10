@@ -13,7 +13,11 @@
     "Ayush",
     "Srivastava",
     "cToken",
-    "sonner"
+    "sonner",
+    "Keypair",
+    "localnet",
+    "keypair",
+    "qrcode"
   ],
   "ignorePaths": [
     "node_modules/**",

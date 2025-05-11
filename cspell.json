@@ -21,7 +21,8 @@
     "Merkle",
     "merkle",
     "lightprotocol",
-    "Droploop"
+    "Droploop",
+    "Helius"
   ],
   "ignorePaths": [
     "node_modules/**",

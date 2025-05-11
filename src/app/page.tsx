@@ -154,7 +154,7 @@ export default function Home() {
 
   return (
     <AppleLayout>
-      {/* Particles background similar to aayushbharti.in */}
+      {/* Animated particles background */}
       <ParticlesBackground />
       {/* Hero Section */}
       <HeroSection

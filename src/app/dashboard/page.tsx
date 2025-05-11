@@ -4,6 +4,7 @@ import { AppleLayout } from '@/components/layouts/apple-layout';
 import { ROUTES } from '@/lib/constants';
 import { EventStatistics } from '@/components/dashboard/event-statistics';
 import { RecipientList } from '@/components/dashboard/recipient-list';
+import { ClaimAnalytics } from '@/components/dashboard/claim-analytics';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function DashboardPage() {
@@ -42,13 +43,18 @@ export default function DashboardPage() {
           {/* Right column - Dashboard Content */}
           <div className="lg:col-span-2">
             <Tabs defaultValue="statistics" className="border border-border rounded-lg p-6">
-              <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsList className="grid w-full grid-cols-3 mb-6">
                 <TabsTrigger value="statistics">Event Statistics</TabsTrigger>
+                <TabsTrigger value="analytics">Claim Analytics</TabsTrigger>
                 <TabsTrigger value="recipients">Token Recipients</TabsTrigger>
               </TabsList>
               
               <TabsContent value="statistics">
                 <EventStatistics />
+              </TabsContent>
+
+              <TabsContent value="analytics">
+                <ClaimAnalytics />
               </TabsContent>
               
               <TabsContent value="recipients">

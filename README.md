@@ -31,8 +31,7 @@ The user interface is built to be intuitive across devices and accommodates both
 
 ![442056067-8b7532fd-1a86-4471-810d-b7e9b3484217](https://github.com/user-attachments/assets/e2d11e13-a8b1-4c6c-a7ad-2a3d65d02f86)
 
-
-![Screenshot 2025-05-12 at 4.23.55 AM](/Users/ayushsrivastava/Scalable-cToken/Screenshot%202025-05-12%20at%204.23.55%20AM.png)
+![Screenshot 2025-05-12 at 4 23 55 AM](https://github.com/user-attachments/assets/f9c81e73-129b-4750-9d6d-9a44a9d8d104)
 
 ## QR Codes & Airdrops
 
@@ -154,13 +153,3 @@ The application is deployed on Vercel. To deploy your own version:
 ## License
 
 This project is licensed under the MIT License and is open for extension, experimentation, and contribution.
-
-## Special Thanks
-
-Gratitude to the teams behind Light Protocol and Solana for their exceptional infrastructure and tools. Additional thanks to the developers of Next.js, the creators of shadcn/ui, and the broader Solana community for their ongoing support and innovation.
-
----
-
-Crafted with care by Ayush Srivastava
-
-

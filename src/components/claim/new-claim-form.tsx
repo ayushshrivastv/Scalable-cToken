@@ -10,8 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { transferCompressedTokens, createConnection } from '@/lib/utils/solana';
-import { DEFAULT_CLUSTER, DEVNET_RPC_ENDPOINT } from '@/lib/constants';
-import { Keypair } from '@solana/web3.js';
+import { DEFAULT_CLUSTER, DEVNET_RPC_ENDPOINT, ROUTES } from '@/lib/constants';
 import { QrScanner } from './qr-scanner';
 
 /**
@@ -20,7 +19,7 @@ import { QrScanner } from './qr-scanner';
  */
 export function ClaimForm() {
   // Access to the user's Solana wallet
-  const { publicKey, connected, signTransaction, sendTransaction } = useWallet();
+  const { publicKey, connected, sendTransaction } = useWallet();
   // Get URL parameters (used for direct claim links)
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -117,46 +116,36 @@ export function ClaimForm() {
       }
     } catch (err) {
       console.error('Error claiming token:', err);
-      setError('Failed to claim token: ' + (err instanceof Error ? err.message : String(err)));
+      setError('Failed to claim token. Please check the address and try again.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // Render success message if claim was successful
+  // Handle successful claim screen
   if (claimSuccess) {
     return (
       <Card className="w-full card-hover animate-fade-in">
-        <CardHeader>
-          <CardTitle className="flex items-center text-green-500">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-            </svg>
-            Token Claimed Successfully
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground mb-4">
-            Your proof-of-participation token has been successfully claimed and transferred to your wallet.
-          </p>
-          
-          {eventDetails && (
-            <div className="p-4 bg-muted rounded-lg shadow-sm">
-              <p className="font-medium">Event: {eventDetails.name}</p>
-              <p className="text-sm text-muted-foreground mt-1">
-                Token: {eventDetails.mint.slice(0, 8)}...{eventDetails.mint.slice(-8)}
-              </p>
+        <CardContent className="pt-6">
+          <div className="space-y-4">
+            <div className="bg-green-500/10 text-green-500 p-4 rounded-lg">
+              <div className="flex items-center mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
+                <h3 className="text-lg font-medium">Token Claim Successful!</h3>
+              </div>
+              <p>Your compressed NFT has been successfully transferred to your wallet.</p>
             </div>
-          )}
+            
+            <Button
+              onClick={() => router.push(ROUTES.HOME)}
+              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+            >
+              Return to Home
+            </Button>
+          </div>
         </CardContent>
-        <CardFooter>
-          <Button 
-            onClick={() => router.push('/')}
-            className="w-full"
-          >
-            Return to Home
-          </Button>
-        </CardFooter>
       </Card>
     );
   }
@@ -173,6 +162,7 @@ export function ClaimForm() {
         </CardTitle>
       </CardHeader>
       <CardContent>
+        {/* QR Scanner Component - Only shown when showQrScanner is true */}
         {showQrScanner && (
           <div className="mb-6">
             <QrScanner
@@ -237,6 +227,7 @@ export function ClaimForm() {
           </div>
         )}
         
+        {/* Error Alert */}
         {error && (
           <Alert variant="destructive" className="mb-4">
             <AlertTitle className="flex items-center">
@@ -249,6 +240,7 @@ export function ClaimForm() {
           </Alert>
         )}
         
+        {/* Event Details Display */}
         {eventDetails ? (
           <div className="space-y-4 animate-fade-in">
             <div className="p-4 bg-muted rounded-lg shadow-sm transition-all hover:shadow-md">
@@ -314,7 +306,7 @@ export function ClaimForm() {
               </p>
             </div>
           </form>
-        )}
+        ) : null}
       </CardContent>
       <CardFooter className="flex justify-end">
         <Button 

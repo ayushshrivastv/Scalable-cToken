@@ -16,6 +16,8 @@ Built for the ZK Compression Track of the Superteam x Solana 1000x Hackathon, th
 
 For a detailed technical architecture and component flow diagrams, please refer to the [ARCHITECTURE.md](./ARCHITECTURE.md) document.
 
+P.S. I built this project over the course of 48 intense hours for the 1000x Hackathon – Best cPOP Interface bounty. It’s just the beginning, and I’ll be continuing to improve it, especially on the backend, in the days to come.
+
 ## Solana Pay and Smart Contract Workflow
 
 This Scalable cToken uses Solana Pay to make QR code interactions super easy. Attendees can claim tokens without any hassle. The organizers set up a smart contract on Solana to mint tokens. This contract uses Light Protocol’s infrastructure to create cTokens. When an attendee scans the Solana Pay QR code, it sends a transaction to the smart contract. The smart contract checks if the claim is valid and then sends a unique, compressed proof-of-participation token straight to the attendee’s wallet. This way, the tokens are distributed securely and efficiently.
@@ -58,6 +60,14 @@ This combination of QR-based claiming and airdrop functionality makes the platfo
 Distribute tokens to large audiences with just a few clicks. Our airdrop system allows event organizers to send tokens to hundreds or thousands of attendees simultaneously. The platform leverages custom Solana smart contracts that interact seamlessly with Light Protocol's compression technology, reducing transaction costs by 1000x. Solana Pay integration enables frictionless claiming through scannable QR codes that embed transaction instructions, wallet connections, and verification parameters—all while maintaining sub-second finality and military-grade security.
 
 **[Try the live demo here](https://scalable-c-token-ayushshrivastvs-projects.vercel.app/)**
+
+### Solana Foundation Prize Enhancements
+
+This project has been significantly enhanced to meet the requirements for the Solana Foundation prize by:
+
+- **Adding a complete token distribution workflow:** From creation to claiming, the entire lifecycle of compressed tokens is managed through an intuitive interface.
+- **Showcasing the efficiency of compressed NFTs for bulk operations:** Demonstrate how Light Protocol's compression technology enables distributing tokens to thousands of recipients with minimal transaction costs.
+- **Providing event organizers with practical tools for token management:** Integrated QR scanning and bulk airdrop functionality make this platform ideal for real-world event applications.
 
 ## Setup & Installation
 

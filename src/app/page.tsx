@@ -3,15 +3,16 @@
 import { ROUTES } from '@/lib/constants';
 import Link from 'next/link';
 import { AppleLayout } from '@/components/layouts/apple-layout';
-import { HeroSection } from '@/components/ui/apple-style/hero-section';
-import { FeatureSection } from '@/components/ui/apple-style/feature-section';
-import { SpecGrid } from '@/components/ui/apple-style/spec-grid';
-import { CTASection } from '@/components/ui/apple-style/cta-section';
-import { ReadmeShowcase } from '@/components/ui/apple-style/readme-showcase';
-import { BenefitsTable } from '@/components/ui/apple-style/benefits-table';
-import { FeatureHighlight } from '@/components/ui/apple-style/feature-highlight';
+import { HeroSection } from '@/components/ui/Webstyles/hero-section';
+import { FeatureSection } from '@/components/ui/Webstyles/feature-section';
+import { SpecGrid } from '@/components/ui/Webstyles/spec-grid';
+import { CTASection } from '@/components/ui/Webstyles/cta-section';
+import { ReadmeShowcase } from '@/components/ui/Webstyles/readme-showcase';
+import { BenefitsChart } from '@/components/ui/Webstyles/benefits-chart';
+import { FeatureHighlight } from '@/components/ui/Webstyles/feature-highlight';
 import { ParticlesBackground } from '@/components/ui/particles-background';
 import { motion } from 'framer-motion';
+import { QuantifiedBenefits } from '@/components/ui/Webstyles/quantified-benefits';
 
 // Icon components for feature section
 const ZkIcon = () => (
@@ -133,7 +134,7 @@ export default function Home() {
   // Custom title component with gradient styling
   const heroTitle = (
     <div className="space-y-2">
-      <motion.h1 
+      <motion.h1
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -141,7 +142,7 @@ export default function Home() {
       >
         Scalable <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-500 to-pink-600">cToken</span>
       </motion.h1>
-      <motion.h2 
+      <motion.h2
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.2 }}
@@ -235,10 +236,11 @@ export default function Home() {
 
       {/* Feature Highlight for Solana Pay QR Codes - SECOND */}
       <FeatureHighlight
-        title="Solana Pay QR Codes"
+        title="Solana Pay"
         description="Enable seamless in-person token claiming with our dynamic QR code system. Attendees simply scan a QR code to instantly receive their tokens."
-        primaryColor="purple"
-        secondaryColor="pink"
+        primaryColor="yellow"
+        secondaryColor="orange"
+        highlightIndex={1}
         items={[
           {
             title: "Dynamic Generation",
@@ -305,9 +307,12 @@ export default function Home() {
           }
         ]}
       />
-      
+
       {/* Benefits Table */}
-      <BenefitsTable metrics={benefitsMetrics} />
+      <BenefitsChart metrics={benefitsMetrics} />
+
+      {/* Quantified Benefits */}
+      <QuantifiedBenefits />
 
       {/* Specs Grid */}
       <SpecGrid
@@ -315,10 +320,10 @@ export default function Home() {
         subtitle="Multiple ways to deliver tokens to your audience efficiently"
         items={specItems}
       />
-      
+
       {/* README Showcase */}
       <ReadmeShowcase />
-      
+
       {/* CTA Section */}
       <CTASection
         title="Ready to get started?"

@@ -22,7 +22,8 @@
     "merkle",
     "lightprotocol",
     "Droploop",
-    "Helius"
+    "Helius",
+    "Webstyles"
   ],
   "ignorePaths": [
     "node_modules/**",

@@ -1,8 +1,8 @@
 "use client";
 
 import React, { ReactNode } from 'react';
-import { NavHeader } from '@/components/ui/apple-style/nav-header';
-import { SimplifiedFooter } from '@/components/ui/apple-style/simplified-footer';
+import { NavHeader } from '@/components/ui/Webstyles/nav-header';
+import { SimplifiedFooter } from '@/components/ui/Webstyles/simplified-footer';
 import { ROUTES } from '@/lib/constants';
 
 interface AppleLayoutProps {

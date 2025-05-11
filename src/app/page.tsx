@@ -165,7 +165,7 @@ export default function Home() {
       {/* Feature Highlight for Airdrop Capabilities - FIRST */}
       <FeatureHighlight
         title="Airdrop Capabilities"
-        description="Distribute tokens to large audiences with just a few clicks. Our airdrop system allows event organizers to send tokens to hundreds or thousands of attendees simultaneously."
+        description="Distribute tokens to large audiences with just a few clicks. Our airdrop system allows event organizers to send tokens to hundreds or thousands of attendees simultaneously. Powered by custom Solana smart contracts that leverage Light Protocol's compression technology, reducing costs by 1000x. Solana Pay integration enables frictionless claiming through QR codes that embed transactions, wallet connections, and verification parameters with sub-second finality."
         primaryColor="blue"
         secondaryColor="cyan"
         items={[

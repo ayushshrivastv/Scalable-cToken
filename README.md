@@ -1,8 +1,10 @@
 # Scalable cToken (Solana Pay)
 
-Scalable cToken Distribution with Solana Pay and ZK Compression on Solana
+This project enables event organisers to mint digital POP tokens that can be claimed by attendees through a simple scan of a QR code. These tokens are not just symbolic; they represent verifiable, compressed assets living entirely on-chain, making them ideal for airdrops, community rewards, or credentialing at scale.
 
-A high throughput solution for creating and distributing compressed proof-of-participation tokens at scale on Solana blockchain using Solana Pay and Light Protocol's compression technology.
+For a detailed technical architecture and component flow diagrams, please refer to the [ARCHITECTURE.md](./ARCHITECTURE.md) document.
+
+P.S. After 48 hours of coding, debugging, and more coffee than water—here's the Project. The backend isn’t quite where I want it yet—there’s still a lot of work ahead!
 
 ### Web Page Link
 **[Scalable cToken Page](https://scalable-c-token-ayushshrivastvs-projects.vercel.app/)**
@@ -11,13 +13,9 @@ A high throughput solution for creating and distributing compressed proof-of-par
 
 ## Overview
 
-This project enables event organisers to mint digital proof-of-participation tokens that can be claimed by attendees through a simple scan of a QR code. These tokens are not just symbolic; they represent verifiable, compressed assets living entirely on-chain, making them ideal for airdrops, community rewards, or credentialing at scale.
+Scalable cToken Distribution with Solana Pay and ZK Compression on Solana
 
-Built for the ZK Compression Track of the Superteam x Solana 1000x Hackathon bounty, this application demonstrates how real-world events can benefit from blockchain technology without compromising on speed, cost, or user experience.
-
-For a detailed technical architecture and component flow diagrams, please refer to the [ARCHITECTURE.md](./ARCHITECTURE.md) document.
-
-P.S. After 48 hours of coding, debugging, and more coffee than water—here's the Project. The backend isn’t quite where I want it yet—lots of code still ahead!
+A high throughput solution for creating and distributing compressed proof-of-participation tokens at scale on Solana blockchain using Solana Pay and Light Protocol's compression technology.
 
 ## Solana Pay and Smart Contract Workflow
 
@@ -33,7 +31,8 @@ The user interface is built to be intuitive across devices and accommodates both
 
 ![442056067-8b7532fd-1a86-4471-810d-b7e9b3484217](https://github.com/user-attachments/assets/e2d11e13-a8b1-4c6c-a7ad-2a3d65d02f86)
 
-![442056106-0c9807e2-f345-4c51-b399-fb8932c9bcb1](https://github.com/user-attachments/assets/ed907b7b-4264-41ea-a7c4-5e3010d846fe)
+
+![Screenshot 2025-05-12 at 4.23.55 AM](/Users/ayushsrivastava/Scalable-cToken/Screenshot%202025-05-12%20at%204.23.55%20AM.png)
 
 ## QR Codes & Airdrops
 

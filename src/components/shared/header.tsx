@@ -5,9 +5,17 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { WalletConnectButton } from '@/components/ui/wallet-connect-button';
 import { ThemeToggleButton } from '@/components/ui/theme-toggle-button';
-import { APP_NAME, ROUTES } from '@/lib/constants';
+import { APP_NAME } from '@/lib/constants';
 import { Linkedin, Menu } from 'lucide-react';
 import { useState } from 'react';
+
+// Define routes directly to ensure they're available
+const ROUTES = {
+  HOME: "/",
+  DASHBOARD: "/dashboard",
+  MINT: "/mint",
+  CLAIM: "/claim",
+};
 
 interface HeaderProps {
   activePage?: string;
@@ -32,14 +40,26 @@ export const Header: FC<HeaderProps> = ({ activePage }) => {
         {/* Desktop navigation */}
         <nav className="hidden md:flex items-center gap-6">
           <Link 
-            href={ROUTES.MINT}
-            className={`text-sm font-medium transition-colors hover:text-primary ${activePage === ROUTES.MINT ? 'text-foreground' : 'text-muted-foreground'}`}
+            href="/"
+            className={`text-sm font-medium transition-colors hover:text-primary ${activePage === '/' ? 'text-foreground' : 'text-muted-foreground'}`}
+          >
+            Home
+          </Link>
+          <Link 
+            href="/dashboard"
+            className={`text-sm font-medium transition-colors hover:text-primary ${activePage === '/dashboard' ? 'text-foreground' : 'text-muted-foreground'}`}
+          >
+            Dashboard
+          </Link>
+          <Link 
+            href="/mint"
+            className={`text-sm font-medium transition-colors hover:text-primary ${activePage === '/mint' ? 'text-foreground' : 'text-muted-foreground'}`}
           >
             Create Event
           </Link>
           <Link 
-            href={ROUTES.CLAIM}
-            className={`text-sm font-medium transition-colors hover:text-primary ${activePage === ROUTES.CLAIM ? 'text-foreground' : 'text-muted-foreground'}`}
+            href="/claim"
+            className={`text-sm font-medium transition-colors hover:text-primary ${activePage === '/claim' ? 'text-foreground' : 'text-muted-foreground'}`}
           >
             Claim Token
           </Link>
@@ -79,15 +99,29 @@ export const Header: FC<HeaderProps> = ({ activePage }) => {
         <div className="md:hidden py-4 px-4 bg-background border-b border-border/40 animate-in slide-in-from-top-5 duration-300">
           <nav className="flex flex-col space-y-4 pb-4">
             <Link 
-              href={ROUTES.MINT}
-              className={`text-sm font-medium transition-colors hover:text-primary ${activePage === ROUTES.MINT ? 'text-foreground' : 'text-muted-foreground'}`}
+              href="/"
+              className={`text-sm font-medium transition-colors hover:text-primary ${activePage === '/' ? 'text-foreground' : 'text-muted-foreground'}`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link 
+              href="/dashboard"
+              className={`text-sm font-medium transition-colors hover:text-primary ${activePage === '/dashboard' ? 'text-foreground' : 'text-muted-foreground'}`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Dashboard
+            </Link>
+            <Link 
+              href="/mint"
+              className={`text-sm font-medium transition-colors hover:text-primary ${activePage === '/mint' ? 'text-foreground' : 'text-muted-foreground'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               Create Event
             </Link>
             <Link 
-              href={ROUTES.CLAIM}
-              className={`text-sm font-medium transition-colors hover:text-primary ${activePage === ROUTES.CLAIM ? 'text-foreground' : 'text-muted-foreground'}`}
+              href="/claim"
+              className={`text-sm font-medium transition-colors hover:text-primary ${activePage === '/claim' ? 'text-foreground' : 'text-muted-foreground'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               Claim Token

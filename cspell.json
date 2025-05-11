@@ -17,7 +17,11 @@
     "Keypair",
     "localnet",
     "keypair",
-    "qrcode"
+    "qrcode",
+    "Merkle",
+    "merkle",
+    "lightprotocol",
+    "Droploop"
   ],
   "ignorePaths": [
     "node_modules/**",

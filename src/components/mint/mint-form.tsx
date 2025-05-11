@@ -57,19 +57,25 @@ const formSchema = z.object({
  * Includes form validation, on-chain token creation, and QR code generation
  */
 export function MintForm() {
+  // Always call hooks unconditionally in the same order
+  const wallet = useWallet();
   const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  const { publicKey, connected, signTransaction, sendTransaction } = useWallet();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("event");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [mintSuccess, setMintSuccess] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
   const [claimUrl, setClaimUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+  
+  // Extract wallet properties safely - only use them when client-side
+  const publicKey = isClient ? wallet.publicKey : null;
+  const connected = isClient ? wallet.connected : false;
+  const signTransaction = isClient ? wallet.signTransaction : null;
+  const sendTransaction = isClient ? wallet.sendTransaction : null;
 
   // Initialize form
   const form = useForm<FormValues>({

@@ -26,6 +26,7 @@ export const DEFAULT_METADATA = {
 // Routes
 export const ROUTES = {
   HOME: "/",
+  DASHBOARD: "/dashboard",
   MINT: "/mint",
   CLAIM: "/claim",
   PROFILE: "/profile",

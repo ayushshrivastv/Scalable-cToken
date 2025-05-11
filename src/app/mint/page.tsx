@@ -3,6 +3,7 @@
 import { AppleLayout } from '@/components/layouts/apple-layout';
 import { ROUTES } from '@/lib/constants';
 import { MintForm } from '@/components/mint/mint-form';
+import { TokenStatistics } from '@/components/mint/token-statistics';
 
 export default function MintPage() {
   return (
@@ -44,6 +45,9 @@ export default function MintPage() {
             </div>
           </div>
         </div>
+        
+        {/* Token Statistics Section */}
+        <TokenStatistics />
       </div>
     </AppleLayout>
   );

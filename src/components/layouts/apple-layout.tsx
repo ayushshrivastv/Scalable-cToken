@@ -11,6 +11,7 @@ interface AppleLayoutProps {
 
 const navItems = [
   { label: 'Home', href: ROUTES.HOME },
+  { label: 'Dashboard', href: ROUTES.DASHBOARD },
   { label: 'Create Event', href: ROUTES.MINT },
   { label: 'Claim Token', href: ROUTES.CLAIM },
 ];

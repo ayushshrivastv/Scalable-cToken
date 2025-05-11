@@ -127,6 +127,12 @@ const benefitsMetrics = [
     traditional: '~1,000 attendees',
     scalable: '100,000+ attendees',
     improvement: '100x scalability'
+  },
+  {
+    metric: 'Token Issuance Speed',
+    traditional: '~10 tokens/min',
+    scalable: '~5,000 tokens/min',
+    improvement: '500x faster'
   }
 ];
 

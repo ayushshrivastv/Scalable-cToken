@@ -78,6 +78,15 @@ export const BenefitsChart: React.FC<BenefitsChartProps> = ({ metrics }) => {
         traditional: traditionalValue * (1 + (i * 0.1)),
         scalable: scalableValue * (1 + (i * 0.15))
       }));
+    } else if (metric.metric === 'Token Issuance Speed') {
+      traditionalValue = 10;
+      scalableValue = 5000;
+      // Generate data points for a stock-like chart (speed increasing over time)
+      dataPoints = Array.from({ length: 12 }, (_, i) => ({
+        x: i,
+        traditional: traditionalValue * (1 + (i * 0.05)),
+        scalable: scalableValue * (1 + (i * 0.08))
+      }));
     }
     
     return {

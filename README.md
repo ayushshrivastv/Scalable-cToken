@@ -19,6 +19,8 @@ Scalable cToken Distribution with Solana Pay and ZK Compression on Solana
 
 A high throughput solution for creating and distributing compressed proof-of-participation tokens at scale on Solana blockchain using Solana Pay and Light Protocol's compression technology.
 
+Check out [demo script](./DEMO_SCRIPT.md) for a quick overview of the project's functionality.
+
 ## Solana Pay and Smart Contract Workflow
 
 This Scalable cToken uses Solana Pay to make QR code interactions super easy. Attendees can claim tokens without any hassle. The organizers set up a smart contract on Solana to mint tokens. This contract uses Light Protocol’s infrastructure to create cTokens. When an attendee scans the Solana Pay QR code, it sends a transaction to the smart contract. The smart contract checks if the claim is valid and then sends a unique, compressed proof-of-participation token straight to the attendee’s wallet. This way, the tokens are distributed securely and efficiently.

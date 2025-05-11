@@ -12,11 +12,11 @@ A high throughput solution for creating and distributing compressed proof-of-par
 
 This project enables event organisers to mint digital proof-of-participation tokens that can be claimed by attendees through a simple scan of a QR code. These tokens are not just symbolic; they represent verifiable, compressed assets living entirely on-chain, making them ideal for airdrops, community rewards, or credentialing at scale.
 
-Built for the ZK Compression Track of the Superteam x Solana 1000x Hackathon, this application demonstrates how real-world events can benefit from blockchain technology without compromising on speed, cost, or user experience.
+Built for the ZK Compression Track of the Superteam x Solana 1000x Hackathon bounty, this application demonstrates how real-world events can benefit from blockchain technology without compromising on speed, cost, or user experience.
 
 For a detailed technical architecture and component flow diagrams, please refer to the [ARCHITECTURE.md](./ARCHITECTURE.md) document.
 
-P.S. I built this project over the course of 48 intense hours for the 1000x Hackathon – Best cPOP Interface bounty. It’s just the beginning, and I’ll be continuing to improve it, especially on the backend, in the days to come.
+P.S. I built this project over the course of last 48 intense hours for the 1000x Hackathon – Best cPOP Interface bounty. It’s just the beginning, and I’ll be continuing to improve it, especially on the backend, in the days to come.
 
 ## Solana Pay and Smart Contract Workflow
 

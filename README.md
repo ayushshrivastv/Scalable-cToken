@@ -60,13 +60,26 @@ Distribute tokens to large audiences with just a few clicks. Our airdrop system 
 
 **[Try the live demo here](https://scalable-c-token-ayushshrivastvs-projects.vercel.app/)**
 
-### Solana Foundation Prize Enhancements
+### Best cPOP Interface - Solana Foundation Prize Requirements
 
-This project has been significantly enhanced to meet the requirements for the Solana Foundation prize by:
+This project directly addresses the Solana Foundation's requirements for the "Best cPOP Interface" prize:
 
-- **Adding a complete token distribution workflow:** From creation to claiming, the entire lifecycle of compressed tokens is managed through an intuitive interface.
-- **Showcasing the efficiency of compressed NFTs for bulk operations:** Demonstrate how Light Protocol's compression technology enables distributing tokens to thousands of recipients with minimal transaction costs.
-- **Providing event organizers with practical tools for token management:** Integrated QR scanning and bulk airdrop functionality make this platform ideal for real-world event applications.
+1. **Creator Token Minting Interface:**
+   - Intuitive form for event organizers to create and mint cTokens for experiences/events
+   - Customizable token metadata including event details, branding, and attributes
+   - Bulk minting capabilities with 1000x cost reduction using Light Protocol's compression
+
+2. **Attendee Claiming via QR Code:**
+   - Solana Pay-compatible QR codes that attendees can scan with any smartphone
+   - One-tap wallet connection and token claiming process
+   - Real-time transaction confirmation and token display
+
+3. **Compressed Token Implementation:**
+   - Full integration with Light Protocol for ZK-compressed tokens
+   - Maintains all security and composability benefits of standard Solana tokens
+   - Achieves 1000x storage cost reduction and 100x higher throughput
+
+The interface prioritizes user experience with a modern, responsive design that works across devices, making it ideal for both virtual and in-person events.
 
 ## Setup & Installation
 

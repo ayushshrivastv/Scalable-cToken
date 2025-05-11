@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Linkedin, Github } from 'lucide-react';
+import { Linkedin, Github, Twitter } from 'lucide-react';
 
 interface FooterProps {
   className?: string;
@@ -103,6 +103,15 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                 aria-label="LinkedIn"
               >
                 <Linkedin size={20} />
+              </Link>
+              <Link 
+                href="https://x.com/ayushsrivastv" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-zinc-400 hover:text-white transition-colors"
+                aria-label="X (Twitter)"
+              >
+                <Twitter size={20} />
               </Link>
             </div>
           </div>

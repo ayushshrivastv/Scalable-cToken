@@ -8,10 +8,8 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": false,
+    "strict": true,
     "noEmit": true,
-    "noImplicitAny": false,
-    "strictNullChecks": false,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -35,8 +33,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "next-env.d.ts",
-    "build/types/**/*.ts",
-    "src/types/**/*.d.ts"
+    "build/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

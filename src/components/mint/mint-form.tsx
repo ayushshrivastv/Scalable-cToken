@@ -1,15 +1,15 @@
 /**
  * @file mint-form.tsx
- * @description MintForm component for creating and minting compressed tokens for referral campaigns
- * This component handles the entire referral campaign creation process including collecting campaign details,
- * minting referral tokens with ZK compression, and generating QR codes for referrers to share.
+ * @description MintForm component for creating and minting compressed tokens for events
+ * This component handles the entire token creation process including collecting event details,
+ * minting tokens, and generating QR codes for claiming the tokens.
  */
 
 "use client";
 
 import { useState, useEffect } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -35,20 +35,19 @@ type FormValues = z.infer<typeof formSchema>;
  * Defines the structure and validation rules for the form data
  */
 const formSchema = z.object({
-  // Campaign Details
-  campaignName: z.string().min(3, { message: "Campaign name must be at least 3 characters" }),
-  campaignDescription: z.string().min(10, { message: "Description must be at least 10 characters" }),
-  campaignEndDate: z.string().min(1, { message: "End date is required" }),
+  // Event Details
+  eventName: z.string().min(3, { message: "Event name must be at least 3 characters" }),
+  eventDescription: z.string().min(10, { message: "Description must be at least 10 characters" }),
+  eventDate: z.string().min(1, { message: "Event date is required" }),
+  eventLocation: z.string().optional(),
   organizerName: z.string().min(2, { message: "Organizer name is required" }),
-  targetReferrals: z.coerce.number().int().positive().optional(),
+  maxAttendees: z.coerce.number().int().positive().optional(),
   
   // Token Metadata
   tokenName: z.string().min(3, { message: "Token name must be at least 3 characters" }),
   tokenSymbol: z.string().min(2, { message: "Token symbol must be at least 2 characters" }),
   tokenDescription: z.string().min(10, { message: "Token description must be at least 10 characters" }),
   tokenImage: z.string().url({ message: "Please enter a valid URL" }).optional(),
-  referrerReward: z.coerce.number().int().positive({ message: "Reward must be a positive number" }),
-  refereeReward: z.coerce.number().int().positive({ message: "Reward must be a positive number" }),
   tokenSupply: z.coerce.number().int().positive({ message: "Supply must be a positive number" }),
 });
 
@@ -59,21 +58,14 @@ const formSchema = z.object({
  */
 export function MintForm() {
   const [isClient, setIsClient] = useState(false);
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     setIsClient(true);
-    
-    // Check for tab parameter in URL and switch to campaign tab if specified
-    const tabParam = searchParams.get('tab');
-    if (tabParam === 'campaign') {
-      setActiveTab('campaign');
-    }
-  }, [searchParams]);
+  }, []);
 
   const { publicKey, connected, signTransaction, sendTransaction } = useWallet();
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("event"); // Default tab is event
+  const [activeTab, setActiveTab] = useState("event");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [mintSuccess, setMintSuccess] = useState(false);
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
@@ -83,18 +75,17 @@ export function MintForm() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      campaignName: "",
-      campaignDescription: "",
-      campaignEndDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // 30 days from now
+      eventName: "",
+      eventDescription: "",
+      eventDate: new Date().toISOString().split('T')[0],
+      eventLocation: "",
       organizerName: "",
-      targetReferrals: 100,
+      maxAttendees: 100,
       tokenName: "",
-      tokenSymbol: "DROP",
+      tokenSymbol: "POP",
       tokenDescription: "",
       tokenImage: "https://picsum.photos/300/300", // Placeholder image
-      referrerReward: 2,
-      refereeReward: 1,
-      tokenSupply: 500,
+      tokenSupply: 100,
     },
   });
 
@@ -120,12 +111,12 @@ export function MintForm() {
       // Format data for token minting
       const mintData: MintFormData = {
         eventDetails: {
-          name: values.campaignName,
-          description: values.campaignDescription,
-          date: values.campaignEndDate,
-          location: "Online", // Default to online for referral campaigns
+          name: values.eventName,
+          description: values.eventDescription,
+          date: values.eventDate,
+          location: values.eventLocation,
           organizerName: values.organizerName,
-          maxAttendees: values.targetReferrals || 1000, // Use targetReferrals as maxAttendees
+          maxAttendees: values.maxAttendees,
         },
         tokenMetadata: {
           name: values.tokenName,
@@ -133,8 +124,8 @@ export function MintForm() {
           description: values.tokenDescription,
           image: values.tokenImage,
           attributes: [
-            { trait_type: "Campaign", value: values.campaignName },
-            { trait_type: "Date", value: values.campaignEndDate },
+            { trait_type: "Event", value: values.eventName },
+            { trait_type: "Date", value: values.eventDate },
             { trait_type: "Organizer", value: values.organizerName },
           ],
         },
@@ -191,7 +182,7 @@ export function MintForm() {
       // Standard claim URL for direct web access
       const standardClaimUrl = createClaimUrl(
         baseUrl,
-        values.campaignName, // Use campaign name as the campaignId
+        values.eventName, // Use event name as the eventId
         mint // Pass the PublicKey directly, not as a string
       );
       
@@ -199,8 +190,8 @@ export function MintForm() {
       const solanaPayUrl = createSolanaPayClaimUrl(
         publicKey, // The organizer's wallet as recipient
         mint, // The token mint
-        values.campaignName, // Campaign name as label
-        `Claim your ${values.tokenName} token for ${values.campaignName}` // Memo message
+        values.eventName, // Event name as label
+        `Claim your ${values.tokenName} token for ${values.eventName}` // Memo message
       );
       
       console.log('Generated Standard Claim URL:', standardClaimUrl);
@@ -227,17 +218,16 @@ export function MintForm() {
     setActiveTab(value);
   };
 
+  // Handle next button in event details tab
   const handleNextTab = () => {
-    // Validate only the fields in the current tab before proceeding
-    if (activeTab === "campaign") {
-      const campaignFields = ["campaignName", "campaignDescription", "campaignEndDate", "organizerName"];
-      const hasErrors = campaignFields.some(fieldName => {
-        return form.getFieldState(fieldName as any).invalid;
-      });
-      
-      if (!hasErrors) {
-        setActiveTab("token");
-      }
+    const eventFields = ["eventName", "eventDescription", "eventDate", "organizerName"];
+    const isValid = eventFields.every(field => {
+      const result = form.trigger(field as keyof FormValues);
+      return result;
+    });
+
+    if (isValid) {
+      setActiveTab("token");
     }
   };
 
@@ -247,11 +237,11 @@ export function MintForm() {
         <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-green-800 animate-slide-up">
           <h3 className="font-semibold text-lg flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 001.414-1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
             Token Created Successfully!
           </h3>
-          <p className="mt-1">Your referral campaign tokens have been minted and are ready to be claimed.</p>
+          <p className="mt-1">Your event tokens have been minted and are ready to be claimed.</p>
         </div>
 
         <Card className="p-6 card-hover animate-slide-up" style={{animationDelay: '100ms'}}>
@@ -262,7 +252,7 @@ export function MintForm() {
               </svg>
               Claim QR Code
             </h3>
-            <p className="text-muted-foreground">Users can scan this QR code with any Solana Pay compatible wallet</p>
+            <p className="text-muted-foreground">Attendees can scan this QR code with any Solana Pay compatible wallet</p>
             
             <div className="flex justify-center my-6">
               <div className="border border-border p-4 rounded-lg inline-block bg-white shadow-lg transition-all hover:shadow-xl">
@@ -313,29 +303,27 @@ export function MintForm() {
     );
   }
 
-  // When using FormProvider, we need to pass it as a component rather than using it directly
-  // This ensures the children prop is properly handled
   return (
-    // @ts-ignore - Form component expects children which we're providing
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 animate-fade-in">
-        <Tabs defaultValue="campaign" value={activeTab} onValueChange={handleTabChange} className="w-full">
-          <TabsList className="grid grid-cols-2 mb-6">
-            <TabsTrigger value="campaign">Campaign Details</TabsTrigger>
-            <TabsTrigger value="token">Token Details</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={handleTabChange}>
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="event">Event Details</TabsTrigger>
+            <TabsTrigger value="token">Token Configuration</TabsTrigger>
           </TabsList>
           
-          {/* Campaign Details Tab */}
-          <TabsContent value="campaign" className="space-y-4">
+          {/* Event Details Tab */}
+          <TabsContent value="event" className="space-y-4">
             <FormField
               control={form.control}
-              name="campaignName"
+              name="eventName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Campaign Name</FormLabel>
+                  <FormLabel>Event Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Droploop Community Growth" {...field} />
+                    <Input placeholder="Solana Hackathon 2025" {...field} />
                   </FormControl>
+                  <FormDescription>The name of your event</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -343,17 +331,18 @@ export function MintForm() {
             
             <FormField
               control={form.control}
-              name="campaignDescription"
+              name="eventDescription"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Campaign Description</FormLabel>
+                  <FormLabel>Event Description</FormLabel>
                   <FormControl>
                     <Textarea 
-                      placeholder="Reward users for inviting friends to join Droploop" 
+                      placeholder="Join us for an exciting hackathon..." 
                       className="min-h-[100px]"
                       {...field} 
                     />
                   </FormControl>
+                  <FormDescription>Describe your event</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -362,10 +351,10 @@ export function MintForm() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
-                name="campaignEndDate"
+                name="eventDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Campaign End Date</FormLabel>
+                    <FormLabel>Event Date</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -376,12 +365,12 @@ export function MintForm() {
               
               <FormField
                 control={form.control}
-                name="organizerName"
+                name="eventLocation"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Organizer Name</FormLabel>
+                    <FormLabel>Location (Optional)</FormLabel>
                     <FormControl>
-                      <Input placeholder="Your name or organization" {...field} />
+                      <Input placeholder="San Francisco, CA" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -389,20 +378,35 @@ export function MintForm() {
               />
             </div>
             
-            <FormField
-              control={form.control}
-              name="targetReferrals"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Target Referrals (Optional)</FormLabel>
-                  <FormControl>
-                    <Input type="number" min="1" placeholder="100" {...field} />
-                  </FormControl>
-                  <FormDescription>Your goal for number of successful referrals</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="organizerName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Organizer Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Solana Foundation" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <FormField
+                control={form.control}
+                name="maxAttendees"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Max Attendees (Optional)</FormLabel>
+                    <FormControl>
+                      <Input type="number" min="1" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             
             <div className="flex justify-end mt-6">
               <Button 
@@ -410,22 +414,23 @@ export function MintForm() {
                 onClick={handleNextTab}
                 className="bg-white text-black hover:bg-slate-100 transition-all"
               >
-                Next: Token Details
+                Next: Token Configuration
               </Button>
             </div>
           </TabsContent>
           
-          {/* Token Details Tab */}
+          {/* Token Configuration Tab */}
           <TabsContent value="token" className="space-y-4">
             <FormField
               control={form.control}
               name="tokenName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Referral Token Name</FormLabel>
+                  <FormLabel>Token Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Droploop Referral Token" {...field} />
+                    <Input placeholder="Solana Hackathon Token" {...field} />
                   </FormControl>
+                  <FormDescription>The name of your token</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -439,7 +444,7 @@ export function MintForm() {
                   <FormItem>
                     <FormLabel>Token Symbol</FormLabel>
                     <FormControl>
-                      <Input placeholder="DROP" {...field} />
+                      <Input placeholder="POP" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -455,39 +460,7 @@ export function MintForm() {
                     <FormControl>
                       <Input type="number" min="1" {...field} />
                     </FormControl>
-                    <FormDescription>Total tokens to mint for this campaign</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="referrerReward"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Referrer Reward</FormLabel>
-                    <FormControl>
-                      <Input type="number" min="1" {...field} />
-                    </FormControl>
-                    <FormDescription>Tokens earned per successful referral</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="refereeReward"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>New User Reward</FormLabel>
-                    <FormControl>
-                      <Input type="number" min="1" {...field} />
-                    </FormControl>
-                    <FormDescription>Tokens given to newly referred users</FormDescription>
+                    <FormDescription>Number of tokens to mint</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -502,7 +475,7 @@ export function MintForm() {
                   <FormLabel>Token Description</FormLabel>
                   <FormControl>
                     <Textarea 
-                      placeholder="This token represents participation in the Droploop referral program" 
+                      placeholder="This token verifies attendance at the Solana Hackathon 2025" 
                       className="min-h-[100px]"
                       {...field} 
                     />
@@ -528,7 +501,7 @@ export function MintForm() {
             />
             
             <div className="flex justify-between mt-6">
-              <Button type="button" variant="outline" onClick={() => setActiveTab("campaign")}>
+              <Button type="button" variant="outline" onClick={() => setActiveTab("event")}>
                 Back to Event Details
               </Button>
               <Button 
@@ -543,7 +516,7 @@ export function MintForm() {
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
-                      Creating Campaign...
+                      Creating Token...
                     </span>
                   </>
                 ) : (
@@ -551,7 +524,7 @@ export function MintForm() {
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414-1.414L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 001.414-1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
-                    Create Campaign
+                    Create Token
                   </span>
                 )}
               </Button>

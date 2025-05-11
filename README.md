@@ -4,7 +4,9 @@ This project enables event organisers to mint digital POP tokens that can be cla
 
 For a detailed technical architecture and component flow diagrams, please refer to the [ARCHITECTURE.md](./ARCHITECTURE.md) document.
 
-P.S. After 48 hours of coding, debugging, and more coffee than water—here's the Project. The backend isn’t quite where I want it yet—there’s still a lot of work ahead!
+P.S. After 48 hours of coding, debugging, and more coffee than water—here’s the project. The backend isn’t quite where I want it yet—there’s still a lot of work ahead.
+
+I first discovered this project on Superteam on March 10th, and This is my very first submission to a Superteam Projects.
 
 ### Web Page Link
 **[Scalable cToken Page](https://scalable-c-token-ayushshrivastvs-projects.vercel.app/)**

@@ -169,156 +169,122 @@ export default function Home() {
         subtitle="High throughput token issuance and distribution powered by Light Protocol's state compression technology"
       />
 
-      {/* Feature Highlight for Airdrop Capabilities - FIRST */}
-      <FeatureHighlight
-        title="Airdrop Capabilities"
-        description="Distribute tokens to large audiences with just a few clicks. Our airdrop system allows event organizers to send tokens to hundreds or thousands of attendees simultaneously. Powered by custom Solana smart contracts that leverage Light Protocol's compression technology, reducing costs by 1000x. Solana Pay integration enables frictionless claiming through QR codes that embed transactions, wallet connections, and verification parameters with sub-second finality."
-        primaryColor="blue"
-        secondaryColor="cyan"
-        items={[
-          {
-            title: "Bulk Distribution",
-            description: "Send tokens to thousands of recipients in a single transaction, saving time and reducing gas fees significantly.",
-            icon: (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                <path d="M2 17l10 5 10-5"/>
-                <path d="M2 12l10 5 10-5"/>
-              </svg>
-            )
-          },
-          {
-            title: "Targeted Campaigns",
-            description: "Create specific airdrop campaigns for different audience segments based on criteria like event role or registration type.",
-            icon: (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                <polyline points="22 4 12 14.01 9 11.01"/>
-              </svg>
-            )
-          },
-          {
-            title: "Scheduled Releases",
-            description: "Set up timed airdrops to distribute tokens at specific points during or after an event, perfect for multi-day conferences.",
-            icon: (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="12 6 12 12 16 14"/>
-              </svg>
-            )
-          },
-          {
-            title: "Claim Verification",
-            description: "Implement verification requirements before tokens can be claimed, such as email verification or wallet authentication.",
-            icon: (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                <polyline points="22 4 12 14.01 9 11.01"/>
-              </svg>
-            )
-          },
-          {
-            title: "Batch Processing",
-            description: "Process large airdrops in efficient batches to optimize gas usage and ensure timely distribution.",
-            icon: (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="23 4 23 10 17 10"/>
-                <polyline points="1 20 1 14 7 14"/>
-                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-              </svg>
-            )
-          },
-          {
-            title: "Flexible Allocation",
-            description: "Distribute different token quantities to different recipients based on their role, participation level, or other criteria.",
-            icon: (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
-              </svg>
-            )
-          }
-        ]}
-      />
+      {/* Project Overview Section */}
+      <section className="py-8 md:py-16 bg-black/30 backdrop-blur-sm">
+        <div className="px-4 md:px-6 max-w-3xl mx-auto">
+          <article className="space-y-6 text-left">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="space-y-3"
+            >
+              <h1 className="text-3xl md:text-4xl font-bold text-white">
+                Scalable cToken Decentralized Token System
+              </h1>
+              <div className="text-zinc-400 text-sm border-b border-zinc-800 pb-3">Posted by Ayush Srivastava · May 12</div>
+            </motion.div>
 
-      {/* Feature Highlight for Solana Pay QR Codes - SECOND */}
-      <FeatureHighlight
-        title="Solana Pay"
-        description="Enable seamless in-person token claiming with our dynamic QR code system. Attendees simply scan a QR code to instantly receive their tokens."
-        primaryColor="yellow"
-        secondaryColor="orange"
-        highlightIndex={1}
-        items={[
-          {
-            title: "Dynamic Generation",
-            description: "Unique QR codes are generated on-demand for each event with embedded token metadata and claiming instructions.",
-            icon: (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="7" height="7"/>
-                <rect x="14" y="3" width="7" height="7"/>
-                <rect x="14" y="14" width="7" height="7"/>
-                <rect x="3" y="14" width="7" height="7"/>
-              </svg>
-            )
-          },
-          {
-            title: "Instant Recognition",
-            description: "QR codes are instantly recognized by Solana Pay compatible wallets with no additional software required.",
-            icon: (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-                <line x1="9" y1="9" x2="9.01" y2="9"/>
-                <line x1="15" y1="9" x2="15.01" y2="9"/>
-              </svg>
-            )
-          },
-          {
-            title: "Transaction Embedding",
-            description: "Each QR code embeds the necessary transaction instructions for seamless token claiming with minimal user interaction.",
-            icon: (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
-              </svg>
-            )
-          },
-          {
-            title: "Wallet Connectivity",
-            description: "QR codes automatically connect to the user's Solana wallet when scanned, eliminating manual connection steps.",
-            icon: (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="6" width="20" height="12" rx="2"/>
-                <path d="M6 12h12"/>
-              </svg>
-            )
-          },
-          {
-            title: "Offline Distribution",
-            description: "QR codes can be printed or displayed on screens at physical events for easy scanning by attendees.",
-            icon: (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="6 9 6 2 18 2 18 9"/>
-                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
-                <rect x="6" y="14" width="12" height="8"/>
-              </svg>
-            )
-          },
-          {
-            title: "Security Features",
-            description: "Built-in security measures ensure only authorized attendees can claim tokens, preventing fraud and duplicate claims.",
-            icon: (
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              </svg>
-            )
-          }
-        ]}
-      />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="space-y-6"
+            >
+              <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+                Imagine a world where distributing digital tokens is as simple as sharing smiles at your event. That's the vision I've brought to life with Scalable cToken. Born from countless conversations with event organizers who struggled with complex token systems, I've crafted a platform that transforms the way digital tokens flow through the Solana ecosystem. At its heart lies an elegantly simple process: connect your wallet, breathe life into your event details, and watch as tokens spring to life through Light Protocol's groundbreaking compression technology. I've distilled the entire claiming process down to a single scan of a QR code – because I believe technology should fade into the background while human connections take center stage.
+              </p>
+              <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+                The magic happens in my innovative use of Zero-Knowledge compression – think of it as digital origami, where instead of thousands of separate pieces, I fold everything into a single, beautiful, verifiable on-chain record. This isn't just about numbers; it's about making the impossible possible. I've slashed storage costs by an astounding 1000x and opened the doors to distributing up to 1,000 tokens in a single heartbeat. Even when your event swells to 100,000+ attendees, every interaction remains swift and secure, ensuring your community stays connected without breaking the bank.
+              </p>
+              <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+                My journey began with a simple question: what if I could make token distribution as natural as greeting guests at your event? Today, that dream has become reality. Whether you're orchestrating an intimate hackathon or conducting a symphony of interactions at a global conference, my platform stands ready as your trusted partner. I've woven together instant verification, fraud prevention, and real-time analytics into a seamless tapestry that adapts to your needs. Event organizers can shape their digital experiences with the same care they put into crafting physical ones – customizing metadata, defining parameters, and monitoring engagement through an intuitive dashboard that feels like a natural extension of their vision.
+              </p>
+              <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+                The beauty of my system lies in its flexibility and human-centered design. For organizers, I've created a canvas where creativity knows no bounds – distribute tokens through elegant QR codes at in-person gatherings or bridge digital distances with direct wallet addresses. Schedule airdrops that feel like digital rain or craft personalized claiming experiences, all while maintaining rock-solid security through thoughtfully designed verification systems. For participants, I've eliminated the technological barriers that often stand between people and their digital memories. A simple scan connects them to their tokens, working harmoniously with familiar wallets like Phantom, Backpack, and Solflare. Tokens appear in wallets like magic, creating lasting digital mementos of shared experiences.
+              </p>
+              <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+                In crafting Scalable cToken, I've done more than build a platform – I've created a bridge between the technical complexity of blockchain and the warmth of human interaction. Every feature, from the instant token receipt to the comprehensive event tracking, has been lovingly designed with one goal in mind: to let event organizers focus on what truly matters – creating meaningful connections and memorable experiences. I've hidden the complex blockchain machinery behind a curtain of simplicity, ensuring that whether you're a tech-savvy developer or a first-time token distributor, you'll find a welcoming home in this ecosystem. Welcome to the future of token distribution – where technology serves humanity, not the other way around.
+              </p>
+            </motion.div>
+          </article>
+        </div>
+      </section>
 
-      {/* Benefits Table */}
-      <BenefitsChart metrics={benefitsMetrics} />
+      {/* Feature Sections Container */}
+      <section className="relative max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        {/* Airdrop Capabilities Section */}
+        <article className="space-y-16">
+          <div className="space-y-6">
+            <h2 className="text-3xl md:text-4xl font-semibold text-white text-center">
+              Airdrop Capabilities
+            </h2>
+            <p className="text-lg md:text-xl text-zinc-400 leading-relaxed">
+              Revolutionize your event token distribution with our advanced airdrop system. Seamlessly manage large-scale token distributions while maintaining security and cost-effectiveness.
+            </p>
+          </div>
 
-      {/* README Showcase */}
-      <ReadmeShowcase />
+          <div className="space-y-16">
+            <div className="space-y-6">
+              <h3 className="text-2xl md:text-3xl font-semibold text-white text-center">
+                Bulk Distribution
+              </h3>
+              <p className="text-base md:text-lg text-zinc-400 leading-relaxed">
+                Transform event token distribution with our revolutionary bulk transfer system. Send tokens to thousands of recipients simultaneously while maintaining security and reducing costs. Perfect for large-scale events and community airdrops.
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              <h3 className="text-2xl md:text-3xl font-semibold text-white text-center">
+                Cost Efficiency
+              </h3>
+              <p className="text-base md:text-lg text-zinc-400 leading-relaxed">
+                Experience unprecedented savings with our compression technology. Reduce storage costs by 1000x compared to traditional methods, making large-scale token distribution accessible to events of any size.
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              <h3 className="text-2xl md:text-3xl font-semibold text-white text-center">
+                Real-time Analytics
+              </h3>
+              <p className="text-base md:text-lg text-zinc-400 leading-relaxed">
+                Monitor your token distribution with precision through our comprehensive dashboard. Track claim rates, engagement metrics, and distribution progress in real-time, ensuring complete visibility over your event's success.
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <h2 className="text-3xl md:text-4xl font-semibold text-white text-center">
+              Solana Pay Integration
+            </h2>
+            <p className="text-lg md:text-xl text-zinc-400 leading-relaxed">
+              Leverage the power of Solana's high-performance blockchain for instant, secure token transfers. Our integration ensures smooth, reliable transactions with minimal fees and maximum efficiency.
+            </p>
+          </div>
+
+          <div className="space-y-16">
+            <div className="space-y-6">
+              <h3 className="text-2xl md:text-3xl font-semibold text-white text-center">
+                Secure by Design
+              </h3>
+              <p className="text-base md:text-lg text-zinc-400 leading-relaxed">
+                Built with security at its core, our platform leverages state-of-the-art cryptography to protect every transaction. Your tokens remain safe from creation to distribution, with built-in verification at every step.
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              <h3 className="text-2xl md:text-3xl font-semibold text-white text-center">
+                Instant Settlement
+              </h3>
+              <p className="text-base md:text-lg text-zinc-400 leading-relaxed">
+                Experience the speed of Solana with instant token transfers and immediate settlement. No more waiting for confirmations or dealing with slow networks. Your tokens arrive in wallets within seconds.
+              </p>
+            </div>
+          </div>
+        </article>
+      </section>
 
       {/* CTA Section */}
       <CTASection

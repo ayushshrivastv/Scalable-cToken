@@ -163,31 +163,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     // Main section container
     <section 
       className="relative w-full h-screen overflow-hidden hero-section-main-container" // Added a class for the new ::before
-      style={{ backgroundColor: 'var(--background)' }} // Using theme variable to match the rest of the site
+      style={{ backgroundColor: '#000000', overflowX: 'hidden' }} // Pure black background
       aria-label="Hero section with animated background and content"
     >
       {/* Embedded global styles for particles and background curves */}
       <style jsx global>{`
-        /* Distant, subtle curve (applied to .hero-section-main-container::before) */
-        .hero-section-main-container::before {
-          content: "";
-          position: absolute;
-          bottom: -70vh;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 350vw;
-          height: 120vh;
-          background: radial-gradient(
-            ellipse at center bottom,
-            rgba(40, 40, 70, 0.15) 0%, /* Very subtle dark purplish/blueish glow */
-            rgba(30, 30, 60, 0.05) 30%,
-            transparent 50% /* Fades out relatively quickly */
-          );
-          border-radius: 50%;
-          z-index: 0; /* Behind other elements */
-          pointer-events: none;
-        }
-
         /* Your existing particle styling */
         .particle {
           position: absolute; 
@@ -196,7 +176,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           will-change: transform, opacity; 
         }
 
-        /* Your existing horizon glow styling */
+        /* Enhanced horizon glow styling */
         .hero-horizon::after {
           content: "";
           position: absolute;
@@ -207,14 +187,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           height: 100vh; 
           background: radial-gradient(
               ellipse at center bottom,
-              rgba(220, 235, 255, 0.7) 0%,
-              rgba(200, 220, 255, 0.5) 3%,
-              rgba(130, 160, 220, 0.2) 10%,
-              rgba(80, 100, 170, 0.1) 20%,
+              rgba(220, 235, 255, 1) 0%,
+              rgba(200, 220, 255, 0.95) 3%,
+              rgba(130, 160, 220, 0.50) 10%,
+              rgba(80, 100, 170, 0.34) 20%,
               transparent 35%
           );
           border-radius: 50%;
-          /* z-index is 1 by default relative to its parent (.hero-horizon) */
+          filter: blur(25px);
           pointer-events: none;
         }
 
@@ -224,9 +204,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           bottom: 0;
           left: 0;
           width: 100%;
-          height: 30vh; /* Increased height for smoother transition */
-          background: linear-gradient(to bottom, transparent, var(--background) 95%); /* Using theme variable */
-          z-index: 3; /* Above curves, below particles and content */
+          height: 30vh;
+          background: linear-gradient(to bottom, transparent, var(--background) 95%);
+          z-index: 3;
           pointer-events: none;
         }
       `}</style>
@@ -238,7 +218,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         aria-hidden="true" // Decorative particles
       />
 
-      {/* Horizon glow effect container - z-index 1 (to be above section::before) */}
+      {/* Horizon glow effect container - z-index 1 */}
       <div 
         className="absolute inset-0 hero-horizon z-[1]" 
         aria-hidden="true" 

@@ -19,7 +19,7 @@ Scalable cToken Distribution with Solana Pay and ZK Compression on Solana
 
 A high throughput solution for creating and distributing compressed proof-of-participation tokens at scale on Solana blockchain using Solana Pay and Light Protocol's compression technology.
 
-Check out [Presentation](./DEMO_SCRIPT.md) for a quick overview of the project's functionality.
+Check out [Presentation](./PRESENTATION.md) for a quick overview of the project's functionality.
 
 ## Solana Pay and Smart Contract Workflow
 

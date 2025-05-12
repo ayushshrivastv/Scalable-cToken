@@ -22,7 +22,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DEFAULT_TOKEN_DECIMALS } from '@/lib/constants';
 import type { MintFormData } from '@/lib/types';
 import { createCompressedTokenMint, mintCompressedTokens, createConnection } from '@/lib/utils/solana';
-import { Keypair } from '@solana/web3.js';
+import { Keypair, PublicKey } from '@solana/web3.js';
 import { createClaimUrl, createSolanaPayUrl, createSolanaPayClaimUrl, generateQrCodeDataUrl } from '@/lib/utils/qrcode';
 
 /**
@@ -148,37 +148,63 @@ export function MintForm() {
         cluster: process.env.NEXT_PUBLIC_CLUSTER as "devnet" | "mainnet-beta" | "testnet" | "localnet" || "devnet"
       };
       
-      // We need a keypair for signing transactions
-      // In a real app, this would come from the user's wallet
-      // For testing, we'll use a generated keypair
-      // WARNING: In production, never expose private keys on the client side!
-      const payerKeypair = /*window.solana.signTransaction ? await window.solana._keypair :*/ new Keypair(); // Temporary for testing
+      // Check if wallet adapter signing is available
+      if (!wallet.signTransaction || !wallet.sendTransaction) {
+        throw new Error("Your wallet doesn't support the required signing methods.");
+      }
       
-      // 1. Create the compressed token mint
-      console.log("Creating compressed token mint...");
-      const { mint, signature: createSignature } = await createCompressedTokenMint(
-        createConnection(appConfig),
-        payerKeypair, // Payer/wallet
-        publicKey, // Mint authority
-        mintData.decimals,
-        mintData.tokenMetadata.name,
-        mintData.tokenMetadata.symbol,
-        mintData.tokenMetadata.image || "https://arweave.net/placeholder", // Token URI/image
-      );
+      // We'll use the wallet adapter to sign transactions
+      // For Light Protocol operations that require a keypair, we'll need to adjust our approach
       
-      console.log("Token mint created with address:", mint.toBase58());
-      console.log("Creation signature:", createSignature);
+      // We're using a server-side approach for token creation since Light Protocol requires Keypairs
+      // This keeps private keys secure on the server while still allowing wallet interaction
+      console.log("Initiating server-side token creation process...");
       
-      // 2. Mint tokens to the organizer's wallet
-      console.log("Minting tokens to organizer wallet...");
-      const { signature: mintSignature } = await mintCompressedTokens(
-        createConnection(appConfig),
-        payerKeypair, // Payer
-        mint, // Mint address
-        publicKey, // Destination (organizer's wallet)
-        payerKeypair, // Mint authority
-        mintData.supply, // Amount to mint
-      );
+      // Show loading message
+      setIsSubmitting(true);
+      
+      // Variables to store token creation results
+      let mint: PublicKey;
+      let createSignature: string;
+      let mintSignature: string;
+      
+      try {
+        // Call our server-side API endpoint
+        const response = await fetch('/api/token/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            mintData,
+            destinationWallet: publicKey.toBase58(), // The user's wallet address
+          }),
+        });
+        
+        // Parse the response
+        const result = await response.json();
+        
+        // Check if the request was successful
+        if (!response.ok) {
+          throw new Error(result.details || result.error || 'Token creation failed');
+        }
+        
+        console.log("Server-side token creation successful:", result);
+        
+        // Extract the relevant data from the response
+        mint = new PublicKey(result.mint);
+        createSignature = result.createSignature;
+        mintSignature = result.mintSignature;
+        
+        console.log("Token mint created with address:", mint.toBase58());
+        console.log("Creation signature:", createSignature);
+        console.log("Mint signature:", mintSignature);
+      } catch (error) {
+        console.error("Error during server-side token creation:", error);
+        alert(`Token creation failed: ${error instanceof Error ? error.message : String(error)}`);
+        setIsSubmitting(false);
+        return;
+      }
       
       console.log("Tokens minted successfully, signature:", mintSignature);
       

@@ -33,9 +33,7 @@ const Select = ({ value, onValueChange, children }: { value: string, onValueChan
 const SelectTrigger = ({ className = '', children }: { className?: string, children: React.ReactNode }) => (
   <button className={`flex h-9 w-full items-center justify-between rounded-md border border-gray-700 bg-[#121212] px-3 py-2 text-sm ${className}`}>
     {children}
-    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" className="h-4 w-4 opacity-50">
-      <path d="M4.93179 5.43179C4.75605 5.60753 4.75605 5.89245 4.93179 6.06819C5.10753 6.24392 5.39245 6.24392 5.56819 6.06819L7.49999 4.13638L9.43179 6.06819C9.60753 6.24392 9.89245 6.24392 10.0682 6.06819C10.2439 5.89245 10.2439 5.60753 10.0682 5.43179L7.81819 3.18179C7.73379 3.0974 7.61933 3.04999 7.49999 3.04999C7.38064 3.04999 7.26618 3.0974 7.18179 3.18179L4.93179 5.43179ZM10.0682 9.56819C10.2439 9.39245 10.2439 9.10753 10.0682 8.93179C9.89245 8.75606 9.60753 8.75606 9.43179 8.93179L7.49999 10.8636L5.56819 8.93179C5.39245 8.75606 5.10753 8.75606 4.93179 8.93179C4.75605 9.10753 4.75605 9.39245 4.93179 9.56819L7.18179 11.8182C7.26618 11.9026 7.38064 11.95 7.49999 11.95C7.61933 11.95 7.73379 11.9026 7.81819 11.8182L10.0682 9.56819Z" fill="currentColor"></path>
-    </svg>
+    v
   </button>
 );
 
@@ -108,58 +106,13 @@ export function RecipientList() {
     
     setIsLoading(true);
     try {
-      // This would be replaced with actual API calls to fetch recipients
-      // Simulating API call with timeout
+      // In a real implementation, this would fetch actual data from the blockchain
+      // For now, we'll return an empty array to indicate no recipients yet
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Mock data - would be replaced with actual API response
-      setRecipients([
-        {
-          id: '1',
-          walletAddress: '8ZKS79CD4YNmhGVEZgwj1iWZnV9y9UtVvjwjQzN4JKfA',
-          name: 'Alex Johnson',
-          email: 'alex@example.com',
-          eventName: 'Solana 1000x Hackathon',
-          claimDate: '2025-05-02T14:32:15',
-          status: 'claimed'
-        },
-        {
-          id: '2',
-          walletAddress: '6ZnYg6V253RjjsTgKW5MVXVEUjwFP8iJgUBMKAWCFsNG',
-          name: 'Maria Rodriguez',
-          email: 'maria@example.com',
-          eventName: 'Solana 1000x Hackathon',
-          claimDate: '2025-05-02T15:45:22',
-          status: 'claimed'
-        },
-        {
-          id: '3',
-          walletAddress: '4j1xp9s2ZV4JxK8zJQxrNRVcLUmMzpXZ5yqJvRPKBJYm',
-          name: null,
-          email: null,
-          eventName: 'Token Web3 Meetup',
-          claimDate: '2025-04-15T11:05:33',
-          status: 'claimed'
-        },
-        {
-          id: '4',
-          walletAddress: '2uvSmG4xnQQSM6So8PTLoFxCLqoYZLaNrNw4BQJFbYLy',
-          name: 'John Smith',
-          email: 'john@example.com',
-          eventName: 'Blockchain Developer Workshop',
-          claimDate: '2025-03-22T09:15:44',
-          status: 'claimed'
-        },
-        {
-          id: '5',
-          walletAddress: '9BRZHVztCYnoBRJTXWMdCjSVt2RzNFNSGR1CjKXPPmV5',
-          name: 'Emily Chen',
-          email: 'emily@example.com',
-          eventName: 'Solana 1000x Hackathon',
-          claimDate: '2025-05-03T10:22:18',
-          status: 'pending'
-        }
-      ]);
+      // Set an empty recipients array
+      // In a real implementation, this would be populated with actual recipient data
+      setRecipients([]);
     } catch (error) {
       console.error("Error fetching recipients:", error);
     } finally {
@@ -223,10 +176,7 @@ export function RecipientList() {
       ) : isLoading ? (
         <div className="bg-[#121212] rounded-lg p-8 flex items-center justify-center min-h-[200px] border border-dashed border-gray-800">
           <div className="flex items-center">
-            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
+            
             <p className="text-gray-400">Loading recipients...</p>
           </div>
         </div>

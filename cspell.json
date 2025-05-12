@@ -23,7 +23,17 @@
     "lightprotocol",
     "Droploop",
     "Helius",
-    "Webstyles"
+    "Webstyles",
+    "LAMPORTS",
+    "lamports",
+    "Blockhash",
+    "blockhash",
+    "recentBlockhash",
+    "priorityFee",
+    "computeUnitPrice",
+    "computeUnitLimit",
+    "sendAndConfirmTx",
+    "txError"
   ],
   "ignorePaths": [
     "node_modules/**",

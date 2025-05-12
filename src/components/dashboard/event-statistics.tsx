@@ -54,37 +54,26 @@ export function EventStatistics() {
     
     setIsLoading(true);
     try {
-      // This would be replaced with actual API calls to fetch statistics
-      // Simulating API call with timeout
+      // In a real implementation, this would fetch actual data from the blockchain
+      // For now, we'll show a single event with zeros to indicate no real data yet
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Mock data - would be replaced with actual API response
-      setEvents([
+      // Show the user's wallet address as the organizer
+      const walletAddress = publicKey.toBase58();
+      
+      // Create a single event with zeros for the current wallet
+      const emptyEvents: EventData[] = [
         {
-          eventName: "Solana 1000x Hackathon",
-          eventDate: "2025-05-01",
-          organizer: "Superteam",
-          totalSupply: 500,
-          claimed: 387,
-          pending: 113,
-        },
-        {
-          eventName: "Token Web3 Meetup",
-          eventDate: "2025-04-15",
-          organizer: "Solana Foundation",
-          totalSupply: 250,
-          claimed: 198,
-          pending: 52,
-        },
-        {
-          eventName: "Blockchain Developer Workshop",
-          eventDate: "2025-03-22",
-          organizer: "Light Protocol",
-          totalSupply: 100,
-          claimed: 100,
+          eventName: "Scalable cToken Demo",
+          eventDate: new Date().toISOString().split('T')[0],
+          organizer: walletAddress.slice(0, 10) + "...",
+          totalSupply: 0,
+          claimed: 0,
           pending: 0,
         }
-      ]);
+      ];
+      
+      setEvents(emptyEvents);
     } catch (error) {
       console.error("Error fetching event stats:", error);
     } finally {
@@ -122,10 +111,6 @@ export function EventStatistics() {
       ) : isLoading ? (
         <div className="bg-[#121212] rounded-lg p-8 flex items-center justify-center min-h-[200px] border border-dashed border-gray-800">
           <div className="flex items-center">
-            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
             <p className="text-gray-400">Loading event statistics...</p>
           </div>
         </div>

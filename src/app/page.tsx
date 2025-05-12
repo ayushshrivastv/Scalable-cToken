@@ -317,16 +317,6 @@ export default function Home() {
       {/* Benefits Table */}
       <BenefitsChart metrics={benefitsMetrics} />
 
-      {/* Quantified Benefits */}
-      <QuantifiedBenefits />
-
-      {/* Specs Grid */}
-      <SpecGrid
-        title="Distribution Methods"
-        subtitle="Multiple ways to deliver tokens to your audience efficiently"
-        items={specItems}
-      />
-
       {/* README Showcase */}
       <ReadmeShowcase />
 

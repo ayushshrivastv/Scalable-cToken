@@ -6,7 +6,7 @@ For a detailed technical architecture and component flow diagrams, please refer 
 
 P.S. After 48 hours of coding, debugging, and more coffee than water—here’s the project. The backend isn’t quite where I want it yet—there’s still a lot of work ahead.
 
-I first discovered this project on Superteam on March 10th, and This is my very first submission to a Superteam Projects.
+ I came across this project on Superteam on March 10th, and this is my first-ever submission—and also my first Solana project!
 
 ### Web Page Link
 **[Scalable cToken Page](https://scalable-c-token-ayushshrivastvs-projects.vercel.app/)**
@@ -19,7 +19,7 @@ Scalable cToken Distribution with Solana Pay and ZK Compression on Solana
 
 A high throughput solution for creating and distributing compressed proof-of-participation tokens at scale on Solana blockchain using Solana Pay and Light Protocol's compression technology.
 
-Check out [demo script](./DEMO_SCRIPT.md) for a quick overview of the project's functionality.
+Check out [Presentation](./DEMO_SCRIPT.md) for a quick overview of the project's functionality.
 
 ## Solana Pay and Smart Contract Workflow
 
@@ -36,6 +36,11 @@ The user interface is built to be intuitive across devices and accommodates both
 ![442056067-8b7532fd-1a86-4471-810d-b7e9b3484217](https://github.com/user-attachments/assets/e2d11e13-a8b1-4c6c-a7ad-2a3d65d02f86)
 
 ![Screenshot 2025-05-12 at 4 23 55 AM](https://github.com/user-attachments/assets/f9c81e73-129b-4750-9d6d-9a44a9d8d104)
+
+### Seamless Connection of Wallet to Collect Event Tokens.
+
+<img src="https://github.com/user-attachments/assets/397b8b3b-b404-4b81-8b32-a6f6885f04cb" alt="Screenshot 2025-05-12 at 7 16 48 AM" width="300"/>
+
 
 ## QR Codes & Airdrops
 
@@ -63,27 +68,6 @@ This combination of QR-based claiming and airdrop functionality makes the platfo
 Distribute tokens to large audiences with just a few clicks. Our airdrop system allows event organizers to send tokens to hundreds or thousands of attendees simultaneously. The platform leverages custom Solana smart contracts that interact seamlessly with Light Protocol's compression technology, reducing transaction costs by 1000x. Solana Pay integration enables frictionless claiming through scannable QR codes that embed transaction instructions, wallet connections, and verification parameters—all while maintaining sub-second finality and military-grade security.
 
 **[Try the live demo here](https://scalable-c-token-ayushshrivastvs-projects.vercel.app/)**
-
-### Best cPOP Interface - Solana Foundation Prize Requirements
-
-This project directly addresses the Solana Foundation's requirements for the "Best cPOP Interface" prize:
-
-1. **Creator Token Minting Interface:**
-   - Intuitive form for event organizers to create and mint cTokens for experiences/events
-   - Customizable token metadata including event details, branding, and attributes
-   - Bulk minting capabilities with 1000x cost reduction using Light Protocol's compression
-
-2. **Attendee Claiming via QR Code:**
-   - Solana Pay-compatible QR codes that attendees can scan with any smartphone
-   - One-tap wallet connection and token claiming process
-   - Real-time transaction confirmation and token display
-
-3. **Compressed Token Implementation:**
-   - Full integration with Light Protocol for ZK-compressed tokens
-   - Maintains all security and composability benefits of standard Solana tokens
-   - Achieves 1000x storage cost reduction and 100x higher throughput
-
-The interface prioritizes user experience with a modern, responsive design that works across devices, making it ideal for both virtual and in-person events.
 
 ## Setup & Installation
 
@@ -146,12 +130,16 @@ npm run start       # Start production server
 ## User Experience Showcase
 
 ### Organizer Journey
+For event organizers, the process is simple: connect your Solana wallet, create an event with custom details, and generate QR codes for distribution. The system handles token creation using Light Protocol's compression technology.
+
 1. Connect wallet and access the intuitive dashboard
 2. Create an event with custom branding and metadata
 3. Generate a unique QR code for distribution
 4. Monitor real-time claim statistics
 
 ### Attendee Journey
+Attendees just scan the QR code with their phone, approve the claim in their Solana wallet, and instantly receive their token – all with minimal fees.
+
 1. Scan event QR code with any Phone
 2. Connect Solana wallet with a single tap
 3. Claim compressed token in seconds

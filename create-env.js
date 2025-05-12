@@ -8,7 +8,9 @@ const path = require('path');
 // Define the content for the .env file
 const envContent = `NEXT_PUBLIC_CLUSTER=devnet
 NEXT_PUBLIC_RPC_ENDPOINT=https://api.devnet.solana.com
-ADMIN_PRIVATE_KEY=OIivDgAVz6EvuNIlQFgOpadvE4Cultuob9I+21MVt7c=
+# Generate a private key using setup-admin-wallet.js or Solana CLI
+# NEVER commit actual keys to version control
+ADMIN_PRIVATE_KEY=your_private_key_here
 `;
 
 // Define the path to the .env file
@@ -28,7 +30,9 @@ if (fs.existsSync(envPath)) {
     console.log('📝 Configuration:');
     console.log('- NEXT_PUBLIC_CLUSTER: devnet');
     console.log('- NEXT_PUBLIC_RPC_ENDPOINT: https://api.devnet.solana.com');
-    console.log('- ADMIN_PRIVATE_KEY: [Securely stored in .env file]');
+    console.log('⚠️ IMPORTANT: You need to set your ADMIN_PRIVATE_KEY in the .env file');
+    console.log('\n📋 To generate a new admin keypair, run:');
+    console.log('node setup-admin-wallet.js');
     console.log('\n⚠️ Important: This admin keypair needs SOL to pay for transaction fees.');
     console.log('You can fund it using a devnet faucet or the Solana CLI:');
     console.log('solana airdrop 1 <ADMIN_PUBLIC_KEY> --url https://api.devnet.solana.com');

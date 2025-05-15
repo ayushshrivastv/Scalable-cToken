@@ -194,19 +194,50 @@ export default function Home() {
               className="space-y-6"
             >
               <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
-                Imagine a world where distributing digital tokens is as simple as sharing smiles at your event. That's the vision I've brought to life with Scalable cToken. Born from countless conversations with event organizers who struggled with complex token systems, I've crafted a platform that transforms the way digital tokens flow through the Solana ecosystem. At its heart lies an elegantly simple process: connect your wallet, breathe life into your event details, and watch as tokens spring to life through Light Protocol's groundbreaking compression technology. I've distilled the entire claiming process down to a single scan of a QR code – because I believe technology should fade into the background while human connections take center stage.
+                At the intersection of blockchain complexity and human simplicity, a new digital platform is reimagining how event organizers distribute digital tokens. Dubbed Scalable cToken, the tool promises to make what was once a convoluted, costly process as effortless as scanning a QR code.
               </p>
               <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
-                The magic happens in my innovative use of Zero-Knowledge compression – think of it as digital origami, where instead of thousands of separate pieces, I fold everything into a single, beautiful, verifiable on-chain record. This isn't just about numbers; it's about making the impossible possible. I've slashed storage costs by an astounding 1000x and opened the doors to distributing up to 1,000 tokens in a single heartbeat. Even when your event swells to 100,000+ attendees, every interaction remains swift and secure, ensuring your community stays connected without breaking the bank.
+                The concept was born from recurring frustrations voiced by event organizers — many of whom loved the promise of digital tokens but were consistently thwarted by the technical barriers: complicated wallet integrations, slow transactions, and high on-chain costs.
               </p>
               <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
-                My journey began with a simple question: what if I could make token distribution as natural as greeting guests at your event? Today, that dream has become reality. Whether you're orchestrating an intimate hackathon or conducting a symphony of interactions at a global conference, my platform stands ready as your trusted partner. I've woven together instant verification, fraud prevention, and real-time analytics into a seamless tapestry that adapts to your needs. Event organizers can shape their digital experiences with the same care they put into crafting physical ones – customizing metadata, defining parameters, and monitoring engagement through an intuitive dashboard that feels like a natural extension of their vision.
+                <strong>A Simple Scan, A Powerful Backend</strong><br />
+                Scalable cToken seeks to rewrite that narrative. Built on the high-speed Solana blockchain and leveraging Light Protocol's zero-knowledge compression, the system allows organizers to mint and distribute up to 1,000 tokens per transaction — with minimal costs and near-instant confirmation.
               </p>
               <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
-                The beauty of my system lies in its flexibility and human-centered design. For organizers, I've created a canvas where creativity knows no bounds – distribute tokens through elegant QR codes at in-person gatherings or bridge digital distances with direct wallet addresses. Schedule airdrops that feel like digital rain or craft personalized claiming experiences, all while maintaining rock-solid security through thoughtfully designed verification systems. For participants, I've eliminated the technological barriers that often stand between people and their digital memories. A simple scan connects them to their tokens, working harmoniously with familiar wallets like Phantom, Backpack, and Solflare. Tokens appear in wallets like magic, creating lasting digital mementos of shared experiences.
+                The infrastructure compresses thousands of records into a single verifiable on-chain state, dramatically reducing storage requirements and latency. Organizers simply input event details, customize token parameters through a dashboard, and generate QR codes that attendees can scan to instantly receive tokens.
               </p>
               <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
-                In crafting Scalable cToken, I've done more than build a platform – I've created a bridge between the technical complexity of blockchain and the warmth of human interaction. Every feature, from the instant token receipt to the comprehensive event tracking, has been lovingly designed with one goal in mind: to let event organizers focus on what truly matters – creating meaningful connections and memorable experiences. I've hidden the complex blockchain machinery behind a curtain of simplicity, ensuring that whether you're a tech-savvy developer or a first-time token distributor, you'll find a welcoming home in this ecosystem. Welcome to the future of token distribution – where technology serves humanity, not the other way around.
+                "It's digital origami," said one early user. "Thousands of interactions folded into one — and no one has to think about how it works. They just scan, and the token is there."
+              </p>
+              <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+                <strong>An Infrastructure for Digital Belonging</strong><br />
+                Beyond technical innovation, Scalable cToken is designed to make technology invisible — and human connection tangible. Organizers can deploy tokens for a wide range of use cases: proof-of-attendance, community rewards, gamified experiences, even loyalty badges.
+              </p>
+              <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+                With support for popular Solana wallets like Phantom, Backpack, and Solflare, attendees don't need to learn new tools. Tokens appear instantly, acting as digital mementos of moments shared in person or online.
+              </p>
+              <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+                "People want to feel like they were part of something," said Natalie Chong, an event designer who piloted the system at a recent Web3 conference in Singapore. "The tokens felt less like technology and more like memory. Our attendees loved them — and we didn't have to babysit a backend."
+              </p>
+              <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+                <strong>Security Without Sacrificing Flow</strong><br />
+                The platform integrates real-time analytics and fraud prevention through zero-knowledge proofs, ensuring every claim is secure and verifiable. Even at events with tens of thousands of participants, transactions remain fast and reliable.
+              </p>
+              <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+                The system's flexibility allows for creative customization — including scheduled airdrops, direct wallet distributions, and dynamically generated QR codes — all while maintaining rigorous verification standards.
+              </p>
+              <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+                "In the past, we either had to pre-mint everything or slow down distribution during the event," said José Medina, an engineer at a DAO-focused startup. "Now we just define the rules, and it scales with us — no delays, no stress."
+              </p>
+              <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+                <strong>Reclaiming the Magic of the Moment</strong><br />
+                At its core, Scalable cToken is less about technology and more about removing the friction that often stands between people and digital experiences. Every feature, from instant token receipt to customizable event dashboards, is designed to let organizers focus on what truly matters: creating moments of connection.
+              </p>
+              <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+                Whether it's a 100-person hackathon or a 100,000-person global summit, this platform offers a simple promise: distribute tokens as effortlessly as greeting a guest — and make those moments last.
+              </p>
+              <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+                As one early adopter put it, "Tokens shouldn't be about the tech. They should be about the experience."
               </p>
             </motion.div>
           </article>

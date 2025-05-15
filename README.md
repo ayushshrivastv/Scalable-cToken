@@ -1,5 +1,10 @@
 # Scalable cToken (Solana Pay)
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Next.js](https://img.shields.io/badge/Next.js-15.2.0-black)](https://nextjs.org/)
+[![Solana Pay](https://img.shields.io/badge/Solana-Pay-9945FF)](https://solanapay.com/)
+[![Light Protocol](https://img.shields.io/badge/Light_Protocol-ZK_Compression-6A5ACD)](https://lightprotocol.com/)
+
 This project enables event organisers to mint digital POP tokens that can be claimed by attendees through a simple scan of a QR code. These tokens are not just symbolic; they represent verifiable, compressed assets living entirely on-chain, making them ideal for airdrops, community rewards, or credentialing at scale.
 
 For a detailed technical architecture and component flow diagrams, please refer to the [ARCHITECTURE.md](./ARCHITECTURE.md) document.

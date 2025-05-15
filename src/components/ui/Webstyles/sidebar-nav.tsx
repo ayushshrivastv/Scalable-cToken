@@ -58,7 +58,7 @@ export const SidebarNav: React.FC<SidebarNavProps> = ({
       {/* Footer area - can be used for additional links or info */}
       <div className="mt-auto p-6 pt-10">
         <Link 
-          href="https://github.com/ayushshrivastavv/Scalable-cToken" 
+          href="https://github.com/ayushshrivastv/Scalable-cToken.git" 
           target="_blank"
           className="text-zinc-300 hover:text-white text-sm transition-colors"
         >

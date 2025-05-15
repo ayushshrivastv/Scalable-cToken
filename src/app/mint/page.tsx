@@ -9,7 +9,7 @@ export default function MintPage() {
   return (
     <AppleLayout>
       {/* Content */}
-      <div className="container mx-auto pt-32 pb-16 flex-1">
+      <div className="container mx-auto pt-4 pb-16 flex-1">
         <h1 className="text-3xl font-bold mb-8">Create Event Token</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

@@ -162,7 +162,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   return (
     // Main section container
     <section 
-      className="relative w-full h-screen overflow-hidden hero-section-main-container" // Added a class for the new ::before
+      className="relative w-full min-h-screen overflow-hidden hero-section-main-container" // Changed h-screen to min-h-screen
       style={{ backgroundColor: '#000000', overflowX: 'hidden' }} // Pure black background
       aria-label="Hero section with animated background and content"
     >
@@ -228,17 +228,17 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       <div className="bottom-fade" aria-hidden="true" />
 
       {/* Content - z-index 20 */}
-      <div className="relative z-[20] flex flex-col items-center justify-center h-full px-4 text-center">
+      <div className="relative z-[20] flex flex-col items-center pt-8 h-full px-4 text-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex flex-col items-center max-w-5xl"
+          className="flex flex-col items-center max-w-4xl"
         >
           {/* Main title */}
           <div className="mb-6">
             {typeof title === 'string' ? (
-              <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white">
+              <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white">
                 {title}
               </h1>
             ) : (
@@ -251,7 +251,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="text-xl md:text-2xl text-zinc-400 max-w-2xl mb-8"
+            className="text-lg md:text-xl text-zinc-400 max-w-xl mb-6"
           >
             {subtitle}
           </motion.p>
@@ -261,7 +261,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="flex flex-col sm:flex-row gap-4 mb-12"
+            className="flex flex-col sm:flex-row gap-3 mb-8"
           >
             <Link 
               href={ROUTES.MINT} 
@@ -288,7 +288,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.7 }}
             transition={{ duration: 0.8, delay: 1, repeat: Infinity, repeatType: 'reverse' }}
-            className="absolute bottom-8" // z-index will be inherited from parent content div (z-20)
+            className="fixed bottom-6" // Fixed at the very bottom of the viewport
           >
             <svg 
               width="24" 

@@ -172,7 +172,7 @@ export default function Home() {
       {/* Project Overview Section */}
       <section className="py-8 md:py-16 bg-black/30 backdrop-blur-sm">
         <div className="px-4 md:px-6 max-w-3xl mx-auto">
-          <article className="space-y-6 text-left">
+          <article className="space-y-6 text-left font-fredoka">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -180,7 +180,7 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               className="space-y-3"
             >
-              <h1 className="text-3xl md:text-4xl font-bold text-white">
+              <h1 className="text-3xl md:text-4xl font-bold text-white font-sf-pro">
                 Scalable cToken Decentralized Token System
               </h1>
               <div className="text-zinc-400 text-sm border-b border-zinc-800 pb-3">Posted by Ayush Srivastava · May 12</div>
@@ -244,15 +244,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <CTASection
-        title="Ready to get started?"
-        description="Create your first proof-of-participation token in minutes."
-        primaryButtonText="Create Event Token"
-        primaryButtonLink={ROUTES.MINT}
-        secondaryButtonText="Claim Your Token"
-        secondaryButtonLink={ROUTES.CLAIM}
-      />
+      {/* CTA Section removed as requested */}
     </AppleLayout>
   );
 }

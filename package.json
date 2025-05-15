@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -H 0.0.0.0 --turbopack",
+    "dev": "node setup-dev-environment.js && next dev -H 0.0.0.0",
+    "setup": "node setup-dev-environment.js",
     "build": "next build",
     "start": "next start",
     "lint": "bunx biome lint --write && bunx tsc --noEmit",

@@ -16,25 +16,25 @@ export const SimplifiedFooter: React.FC<FooterProps> = ({ className = '' }) => {
   
   return (
     <footer className={`bg-black text-zinc-400 py-12 ${className}`}>
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div className="container mx-auto px-4 text-center">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 justify-items-center">
           {/* Logo and brief description */}
-          <div className="space-y-4">
-            <Link href="/" className="flex items-center">
+          <div className="space-y-4 flex flex-col items-center">
+            <Link href="/" className="flex items-center justify-center">
               <span className="text-xl font-bold tracking-tight flex items-center">
                 <span className="text-white">Scalable</span>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-500 to-pink-600 ml-1">cToken</span>
               </span>
             </Link>
-            <p className="text-sm">
+            <p className="text-sm max-w-md mx-auto">
               High throughput token issuance and distribution platform powered by Light Protocol's state compression technology.
             </p>
           </div>
           
           {/* Resources links */}
-          <div>
+          <div className="flex flex-col items-center">
             <h3 className="text-white font-medium mb-4">Resources</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-2 text-center">
               <li>
                 <Link href="https://solana.com" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-white transition-colors">
                   Solana
@@ -59,9 +59,9 @@ export const SimplifiedFooter: React.FC<FooterProps> = ({ className = '' }) => {
           </div>
           
           {/* Connect section */}
-          <div>
+          <div className="flex flex-col items-center">
             <h3 className="text-white font-medium mb-4">Connect</h3>
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 justify-center">
               <Link 
                 href="https://x.com/ayushsrivastv" 
                 target="_blank" 

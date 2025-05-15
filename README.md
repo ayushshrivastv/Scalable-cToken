@@ -77,19 +77,50 @@ To run this project locally, ensure you have Node.js 16 or later and a compatibl
 git clone https://github.com/ayushshrivastv/Scalable-cToken.git
 cd Scalable-cToken
 npm install
+# or if you prefer using bun
+bun install
 ```
 
-Create a `.env.local` file in the root directory with the following environment variables:
+### Automated Setup (Recommended)
 
-```
-NEXT_PUBLIC_CLUSTER=devnet
-NEXT_PUBLIC_RPC_ENDPOINT=https://api.devnet.solana.com
+The project now includes an automated setup script that will:
+1. Create the necessary `.env` file with the correct environment variables
+2. Generate a new admin wallet keypair for token operations
+3. Request an airdrop of SOL to the admin wallet (on devnet)
+
+Simply run:
+
+```bash
+npm run setup
+# or
+bun run setup
 ```
 
 Then start the development server:
 
 ```bash
 npm run dev
+# or
+bun run dev
+```
+
+The development server will also automatically run the setup script if needed.
+
+### Manual Setup (Alternative)
+
+If you prefer to set up manually, create a `.env` file in the root directory with the following environment variables:
+
+```
+NEXT_PUBLIC_CLUSTER=devnet
+NEXT_PUBLIC_RPC_ENDPOINT=https://api.devnet.solana.com
+ADMIN_PRIVATE_KEY=your_admin_private_key_here
+```
+
+You can generate an admin private key using the Solana CLI:
+```bash
+solana-keygen new --no-passphrase -o admin-keypair.json
+# Then convert to base64 format for the .env file
+cat admin-keypair.json | base64
 ```
 
 The application will be available at [http://localhost:3000](http://localhost:3000). Connect your wallet to begin creating or claiming tokens.

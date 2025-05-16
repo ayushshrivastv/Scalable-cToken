@@ -165,15 +165,6 @@ This application is built with Next.js 15, React 18, and TypeScript, using Tailw
 
 The architecture allows easy extensibility and is suitable for further enhancements such as event analytics, email confirmations, or token gating.
 
-## Quantified Benefits
-
-| Metric | Traditional NFTs | Scalable cToken | Improvement |
-|--------|-----------------|-----------------|-------------|
-| Storage Cost per Token | ~0.005 SOL | ~0.000005 SOL | 1000x reduction |
-| Tokens per Transaction | 1 | Up to 1,000 | 1000x throughput |
-| Gas Fees for 10,000 Tokens | ~50 SOL | ~0.05 SOL | 1000x savings |
-| Claim Transaction Time | 2-5 seconds | 2-5 seconds | Equal UX |
-| Maximum Event Size | ~1,000 attendees | 100,000+ attendees | 100x scalability |
 
 For more in-depth technical details, refer to the [src/README.md](./src/README.md) file.
 

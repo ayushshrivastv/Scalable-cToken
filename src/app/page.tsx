@@ -244,6 +244,48 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Compression Technology Section */}
+      <section className="py-8 md:py-16 bg-black/30 backdrop-blur-sm">
+        <div className="px-4 md:px-6 max-w-3xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="space-y-3"
+          >
+            <h2 className="text-2xl md:text-3xl font-bold text-white font-sf-pro">
+              How Zero-Knowledge Compression Works
+            </h2>
+            <div className="text-zinc-400 text-sm border-b border-zinc-800 pb-3">Technology Overview</div>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="space-y-6 font-fredoka"
+          >
+            <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+              Scalable cToken leverages Light Protocol's zero-knowledge compression technology to revolutionize token distribution on Solana. This cutting-edge approach combines the security of blockchain with the efficiency of advanced cryptographic techniques, enabling a new paradigm for digital asset management.
+            </p>
+            
+            <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+              At its core, our implementation uses zero-knowledge proofs to compress token data while preserving its integrity and verifiability. This allows us to dramatically reduce on-chain storage requirements and transaction costs without sacrificing security or functionality. The system can process hundreds of tokens in a single transaction, making it ideal for large-scale events and airdrops.
+            </p>
+            
+            <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+              Beyond efficiency, this technology enhances privacy by allowing selective disclosure of information. Event organizers can verify attendance without exposing sensitive participant data, while attendees can prove their participation without revealing personal details. The entire system is built on cryptographic guarantees that mathematically prevent forgery or unauthorized modifications.
+            </p>
+            
+            <p className="text-base md:text-lg text-zinc-300 leading-relaxed">
+              <strong>Quantifiable Results:</strong> With compression technology, we've achieved a 1000× reduction in cost, 500× increase in processing speed, and 100× decrease in storage requirements compared to traditional token systems.
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
       {/* CTA Section removed as requested */}
     </AppleLayout>
   );

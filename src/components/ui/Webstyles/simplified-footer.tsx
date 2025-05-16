@@ -21,14 +21,10 @@ export const SimplifiedFooter: React.FC<FooterProps> = ({ className = '' }) => {
           {/* Logo and brief description */}
           <div className="space-y-4 flex flex-col items-center">
             <Link href="/" className="flex items-center justify-center">
-              <span className="text-xl font-bold tracking-tight flex items-center">
-                <span className="text-white">Scalable</span>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-500 to-pink-600 ml-1">cToken</span>
+              <span className="text-xl font-bold tracking-tight flex items-center text-white">
+                Scalable cToken
               </span>
             </Link>
-            <p className="text-sm max-w-md mx-auto">
-              High throughput token issuance and distribution platform powered by Light Protocol's state compression technology.
-            </p>
           </div>
           
           {/* Resources links */}

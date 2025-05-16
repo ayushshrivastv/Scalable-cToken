@@ -286,6 +286,28 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Video Section */}
+      <section className="py-8 md:py-16 bg-black/30 backdrop-blur-sm">
+        <div className="px-4 md:px-6 max-w-3xl mx-auto">
+          <div className="aspect-video">
+            <video 
+              className="w-full rounded-lg shadow-xl" 
+              controls 
+              preload="auto"
+              playsInline
+              muted
+              autoPlay={false}
+              controlsList="nodownload"
+              disablePictureInPicture
+              disableRemotePlayback
+            >
+              <source src="/Champ.mp4" type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section removed as requested */}
     </AppleLayout>
   );

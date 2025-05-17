@@ -60,11 +60,11 @@ Organisers can log in with their Solana wallet, create a new event, and instantl
 
 The user interface is built to be intuitive across devices and accommodates both the event creator and attendee journeys—from minting to claiming—with minimal friction.
 
-![442056085-235a9be9-e4fa-46f9-989e-1b1ce8cda931](https://github.com/user-attachments/assets/f7a7ba25-3150-4b68-a109-b3f85af91110)
+<img src="https://github.com/user-attachments/assets/f7a7ba25-3150-4b68-a109-b3f85af91110" alt="442056085-235a9be9-e4fa-46f9-989e-1b1ce8cda931" width="800"/>
 
-![442056067-8b7532fd-1a86-4471-810d-b7e9b3484217](https://github.com/user-attachments/assets/e2d11e13-a8b1-4c6c-a7ad-2a3d65d02f86)
+<img src="https://github.com/user-attachments/assets/e2d11e13-a8b1-4c6c-a7ad-2a3d65d02f86" alt="442056067-8b7532fd-1a86-4471-810d-b7e9b3484217" width="800"/>
 
-![Screenshot 2025-05-12 at 4 23 55 AM](https://github.com/user-attachments/assets/f9c81e73-129b-4750-9d6d-9a44a9d8d104)
+<img src="https://github.com/user-attachments/assets/f9c81e73-129b-4750-9d6d-9a44a9d8d104" alt="Screenshot 2025-05-12 at 4 23 55 AM" width="800"/>
 
 ### Seamless Connection of Wallet to Collect Event Tokens.
 

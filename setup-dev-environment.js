@@ -93,7 +93,6 @@ async function main() {
     const balance = await connection.getBalance(publicKey);
     console.log(`Current balance: ${balance / LAMPORTS_PER_SOL} SOL`);
 
-<<<<<<< HEAD
     // We need at least 0.9 SOL for token creation (reduced from 2 SOL)
     const MIN_REQUIRED_SOL = 0.9 * LAMPORTS_PER_SOL;
     
@@ -145,23 +144,7 @@ async function main() {
       
       console.log(`✅ Airdrops successful! Final balance: ${currentBalance / LAMPORTS_PER_SOL} SOL`);
     } else {
-      console.log('✅ Wallet already has sufficient funds (2+ SOL)');
-=======
-    if (balance < LAMPORTS_PER_SOL / 2) {
-      console.log('Balance below 0.5 SOL, requesting airdrop...');
-      const signature = await connection.requestAirdrop(publicKey, LAMPORTS_PER_SOL);
-      console.log(`Airdrop requested with signature: ${signature}`);
-      console.log('Waiting for airdrop confirmation...');
-
-      // Wait for confirmation
-      await connection.confirmTransaction(signature, 'confirmed');
-
-      // Check new balance
-      const newBalance = await connection.getBalance(publicKey);
-      console.log(`✅ Airdrop successful! New balance: ${newBalance / LAMPORTS_PER_SOL} SOL`);
-    } else {
-      console.log('✅ Wallet already has sufficient funds');
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
+      console.log('✅ Wallet already has sufficient funds (0.9+ SOL)');
     }
   } catch (error) {
     console.error('❌ Error requesting airdrop:', error.message);

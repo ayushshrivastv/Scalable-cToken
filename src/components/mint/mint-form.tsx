@@ -21,7 +21,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { DEFAULT_TOKEN_DECIMALS } from '@/lib/constants';
 import type { MintFormData } from '@/lib/types';
-import { createCompressedTokenMint, mintCompressedTokens, createConnection } from '@/lib/utils/solana';
+import { createStandardConnection } from '@/lib/utils/standard-token';
 import { Keypair, PublicKey } from '@solana/web3.js';
 import { createClaimUrl, createSolanaPayUrl, createSolanaPayClaimUrl, generateQrCodeDataUrl } from '@/lib/utils/qrcode';
 
@@ -192,9 +192,10 @@ export function MintForm() {
         console.log("Server-side token creation successful:", result);
         
         // Extract the relevant data from the response
+        // Handle both compressed token and standard SPL token response formats
         mint = new PublicKey(result.mint);
-        createSignature = result.createSignature;
-        mintSignature = result.mintSignature;
+        createSignature = result.createSignature || result.signature;
+        mintSignature = result.mintSignature || result.signature;
         
         console.log("Token mint created with address:", mint.toBase58());
         console.log("Creation signature:", createSignature);
@@ -233,8 +234,13 @@ export function MintForm() {
       setClaimUrl(standardClaimUrl);
       
       // Create QR code with the Solana Pay URL for direct wallet interaction
-      const qrCodeDataUrl = await generateQrCodeDataUrl(solanaPayUrl);
-      setQrCodeUrl(qrCodeDataUrl);
+      try {
+        const qrCodeDataUrl = await generateQrCodeDataUrl(solanaPayUrl);
+        setQrCodeUrl(qrCodeDataUrl);
+      } catch (error) {
+        console.error("Error generating QR code:", error);
+        alert(`Error generating QR code: ${error instanceof Error ? error.message : String(error)}`);
+      }
       
       setMintSuccess(true);
     } catch (error) {

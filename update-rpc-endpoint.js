@@ -10,7 +10,7 @@ const path = require('path');
 const envPath = path.join(__dirname, '.env');
 
 // New RPC endpoint with better support for Light Protocol methods
-const newRpcEndpoint = 'https://rpc-devnet.helius.xyz/?api-key=1d8740dc-e5f4-421c-b823-e1bad1889eff';
+const newRpcEndpoint = 'https://api.devnet.solana.com';
 
 async function updateRpcEndpoint() {
   try {

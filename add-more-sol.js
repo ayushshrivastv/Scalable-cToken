@@ -49,7 +49,7 @@ async function addMoreSol() {
     const neededSol = targetBalance - initialBalance;
     console.log(`🚀 Requesting additional ${neededSol / LAMPORTS_PER_SOL} SOL...`);
 
-<<<<<<< HEAD
+
     // For testing purposes, we'll simulate adding 200 SOL by using a different approach
     // Since devnet has limitations on airdrop amounts (typically 2 SOL per request)
     
@@ -137,13 +137,6 @@ async function addMoreSol() {
       // Always add a small delay between attempts to avoid rate limiting
       console.log('⏳ Waiting before next airdrop attempt...');
       await new Promise(resolve => setTimeout(resolve, 2000));
-=======
-    // Devnet allows up to 2 SOL per airdrop request
-    const maxAirdropAmount = 2 * LAMPORTS_PER_SOL;
-    const numAirdrops = Math.ceil(neededSol / maxAirdropAmount);
-
-    for (let i = 0; i < numAirdrops; i++) {
-      const airdropAmount = Math.min(maxAirdropAmount, neededSol - (i * maxAirdropAmount));
       if (airdropAmount <= 0) break;
 
       console.log(`📡 Requesting airdrop #${i+1} of ${numAirdrops}: ${airdropAmount / LAMPORTS_PER_SOL} SOL...`);
@@ -159,7 +152,7 @@ async function addMoreSol() {
         console.log('⏳ Waiting 2 seconds before next airdrop...');
         await new Promise(resolve => setTimeout(resolve, 2000));
       }
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
+
     }
 
     // Check final balance

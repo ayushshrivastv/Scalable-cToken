@@ -6,16 +6,30 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+<<<<<<< HEAD
+import { Connection, Keypair, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { DEFAULT_TOKEN_DECIMALS } from '@/lib/constants';
+import type { MintFormData } from '@/lib/types';
+import { createStandardTokenMint, mintStandardTokens } from '@/lib/utils/standard-token';
+=======
 import { Keypair, PublicKey } from '@solana/web3.js';
 import { createConnection, createCompressedTokenMint, mintCompressedTokens } from '@/lib/utils/solana';
 import { DEFAULT_TOKEN_DECIMALS } from '@/lib/constants';
 import type { MintFormData } from '@/lib/types';
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
 
 // Load environment variables
 const ADMIN_PRIVATE_KEY = process.env.ADMIN_PRIVATE_KEY;
 const RPC_ENDPOINT = process.env.NEXT_PUBLIC_RPC_ENDPOINT || 'https://api.devnet.solana.com';
 const CLUSTER = (process.env.NEXT_PUBLIC_CLUSTER as 'devnet' | 'mainnet-beta' | 'testnet' | 'localnet') || 'devnet';
 
+<<<<<<< HEAD
+// Minimum required SOL balance for token operations
+// Reduced from 2 SOL to 0.9 SOL for testing purposes
+const MIN_REQUIRED_SOL = 0.9; // 0.9 SOL
+
+=======
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
 /**
  * POST handler for token creation
  * Receives token data from the client and processes it securely on the server
@@ -27,9 +41,15 @@ export async function POST(request: NextRequest) {
       mintData: MintFormData;
       destinationWallet: string;
     };
+<<<<<<< HEAD
+
+    const { mintData, destinationWallet } = data;
+
+=======
     
     const { mintData, destinationWallet } = data;
     
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
     // Validate required data
     if (!mintData || !destinationWallet) {
       return NextResponse.json(
@@ -37,32 +57,59 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
     // For demo purposes, we'll use a server-side keypair
     // In production, this would be securely stored in environment variables
     // or a key management system
     let adminKeypair: Keypair;
+<<<<<<< HEAD
+
+    try {
+      if (ADMIN_PRIVATE_KEY) {
+        console.log('ADMIN_PRIVATE_KEY found in environment variables');
+
+=======
     
     try {
       if (ADMIN_PRIVATE_KEY) {
         console.log('ADMIN_PRIVATE_KEY found in environment variables');
         
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
         // Try parsing as base64 first (the format used by setup-dev-environment.js)
         try {
           console.log('Attempting to parse admin private key from base64 format...');
           const secretKeyUint8Array = Buffer.from(ADMIN_PRIVATE_KEY, 'base64');
           console.log(`Decoded key length: ${secretKeyUint8Array.length} bytes`);
+<<<<<<< HEAD
+
+          // Validate the key length (Solana keypairs should be 64 bytes)
+          if (secretKeyUint8Array.length !== 64) {
+            console.warn(`Warning: Decoded key length (${secretKeyUint8Array.length}) is not the expected 64 bytes`);
+            // Try assuming it's a comma-separated string
+            throw new Error('Invalid key length for base64 format');
+          }
+
+=======
           
           // Validate the key length (Solana keypairs should be 64 bytes)
           if (secretKeyUint8Array.length !== 64) {
             console.warn(`Warning: Decoded key length (${secretKeyUint8Array.length}) is not the expected 64 bytes`);
           }
           
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
           adminKeypair = Keypair.fromSecretKey(secretKeyUint8Array);
           console.log('Successfully parsed admin keypair from base64');
         } catch (e) {
           console.error('Base64 parsing error:', e);
+<<<<<<< HEAD
+
+=======
           
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
           // If that fails, try parsing as comma-separated numbers
           console.log('Trying comma-separated format as fallback...');
           try {
@@ -72,7 +119,11 @@ export async function POST(request: NextRequest) {
               console.error('Invalid private key format: contains non-numeric values');
               throw new Error('Invalid private key format');
             }
+<<<<<<< HEAD
+
+=======
             
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
             adminKeypair = Keypair.fromSecretKey(Uint8Array.from(privateKeyArray));
             console.log('Successfully parsed admin keypair from comma-separated numbers');
           } catch (innerError) {
@@ -85,7 +136,11 @@ export async function POST(request: NextRequest) {
         console.log('No admin private key found, generating a new keypair for demo purposes');
         adminKeypair = Keypair.generate();
       }
+<<<<<<< HEAD
+
+=======
       
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
       // Mask the public key for security
       const publicKeyBase58 = adminKeypair.publicKey.toBase58();
       const maskedKey = publicKeyBase58.substring(0, 4) + '...' + publicKeyBase58.substring(publicKeyBase58.length - 4);
@@ -96,6 +151,34 @@ export async function POST(request: NextRequest) {
       console.log('Falling back to generated keypair');
       adminKeypair = Keypair.generate();
     }
+<<<<<<< HEAD
+
+    // Parse the destination wallet public key
+    const destinationPublicKey = new PublicKey(destinationWallet);
+
+    // Create a connection to the Solana network
+    // Get config from environment variables or use defaults
+    const rpcEndpoint = RPC_ENDPOINT;
+
+    // Create direct connection to Solana (no Light Protocol wrapper)
+    const connection = new Connection(rpcEndpoint, 'confirmed');
+    const adminBalance = await connection.getBalance(adminKeypair.publicKey);
+    console.log(`Admin wallet balance: ${adminBalance / LAMPORTS_PER_SOL} SOL`);
+
+    // Ensure admin has sufficient SOL before proceeding
+    if (adminBalance < MIN_REQUIRED_SOL * LAMPORTS_PER_SOL) {
+      console.error(`Insufficient admin wallet balance: ${adminBalance / LAMPORTS_PER_SOL} SOL (minimum required: ${MIN_REQUIRED_SOL} SOL)`);
+      return NextResponse.json(
+        {
+          error: "Insufficient admin wallet balance",
+          details: `The admin wallet needs at least ${MIN_REQUIRED_SOL} SOL to create tokens. Current balance: ${adminBalance / LAMPORTS_PER_SOL} SOL.`,
+          code: "INSUFFICIENT_FUNDS"
+        },
+        { status: 400 }
+      );
+    }
+
+=======
     
     // Parse the destination wallet public key
     const destinationPublicKey = new PublicKey(destinationWallet);
@@ -106,6 +189,7 @@ export async function POST(request: NextRequest) {
       cluster: CLUSTER
     });
     
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
     // Add priority fee to ensure transaction goes through with limited funds
     const recentBlockhash = await connection.getLatestBlockhash('confirmed');
     // Set a higher priority fee for faster processing
@@ -115,17 +199,35 @@ export async function POST(request: NextRequest) {
     };
     // Note: Priority fee is applied within the createCompressedTokenMint function
     console.log("Setting priority fee:", priorityFee);
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
     console.log("Creating compressed token mint on server side...");
     console.log("Mint Parameters:");
     console.log("  Payer (Admin):", adminKeypair.publicKey.toBase58());
     console.log("  Mint Authority (Admin):", adminKeypair.publicKey.toBase58());
     console.log("  Decimals:", mintData.decimals || DEFAULT_TOKEN_DECIMALS);
+<<<<<<< HEAD
+
+=======
     
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
     const { name, symbol, image } = mintData.tokenMetadata;
     const tokenName = name ? name.trim() : 'Default Token Name';
     const tokenSymbol = symbol ? symbol.trim() : 'DEFAULT';
     // FORCE USING A KNOWN-GOOD JSON METADATA URI FOR TESTING
+<<<<<<< HEAD
+    const tokenMetadataUri = 'https://arweave.net/TCefB73555sZDrqmX7Y59cUS43h3WQXMZ54u1DK3W8A';
+
+    console.log("  Token Name:", tokenName);
+    console.log("  Token Symbol:", tokenSymbol);
+    console.log("  Image/Metadata URI:", tokenMetadataUri);
+
+    // 1. Create the standard SPL token mint
+    const { mint, signature: createSignature } = await createStandardTokenMint(
+=======
     const tokenMetadataUri = 'https://arweave.net/TCefB73555sZDrqmX7Y59cUS43h3WQXMZ54u1DK3W8A'; 
     
     console.log("  Token Name:", tokenName); 
@@ -134,10 +236,21 @@ export async function POST(request: NextRequest) {
     
     // 1. Create the compressed token mint
     const { mint, signature: createSignature } = await createCompressedTokenMint(
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
       connection,
       adminKeypair, // Server-side admin keypair as payer
       adminKeypair.publicKey, // Server-side admin keypair as mint authority
       mintData.decimals || DEFAULT_TOKEN_DECIMALS,
+<<<<<<< HEAD
+      tokenName,
+      tokenSymbol,
+      tokenMetadataUri,
+    );
+
+    console.log("Token mint created with address:", mint.toBase58());
+    console.log("Creation signature:", createSignature);
+
+=======
       tokenName, 
       tokenSymbol, 
       tokenMetadataUri, 
@@ -146,6 +259,7 @@ export async function POST(request: NextRequest) {
     console.log("Token mint created with address:", mint.toBase58());
     console.log("Creation signature:", createSignature);
     
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
     // 2. Mint tokens to the user's wallet
     console.log("Minting tokens to user wallet...");
     console.log("Minting Parameters:");
@@ -156,7 +270,11 @@ export async function POST(request: NextRequest) {
     console.log("  Supply:", mintData.supply);
 
     // 2. Mint tokens to the user's wallet
+<<<<<<< HEAD
+    const { signature: mintSignature } = await mintStandardTokens(
+=======
     const { signature: mintSignature } = await mintCompressedTokens(
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
       connection,
       adminKeypair, // Server-side admin keypair
       mint, // Mint address
@@ -164,9 +282,15 @@ export async function POST(request: NextRequest) {
       adminKeypair, // Mint authority (server-side)
       mintData.supply, // Amount to mint
     );
+<<<<<<< HEAD
+
+    console.log("Tokens minted successfully, signature:", mintSignature);
+
+=======
     
     console.log("Tokens minted successfully, signature:", mintSignature);
     
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
     // Return the success response with mint information
     return NextResponse.json({
       success: true,
@@ -177,6 +301,30 @@ export async function POST(request: NextRequest) {
       tokenName: tokenName,
       tokenSymbol: tokenSymbol,
     });
+<<<<<<< HEAD
+
+  } catch (error) {
+    console.error("Error in token creation API:", error);
+
+    let errorDetails = "Token creation failed";
+    let errorCode = "UNKNOWN_ERROR";
+
+    if (error instanceof Error) {
+      errorDetails = error.message;
+
+      // Categorize common errors for better user experience
+      if (error.message.includes('rent')) {
+        errorCode = "INSUFFICIENT_FUNDS_FOR_RENT";
+        errorDetails = "The admin wallet doesn't have enough SOL to pay for storage rent. Please fund the admin wallet.";
+      } else if (error.message.includes('signature verification failed')) {
+        errorCode = "SIGNATURE_VERIFICATION_FAILED";
+        errorDetails = "Transaction signature verification failed. This may be due to an invalid admin keypair.";
+      } else if (error.message.includes('failed to get slot') || error.message.includes('Method not found')) {
+        errorCode = "RPC_METHOD_NOT_FOUND";
+        errorDetails = "The RPC endpoint doesn't support the required methods. Try using a different RPC endpoint.";
+      }
+
+=======
     
   } catch (error) {
     console.error("Error in token creation API:", error);
@@ -184,6 +332,7 @@ export async function POST(request: NextRequest) {
     let errorDetails = "Token creation failed";
     if (error instanceof Error) {
       errorDetails = error.message;
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
       // If the error object has more specific Solana transaction error details
       if ('transactionMessage' in error && (error as any).transactionMessage) {
         errorDetails = (error as any).transactionMessage;
@@ -194,9 +343,16 @@ export async function POST(request: NextRequest) {
       }
     }
     return NextResponse.json(
+<<<<<<< HEAD
+      {
+        error: "Token creation failed",
+        details: errorDetails,
+        code: errorCode
+=======
       { 
         error: "Token creation failed", 
         details: errorDetails 
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
       },
       { status: 500 }
     );

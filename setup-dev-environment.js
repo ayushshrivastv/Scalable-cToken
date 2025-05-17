@@ -93,6 +93,60 @@ async function main() {
     const balance = await connection.getBalance(publicKey);
     console.log(`Current balance: ${balance / LAMPORTS_PER_SOL} SOL`);
 
+<<<<<<< HEAD
+    // We need at least 0.9 SOL for token creation (reduced from 2 SOL)
+    const MIN_REQUIRED_SOL = 0.9 * LAMPORTS_PER_SOL;
+    
+    if (balance < MIN_REQUIRED_SOL) {
+      console.log(`Balance below 0.9 SOL (required for token creation), requesting airdrops...`);
+      
+      // Request multiple airdrops if needed to reach 2 SOL
+      let currentBalance = balance;
+      while (currentBalance < MIN_REQUIRED_SOL) {
+        try {
+          // Request 1 SOL at a time (devnet limit)
+          const signature = await connection.requestAirdrop(publicKey, LAMPORTS_PER_SOL);
+          console.log(`Airdrop requested with signature: ${signature}`);
+          console.log('Waiting for airdrop confirmation...');
+
+          // Wait for confirmation with retry mechanism
+          let retries = 5;
+          while (retries > 0) {
+            try {
+              await connection.confirmTransaction(signature, 'confirmed');
+              break;
+            } catch (err) {
+              console.log(`Confirmation failed, retrying... (${retries} attempts left)`);
+              retries--;
+              if (retries === 0) throw err;
+              await new Promise(resolve => setTimeout(resolve, 1000));
+            }
+          }
+
+          // Check updated balance
+          currentBalance = await connection.getBalance(publicKey);
+          console.log(`Updated balance: ${currentBalance / LAMPORTS_PER_SOL} SOL`);
+          
+          // Add a delay between requests to avoid rate limiting
+          if (currentBalance < MIN_REQUIRED_SOL) {
+            console.log('Waiting before requesting another airdrop...');
+            await new Promise(resolve => setTimeout(resolve, 2000));
+          }
+        } catch (error) {
+          console.error(`Error during airdrop: ${error.message}`);
+          if (error.message.includes('429')) {
+            console.log('Server responded with 429 Too Many Requests. Retrying after 500ms delay...');
+            await new Promise(resolve => setTimeout(resolve, 500));
+          } else {
+            throw error;
+          }
+        }
+      }
+      
+      console.log(`✅ Airdrops successful! Final balance: ${currentBalance / LAMPORTS_PER_SOL} SOL`);
+    } else {
+      console.log('✅ Wallet already has sufficient funds (2+ SOL)');
+=======
     if (balance < LAMPORTS_PER_SOL / 2) {
       console.log('Balance below 0.5 SOL, requesting airdrop...');
       const signature = await connection.requestAirdrop(publicKey, LAMPORTS_PER_SOL);
@@ -107,6 +161,7 @@ async function main() {
       console.log(`✅ Airdrop successful! New balance: ${newBalance / LAMPORTS_PER_SOL} SOL`);
     } else {
       console.log('✅ Wallet already has sufficient funds');
+>>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
     }
   } catch (error) {
     console.error('❌ Error requesting airdrop:', error.message);

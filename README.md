@@ -71,6 +71,8 @@ The user interface is built to be intuitive across devices and accommodates both
 <img src="https://github.com/user-attachments/assets/397b8b3b-b404-4b81-8b32-a6f6885f04cb" alt="Screenshot 2025-05-12 at 7 16 48 AM" width="300"/>
 
 
+<img src="https://github.com/user-attachments/assets/5ecbbd21-bd21-4201-bb57-2dbc219473d1" alt="Screenshot 2025-05-18 at 12 35 43 AM" width="300"/>
+
 ## QR Codes & Airdrops
 
 ### Solana Pay QR Codes

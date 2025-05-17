@@ -1,13 +1,13 @@
 /**
  * @file route.ts
- * @description Server-side API endpoint for creating compressed tokens
+ * @description Server-side API endpoint for creating standard SPL tokens
  * This endpoint handles the token creation process securely on the server
  * without exposing private keys to the client
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { Keypair, PublicKey } from '@solana/web3.js';
-import { createConnection, createCompressedTokenMint, mintCompressedTokens } from '@/lib/utils/solana';
+import { PublicKey, Keypair, Cluster } from '@solana/web3.js';
+import { createStandardConnection, createStandardTokenMint, mintStandardTokens } from '@/lib/utils/standard-token';
 import { DEFAULT_TOKEN_DECIMALS } from '@/lib/constants';
 import type { MintFormData } from '@/lib/types';
 
@@ -100,10 +100,10 @@ export async function POST(request: NextRequest) {
     // Parse the destination wallet public key
     const destinationPublicKey = new PublicKey(destinationWallet);
     
-    // Create a connection to the Solana network
-    const connection = createConnection({
-      rpcEndpoint: RPC_ENDPOINT,
-      cluster: CLUSTER
+    // Create a standard connection to the Solana network
+    const connection = createStandardConnection({
+      rpcEndpoint: process.env.NEXT_PUBLIC_RPC_ENDPOINT || 'https://api.devnet.solana.com',
+      cluster: (process.env.NEXT_PUBLIC_CLUSTER || 'devnet') as Cluster,
     });
     
     // Add priority fee to ensure transaction goes through with limited funds
@@ -132,19 +132,19 @@ export async function POST(request: NextRequest) {
     console.log("  Token Symbol:", tokenSymbol); 
     console.log("  Image/Metadata URI:", tokenMetadataUri); 
     
-    // 1. Create the compressed token mint
-    const { mint, signature: createSignature } = await createCompressedTokenMint(
+    // 1. Create the standard SPL token mint
+    const { mint, signature: createSignature } = await createStandardTokenMint(
       connection,
       adminKeypair, // Server-side admin keypair as payer
       adminKeypair.publicKey, // Server-side admin keypair as mint authority
       mintData.decimals || DEFAULT_TOKEN_DECIMALS,
-      tokenName, 
-      tokenSymbol, 
-      tokenMetadataUri, 
+      tokenName, // Pass trimmed name
+      tokenSymbol, // Pass trimmed symbol
+      tokenMetadataUri, // Pass metadata URI
     );
-    
+
     console.log("Token mint created with address:", mint.toBase58());
-    console.log("Creation signature:", createSignature);
+    console.log("Create transaction signature:", createSignature);
     
     // 2. Mint tokens to the user's wallet
     console.log("Minting tokens to user wallet...");
@@ -156,13 +156,13 @@ export async function POST(request: NextRequest) {
     console.log("  Supply:", mintData.supply);
 
     // 2. Mint tokens to the user's wallet
-    const { signature: mintSignature } = await mintCompressedTokens(
+    const { signature: mintSignature } = await mintStandardTokens(
       connection,
       adminKeypair, // Server-side admin keypair
-      mint, // Mint address
-      destinationPublicKey, // Destination (user's wallet)
-      adminKeypair, // Mint authority (server-side)
-      mintData.supply, // Amount to mint
+      mint, // The mint we just created
+      destinationPublicKey, // User's wallet
+      adminKeypair, // Server-side admin keypair as mint authority
+      mintData.supply // Amount to mint
     );
     
     console.log("Tokens minted successfully, signature:", mintSignature);

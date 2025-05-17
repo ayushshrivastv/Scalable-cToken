@@ -85,9 +85,12 @@ export const createCompressedTokenMint = async (
   const mintLen = getMintLen([ExtensionType.MetadataPointer]);
   const metadataLen = packTokenMetadata(metadata).length; // TYPE_SIZE + LENGTH_SIZE is handled by pack
 
-  const rentLamports = await connection.getMinimumBalanceForRentExemption(
+  // Calculate rent with a 1.5x safety margin to ensure sufficient funds
+  const calculatedRentLamports = await connection.getMinimumBalanceForRentExemption(
     mintLen + metadataLen
   );
+  const rentLamports = Math.ceil(calculatedRentLamports * 1.5); // Add 50% safety margin
+  console.log(`Calculated rent: ${calculatedRentLamports} lamports, Using rent with safety margin: ${rentLamports} lamports`);
 
   const [createMintAccountIx, initializeMintIx, createTokenPoolIx] =
     await CompressedTokenProgram.createMint({
@@ -141,6 +144,9 @@ export const createCompressedTokenMint = async (
     };
   } catch (error) {
     console.error('Error creating compressed token mint:', error);
+    if (error && typeof error === 'object' && 'logs' in error) {
+      console.error('Solana Transaction Logs from error object:', (error as any).logs);
+    }
     // Consider re-throwing or returning an error structure
     throw error;
   }
@@ -225,6 +231,9 @@ export const mintCompressedTokens = async (
     return { signature };
   } catch (error) {
     console.error('Error minting compressed tokens:', error);
+    if (error && typeof error === 'object' && 'logs' in error) {
+      console.error('Solana Transaction Logs from error object:', (error as any).logs);
+    }
     throw error;
   }
 };
@@ -315,6 +324,9 @@ export const transferCompressedTokens = async (
     return { signature };
   } catch (error) {
     console.error('Error transferring compressed tokens:', error);
+    if (error && typeof error === 'object' && 'logs' in error) {
+      console.error('Solana Transaction Logs from error object:', (error as any).logs);
+    }
     throw error;
   }
 };

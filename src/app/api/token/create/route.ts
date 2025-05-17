@@ -45,16 +45,40 @@ export async function POST(request: NextRequest) {
     
     try {
       if (ADMIN_PRIVATE_KEY) {
-        // Try parsing as comma-separated numbers first
+        console.log('ADMIN_PRIVATE_KEY found in environment variables');
+        
+        // Try parsing as base64 first (the format used by setup-dev-environment.js)
         try {
-          const privateKeyArray = ADMIN_PRIVATE_KEY.split(',').map(Number);
-          // Check if the array has valid numbers (not NaN)
-          if (privateKeyArray.some(isNaN)) throw new Error('Invalid private key format');
-          adminKeypair = Keypair.fromSecretKey(Buffer.from(privateKeyArray));
+          console.log('Attempting to parse admin private key from base64 format...');
+          const secretKeyUint8Array = Buffer.from(ADMIN_PRIVATE_KEY, 'base64');
+          console.log(`Decoded key length: ${secretKeyUint8Array.length} bytes`);
+          
+          // Validate the key length (Solana keypairs should be 64 bytes)
+          if (secretKeyUint8Array.length !== 64) {
+            console.warn(`Warning: Decoded key length (${secretKeyUint8Array.length}) is not the expected 64 bytes`);
+          }
+          
+          adminKeypair = Keypair.fromSecretKey(secretKeyUint8Array);
+          console.log('Successfully parsed admin keypair from base64');
         } catch (e) {
-          // If that fails, try parsing as a base58 encoded string
-          console.log('Trying alternative private key format...');
-          adminKeypair = Keypair.fromSecretKey(Buffer.from(ADMIN_PRIVATE_KEY, 'base64'));
+          console.error('Base64 parsing error:', e);
+          
+          // If that fails, try parsing as comma-separated numbers
+          console.log('Trying comma-separated format as fallback...');
+          try {
+            const privateKeyArray = ADMIN_PRIVATE_KEY.split(',').map(Number);
+            // Check if the array has valid numbers (not NaN)
+            if (privateKeyArray.some(isNaN)) {
+              console.error('Invalid private key format: contains non-numeric values');
+              throw new Error('Invalid private key format');
+            }
+            
+            adminKeypair = Keypair.fromSecretKey(Uint8Array.from(privateKeyArray));
+            console.log('Successfully parsed admin keypair from comma-separated numbers');
+          } catch (innerError) {
+            console.error('All parsing methods failed:', innerError);
+            throw new Error(`Failed to parse admin private key: ${e instanceof Error ? e.message : 'Unknown error'}, then: ${innerError instanceof Error ? innerError.message : 'Unknown error'}`);
+          }
         }
       } else {
         // Fallback for demo - generate a new keypair
@@ -62,7 +86,10 @@ export async function POST(request: NextRequest) {
         adminKeypair = Keypair.generate();
       }
       
-      console.log('Admin public key:', adminKeypair.publicKey.toBase58());
+      // Mask the public key for security
+      const publicKeyBase58 = adminKeypair.publicKey.toBase58();
+      const maskedKey = publicKeyBase58.substring(0, 4) + '...' + publicKeyBase58.substring(publicKeyBase58.length - 4);
+      console.log('Admin keypair loaded [masked key:', maskedKey + ']');
     } catch (error) {
       console.error('Error parsing admin private key:', error);
       // Generate a new keypair as fallback
@@ -81,23 +108,39 @@ export async function POST(request: NextRequest) {
     
     // Add priority fee to ensure transaction goes through with limited funds
     const recentBlockhash = await connection.getLatestBlockhash('confirmed');
+    // Set a higher priority fee for faster processing
     const priorityFee = {
-      computeUnitPrice: 1000, // Adjust as needed, lower values use less SOL
-      computeUnitLimit: 200000, // Adjust as needed, lower values use less SOL
+      computeUnitPrice: 5000, // Micro-lamports per compute unit (increased from 1000)
+      computeUnitLimit: 300000, // Maximum compute units for the transaction (increased from 200000)
     };
+    // Note: Priority fee is applied within the createCompressedTokenMint function
     console.log("Setting priority fee:", priorityFee);
     
     console.log("Creating compressed token mint on server side...");
+    console.log("Mint Parameters:");
+    console.log("  Payer (Admin):", adminKeypair.publicKey.toBase58());
+    console.log("  Mint Authority (Admin):", adminKeypair.publicKey.toBase58());
+    console.log("  Decimals:", mintData.decimals || DEFAULT_TOKEN_DECIMALS);
+    
+    const { name, symbol, image } = mintData.tokenMetadata;
+    const tokenName = name ? name.trim() : 'Default Token Name';
+    const tokenSymbol = symbol ? symbol.trim() : 'DEFAULT';
+    // FORCE USING A KNOWN-GOOD JSON METADATA URI FOR TESTING
+    const tokenMetadataUri = 'https://arweave.net/TCefB73555sZDrqmX7Y59cUS43h3WQXMZ54u1DK3W8A'; 
+    
+    console.log("  Token Name:", tokenName); 
+    console.log("  Token Symbol:", tokenSymbol); 
+    console.log("  Image/Metadata URI:", tokenMetadataUri); 
     
     // 1. Create the compressed token mint
     const { mint, signature: createSignature } = await createCompressedTokenMint(
       connection,
-      adminKeypair, // Server-side admin keypair
-      destinationPublicKey, // The user's wallet as mint authority
+      adminKeypair, // Server-side admin keypair as payer
+      adminKeypair.publicKey, // Server-side admin keypair as mint authority
       mintData.decimals || DEFAULT_TOKEN_DECIMALS,
-      mintData.tokenMetadata.name,
-      mintData.tokenMetadata.symbol,
-      mintData.tokenMetadata.image || "https://arweave.net/placeholder",
+      tokenName, 
+      tokenSymbol, 
+      tokenMetadataUri, 
     );
     
     console.log("Token mint created with address:", mint.toBase58());
@@ -105,6 +148,14 @@ export async function POST(request: NextRequest) {
     
     // 2. Mint tokens to the user's wallet
     console.log("Minting tokens to user wallet...");
+    console.log("Minting Parameters:");
+    console.log("  Payer (Admin):", adminKeypair.publicKey.toBase58());
+    console.log("  Mint Address:", mint.toBase58());
+    console.log("  Destination Wallet:", destinationPublicKey.toBase58());
+    console.log("  Mint Authority (Admin):", adminKeypair.publicKey.toBase58());
+    console.log("  Supply:", mintData.supply);
+
+    // 2. Mint tokens to the user's wallet
     const { signature: mintSignature } = await mintCompressedTokens(
       connection,
       adminKeypair, // Server-side admin keypair
@@ -123,45 +174,29 @@ export async function POST(request: NextRequest) {
       createSignature,
       mintSignature,
       supply: mintData.supply,
-      tokenName: mintData.tokenMetadata.name,
-      tokenSymbol: mintData.tokenMetadata.symbol,
+      tokenName: tokenName,
+      tokenSymbol: tokenSymbol,
     });
     
   } catch (error) {
     console.error("Error in token creation API:", error);
     
-    // Extract detailed error information
-    let errorMessage = 'Token creation failed';
-    let errorDetails = '';
-    
+    let errorDetails = "Token creation failed";
     if (error instanceof Error) {
-      errorMessage = error.message;
-      
-      // Check for specific Solana transaction errors
-      if (error.message.includes('Transaction signature verification failure')) {
-        errorDetails = 'This may be due to an invalid admin keypair or insufficient funds. Please check your environment variables and wallet balance.';
-      } else if (error.message.includes('Simulation failed')) {
-        errorDetails = 'The transaction simulation failed. This could be due to program constraints or invalid parameters.';
-      } else if (error.message.includes('blockhash')) {
-        errorDetails = 'Recent blockhash error. The transaction may have expired. Please try again.';
-      } else if (error.message.includes('0x1')) {
-        errorDetails = 'Insufficient funds to pay for transaction fees. Please add SOL to the admin wallet.';
+      errorDetails = error.message;
+      // If the error object has more specific Solana transaction error details
+      if ('transactionMessage' in error && (error as any).transactionMessage) {
+        errorDetails = (error as any).transactionMessage;
       }
-      
-      // Include stack trace in development
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Stack trace:', error.stack);
+      if ('transactionLogs' in error && (error as any).transactionLogs) {
+        console.error("Transaction Logs:", (error as any).transactionLogs);
+        // errorDetails += ` Logs: ${JSON.stringify((error as any).transactionLogs)}`; // Avoid making response too big
       }
-    } else {
-      errorDetails = String(error);
     }
-    
-    // Return a detailed error response
     return NextResponse.json(
       { 
-        error: errorMessage, 
-        details: errorDetails || String(error),
-        success: false
+        error: "Token creation failed", 
+        details: errorDetails 
       },
       { status: 500 }
     );

@@ -8,7 +8,7 @@ const path = require('path');
 const { Connection, PublicKey, LAMPORTS_PER_SOL } = require('@solana/web3.js');
 
 // Admin wallet public key from our setup
-const ADMIN_PUBLIC_KEY = '8NcJCyrxyHg1yLWnTsKjq4UHRQEkShUEpwFP1vFbj4e9';
+const ADMIN_PUBLIC_KEY = '2WkWeph5TcKJcdEojHU6esXvycSaDDCQJeK56YdWB4Wf';
 const RPC_ENDPOINT = 'https://api.devnet.solana.com';
 
 async function checkAndOptimize() {

@@ -53,7 +53,9 @@ async function main() {
         const privateKeyBuffer = Buffer.from(match[1], 'base64');
         adminKeypair = Keypair.fromSecretKey(privateKeyBuffer);
         publicKeyBase58 = adminKeypair.publicKey.toBase58();
-        console.log(`✅ Using existing admin public key: ${publicKeyBase58}`);
+        // Only show a masked version of the public key for security
+        const maskedKey = publicKeyBase58.substring(0, 4) + '...' + publicKeyBase58.substring(publicKeyBase58.length - 4);
+        console.log(`✅ Using existing admin keypair [masked key: ${maskedKey}]`);
       } catch (error) {
         console.log('❌ Error parsing existing admin private key, generating new one');
         adminKeypair = generateNewAdminKeypair();
@@ -76,7 +78,9 @@ async function main() {
     // Write updated content back to .env file
     fs.writeFileSync(ENV_FILE_PATH, envContents);
     console.log(`✅ Admin keypair generated and saved to .env file`);
-    console.log(`📝 Admin public key: ${publicKeyBase58}`);
+    // Only show a masked version of the public key for security
+    const maskedKey = publicKeyBase58.substring(0, 4) + '...' + publicKeyBase58.substring(publicKeyBase58.length - 4);
+    console.log(`📝 Admin keypair created [masked key: ${maskedKey}]`);
   }
 
   // Request SOL airdrop for the admin wallet on devnet

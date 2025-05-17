@@ -24,10 +24,7 @@ import type { MintFormData } from '@/lib/types';
 import { createCompressedTokenMint, mintCompressedTokens, createConnection } from '@/lib/utils/solana';
 import { Keypair, PublicKey } from '@solana/web3.js';
 import { createClaimUrl, createSolanaPayUrl, createSolanaPayClaimUrl, generateQrCodeDataUrl } from '@/lib/utils/qrcode';
-<<<<<<< HEAD
 import { toast } from '@/components/ui/use-toast';
-=======
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
 
 /**
  * Type definition for form values inferred from the Zod schema
@@ -46,11 +43,6 @@ const formSchema = z.object({
   eventLocation: z.string().optional(),
   organizerName: z.string().min(2, { message: "Organizer name is required" }),
   maxAttendees: z.coerce.number().int().positive().optional(),
-<<<<<<< HEAD
-
-=======
-  
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
   // Token Metadata
   tokenName: z.string().min(3, { message: "Token name must be at least 3 characters" }),
   tokenSymbol: z.string().min(2, { message: "Token symbol must be at least 2 characters" }),
@@ -78,11 +70,7 @@ export function MintForm() {
   useEffect(() => {
     setIsClient(true);
   }, []);
-<<<<<<< HEAD
 
-=======
-  
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
   // Extract wallet properties safely - only use them when client-side
   const publicKey = isClient ? wallet.publicKey : null;
   const connected = isClient ? wallet.connected : false;
@@ -114,314 +102,139 @@ export function MintForm() {
   /**
    * Form submission handler
    * Executes the token creation process using the form data
-<<<<<<< HEAD
    *
-=======
-   * 
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
    * @param values - Form values collected from the user input
    */
   const onSubmit = async (values: FormValues) => {
     if (!connected || !publicKey) {
-<<<<<<< HEAD
       toast({
         title: "Wallet Not Connected",
         description: "Please connect your wallet first.",
         variant: "destructive",
       });
-=======
-      alert("Please connect your wallet first");
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
       return;
     }
 
-    try {
-      setIsSubmitting(true);
+    setIsSubmitting(true);
+    // Variables to store token creation results
+    let mint: PublicKey;
+    let createSignature: string;
+    let mintSignature: string;
 
-      // Format data for token minting
+    try {
       const mintData: MintFormData = {
         eventDetails: {
           name: values.eventName,
           description: values.eventDescription,
           date: values.eventDate,
-          location: values.eventLocation,
+          location: values.eventLocation || '',
           organizerName: values.organizerName,
-          maxAttendees: values.maxAttendees,
+          maxAttendees: values.maxAttendees || 0,
         },
         tokenMetadata: {
           name: values.tokenName,
           symbol: values.tokenSymbol,
           description: values.tokenDescription,
-          image: values.tokenImage,
-          attributes: [
-            { trait_type: "Event", value: values.eventName },
-            { trait_type: "Date", value: values.eventDate },
-            { trait_type: "Organizer", value: values.organizerName },
-          ],
+          image: values.tokenImage || '', // Ensure image is always a string
+          // attributes: [] // Add if necessary, based on TokenAttribute definition
         },
         supply: values.tokenSupply,
         decimals: DEFAULT_TOKEN_DECIMALS,
       };
 
       console.log("Creating token mint with data:", mintData);
-<<<<<<< HEAD
 
-      // Get config from environment variables or use defaults
-      const rpcEndpoint = process.env.NEXT_PUBLIC_RPC_ENDPOINT || "https://api.devnet.solana.com";
-      const appConfig = {
-        rpcEndpoint,
-        cluster: process.env.NEXT_PUBLIC_CLUSTER as "devnet" | "mainnet-beta" | "testnet" | "localnet" || "devnet"
-      };
+      // Call our server-side API endpoint
+      const response = await fetch('/api/token/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mintData,
+          destinationWallet: publicKey.toBase58(), // The user's wallet address
+        }),
+      });
 
-      // Check if wallet adapter signing is available
-      if (!wallet.signTransaction || !wallet.sendTransaction) {
-        toast({
-          title: "Wallet Not Supported",
-          description: "Your wallet doesn't support the required signing methods.",
-          variant: "destructive",
-        });
-        throw new Error("Your wallet doesn't support the required signing methods.");
-      }
+      const result = await response.json();
 
-      // We'll use the wallet adapter to sign transactions
-      // For Light Protocol operations that require a keypair, we'll need to adjust our approach
-
-      // We're using a server-side approach for token creation since Light Protocol requires Keypairs
-      // This keeps private keys secure on the server while still allowing wallet interaction
-      console.log("Initiating server-side token creation process...");
-
-      // Show loading message
-      setIsSubmitting(true);
-
-=======
-      
-      // Get config from environment variables or use defaults
-      const rpcEndpoint = process.env.NEXT_PUBLIC_RPC_ENDPOINT || "https://api.devnet.solana.com";
-      const appConfig = { 
-        rpcEndpoint,
-        cluster: process.env.NEXT_PUBLIC_CLUSTER as "devnet" | "mainnet-beta" | "testnet" | "localnet" || "devnet"
-      };
-      
-      // Check if wallet adapter signing is available
-      if (!wallet.signTransaction || !wallet.sendTransaction) {
-        throw new Error("Your wallet doesn't support the required signing methods.");
-      }
-      
-      // We'll use the wallet adapter to sign transactions
-      // For Light Protocol operations that require a keypair, we'll need to adjust our approach
-      
-      // We're using a server-side approach for token creation since Light Protocol requires Keypairs
-      // This keeps private keys secure on the server while still allowing wallet interaction
-      console.log("Initiating server-side token creation process...");
-      
-      // Show loading message
-      setIsSubmitting(true);
-      
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
-      // Variables to store token creation results
-      let mint: PublicKey;
-      let createSignature: string;
-      let mintSignature: string;
-<<<<<<< HEAD
-
-=======
-      
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
-      try {
-        // Call our server-side API endpoint
-        const response = await fetch('/api/token/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            mintData,
-            destinationWallet: publicKey.toBase58(), // The user's wallet address
-          }),
-        });
-<<<<<<< HEAD
-
-        // Parse the response
-        const result = await response.json();
-
-        // Check if the request was successful
-        if (!response.ok) {
-          // Enhanced error handling based on error code
-          if (result.code === "INSUFFICIENT_FUNDS") {
-            // Special handling for insufficient funds error
-            toast({
-              title: "Insufficient Admin Wallet Funds",
-              description: "The admin wallet needs at least 1 SOL to create tokens. Please contact the administrator.",
-              variant: "destructive",
-              duration: 6000,
-            });
-            console.error("Admin wallet insufficient funds:", result.details);
-            throw new Error(result.details || result.error || 'Token creation failed due to insufficient admin wallet funds');
-          } else if (result.code === "INSUFFICIENT_FUNDS_FOR_RENT") {
-            toast({
-              title: "Insufficient Funds for Rent",
-              description: "The admin wallet doesn't have enough SOL to pay for storage. Please contact the administrator.",
-              variant: "destructive",
-              duration: 6000,
-            });
-            console.error("Insufficient funds for rent:", result.details);
-            throw new Error(result.details || result.error || 'Token creation failed due to insufficient funds for rent');
-          } else if (result.code === "SIGNATURE_VERIFICATION_FAILED") {
-            toast({
-              title: "Signature Verification Failed",
-              description: "There's an issue with the admin wallet. Please contact the administrator.",
-              variant: "destructive",
-              duration: 6000,
-            });
-            console.error("Signature verification failed:", result.details);
-            throw new Error(result.details || result.error || 'Token creation failed due to signature verification failure');
-          } else if (result.code === "RPC_METHOD_NOT_FOUND") {
-            toast({
-              title: "RPC Endpoint Issue",
-              description: "The app is using an incompatible RPC endpoint. Please contact the administrator.",
-              variant: "destructive",
-              duration: 6000,
-            });
-            console.error("RPC method not found:", result.details);
-            throw new Error(result.details || result.error || 'Token creation failed due to RPC method not found');
-          } else {
-            // Generic error handling for other errors
-            toast({
-              title: "Token Creation Failed",
-              description: result.details || result.error || "Something went wrong. Please try again.",
-              variant: "destructive",
-            });
-            console.error("Token creation error:", result);
-            throw new Error(result.details || result.error || 'Token creation failed');
-          }
+      if (!response.ok) {
+        console.error("Server-side token creation failed:", result);
+        let errorMessage = "An unknown error occurred.";
+        if (result && result.error) {
+          errorMessage = result.error;
+        } else if (result && result.message) {
+          errorMessage = result.message;
         }
 
-        console.log("Server-side token creation successful:", result);
-
-=======
-        
-        // Parse the response
-        const result = await response.json();
-        
-        // Check if the request was successful
-        if (!response.ok) {
-          throw new Error(result.details || result.error || 'Token creation failed');
-        }
-        
-        console.log("Server-side token creation successful:", result);
-        
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
-        // Extract the relevant data from the response
-        mint = new PublicKey(result.mint);
-        createSignature = result.createSignature;
-        mintSignature = result.mintSignature;
-<<<<<<< HEAD
-
-=======
-        
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
-        console.log("Token mint created with address:", mint.toBase58());
-        console.log("Creation signature:", createSignature);
-        console.log("Mint signature:", mintSignature);
-      } catch (error) {
-<<<<<<< HEAD
-        // The error is already handled and displayed above
-        setIsSubmitting(false);
-        return;
-      }
-
-      console.log("Tokens minted successfully, signature:", mintSignature);
-
-      // 3. Generate both standard claim URL and Solana Pay URL
-      const baseUrl = window.location.origin;
-
-=======
-        console.error("Error during server-side token creation:", error);
-        alert(`Token creation failed: ${error instanceof Error ? error.message : String(error)}`);
-        setIsSubmitting(false);
-        return;
-      }
-      
-      console.log("Tokens minted successfully, signature:", mintSignature);
-      
-      // 3. Generate both standard claim URL and Solana Pay URL
-      const baseUrl = window.location.origin;
-      
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
-      // Standard claim URL for direct web access
-      const standardClaimUrl = createClaimUrl(
-        baseUrl,
-        values.eventName, // Use event name as the eventId
-        mint // Pass the PublicKey directly, not as a string
-      );
-<<<<<<< HEAD
-
-=======
-      
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
-      // Solana Pay URL for wallet interaction
-      const solanaPayUrl = createSolanaPayClaimUrl(
-        publicKey, // The organizer's wallet as recipient
-        mint, // The token mint
-        values.eventName, // Event name as label
-        `Claim your ${values.tokenName} token for ${values.eventName}` // Memo message
-      );
-<<<<<<< HEAD
-
-      console.log('Generated Standard Claim URL:', standardClaimUrl);
-      console.log('Generated Solana Pay URL:', solanaPayUrl);
-
-      // Store the standard URL for display and copy purposes
-      setClaimUrl(standardClaimUrl);
-
-      // Create QR code with the Solana Pay URL for direct wallet interaction
-      const qrCodeDataUrl = await generateQrCodeDataUrl(solanaPayUrl);
-      setQrCodeUrl(qrCodeDataUrl);
-
-      setMintSuccess(true);
-    } catch (error) {
-      // Only show a toast if not already handled above
-      if (error instanceof Error && error.message) {
-        // If the error was already handled by a toast, don't show another
-        if (
-          error.message.includes("insufficient admin wallet funds") ||
-          error.message.includes("insufficient funds for rent") ||
-          error.message.includes("signature verification failure") ||
-          error.message.includes("RPC method not found")
-        ) {
-          // Already handled
+        if (errorMessage.includes("insufficient lamports") || errorMessage.includes("balance is insufficient")) {
+          toast({
+            title: "Token Creation Failed",
+            description: "The admin wallet has insufficient SOL to perform this transaction. Please add more SOL and try again.",
+            variant: "destructive",
+            duration: 7000,
+          });
+        } else if (errorMessage.includes("RPC method not found")) {
+          toast({
+            title: "Network Error",
+            description: "There seems to be an issue with the Solana RPC endpoint. Please try again later or check your network settings.",
+            variant: "destructive",
+            duration: 7000,
+          });
         } else {
           toast({
-            title: "Error Minting Token",
-            description: error.message,
+            title: "Error Creating Token",
+            description: errorMessage,
             variant: "destructive",
           });
         }
-      } else {
-        toast({
-          title: "Error Minting Token",
-          description: "An unknown error occurred.",
-          variant: "destructive",
-        });
+        // No return here, finally will set isSubmitting to false
+        throw new Error(errorMessage); // throw to be caught by outer catch
       }
-      console.error("Error minting token:", error);
-=======
-      
+
+      console.log("Server-side token creation successful:", result);
+
+      mint = new PublicKey(result.mint);
+      createSignature = result.createSignature;
+      mintSignature = result.mintSignature;
+
+      console.log("Token mint created with address:", mint.toBase58());
+      console.log("Creation signature:", createSignature);
+      console.log("Mint signature:", mintSignature);
+      console.log("Tokens minted successfully, signature:", mintSignature);
+
+      const baseUrl = window.location.origin;
+      const standardClaimUrl = createClaimUrl(
+        baseUrl,
+        values.eventName,
+        mint
+      );
+      const solanaPayUrl = createSolanaPayClaimUrl(
+        publicKey,
+        mint,
+        values.eventName,
+        `Claim your ${values.tokenName} token for ${values.eventName}`
+      );
+
       console.log('Generated Standard Claim URL:', standardClaimUrl);
       console.log('Generated Solana Pay URL:', solanaPayUrl);
-      
-      // Store the standard URL for display and copy purposes
       setClaimUrl(standardClaimUrl);
-      
-      // Create QR code with the Solana Pay URL for direct wallet interaction
+
       const qrCodeDataUrl = await generateQrCodeDataUrl(solanaPayUrl);
       setQrCodeUrl(qrCodeDataUrl);
-      
       setMintSuccess(true);
+
     } catch (error) {
-      console.error("Error minting token:", error);
-      alert(`Error minting token: ${error instanceof Error ? error.message : String(error)}`);
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
+      // Handle errors from fetch, QR code generation, or explicitly thrown errors
+      // Toasts are expected to be shown where the error originates or is specifically handled (like response.ok check)
+      // This catch block is more of a fallback.
+      console.error("Error in onSubmit process:", error);
+      if (!(error instanceof Error && (error.message.includes("insufficient lamports") || error.message.includes("RPC method not found")))) {
+        // Avoid double-toasting if already handled by specific checks
+         toast({
+            title: "Operation Failed",
+            description: error instanceof Error ? error.message : "An unexpected error occurred during the process.",
+            variant: "destructive",
+          });
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -467,30 +280,15 @@ export function MintForm() {
               Claim QR Code
             </h3>
             <p className="text-muted-foreground">Attendees can scan this QR code with any Solana Pay compatible wallet</p>
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
             <div className="flex justify-center my-6">
               <div className="border border-border p-4 rounded-lg inline-block bg-white shadow-lg transition-all hover:shadow-xl">
                 <img src={qrCodeUrl} alt="Solana Pay QR Code" width={250} height={250} className="animate-fade-in" />
               </div>
             </div>
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
             <div className="bg-muted p-3 rounded-md text-sm">
               <p className="font-medium mb-1">💡 How It Works</p>
               <p className="text-muted-foreground text-xs">This QR code contains a Solana Pay URL that will trigger a token claim transaction when scanned with a compatible wallet app like Phantom or Solflare.</p>
             </div>
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
             {claimUrl && (
               <div className="mt-4">
                 <p className="text-sm text-muted-foreground mb-2">Claim URL:</p>
@@ -499,11 +297,6 @@ export function MintForm() {
                 </div>
               </div>
             )}
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
             <div className="flex justify-center gap-4 mt-6">
               <Button variant="outline" className="transition-all hover:bg-secondary" onClick={() => {
                 if (qrCodeUrl) {
@@ -541,11 +334,6 @@ export function MintForm() {
             <TabsTrigger value="event">Event Details</TabsTrigger>
             <TabsTrigger value="token">Token Configuration</TabsTrigger>
           </TabsList>
-<<<<<<< HEAD
-
-=======
-          
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
           {/* Event Details Tab */}
           <TabsContent value="event" className="space-y-4">
             <FormField
@@ -562,11 +350,6 @@ export function MintForm() {
                 </FormItem>
               )}
             />
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
             <FormField
               control={form.control}
               name="eventDescription"
@@ -574,17 +357,10 @@ export function MintForm() {
                 <FormItem>
                   <FormLabel>Event Description</FormLabel>
                   <FormControl>
-<<<<<<< HEAD
                     <Textarea
                       placeholder="Join us for an exciting hackathon..."
                       className="min-h-[100px]"
                       {...field}
-=======
-                    <Textarea 
-                      placeholder="Join us for an exciting hackathon..." 
-                      className="min-h-[100px]"
-                      {...field} 
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
                     />
                   </FormControl>
                   <FormDescription>Describe your event</FormDescription>
@@ -592,11 +368,6 @@ export function MintForm() {
                 </FormItem>
               )}
             />
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -611,11 +382,6 @@ export function MintForm() {
                   </FormItem>
                 )}
               />
-<<<<<<< HEAD
-
-=======
-              
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
               <FormField
                 control={form.control}
                 name="eventLocation"
@@ -630,11 +396,6 @@ export function MintForm() {
                 )}
               />
             </div>
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -649,11 +410,6 @@ export function MintForm() {
                   </FormItem>
                 )}
               />
-<<<<<<< HEAD
-
-=======
-              
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
               <FormField
                 control={form.control}
                 name="maxAttendees"
@@ -668,17 +424,9 @@ export function MintForm() {
                 )}
               />
             </div>
-<<<<<<< HEAD
-
             <div className="flex justify-end mt-6">
               <Button
                 type="button"
-=======
-            
-            <div className="flex justify-end mt-6">
-              <Button 
-                type="button" 
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
                 onClick={handleNextTab}
                 className="bg-white text-black hover:bg-slate-100 transition-all"
               >
@@ -686,11 +434,6 @@ export function MintForm() {
               </Button>
             </div>
           </TabsContent>
-<<<<<<< HEAD
-
-=======
-          
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
           {/* Token Configuration Tab */}
           <TabsContent value="token" className="space-y-4">
             <FormField
@@ -707,11 +450,6 @@ export function MintForm() {
                 </FormItem>
               )}
             />
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -726,11 +464,6 @@ export function MintForm() {
                   </FormItem>
                 )}
               />
-<<<<<<< HEAD
-
-=======
-              
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
               <FormField
                 control={form.control}
                 name="tokenSupply"
@@ -746,11 +479,6 @@ export function MintForm() {
                 )}
               />
             </div>
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
             <FormField
               control={form.control}
               name="tokenDescription"
@@ -758,28 +486,16 @@ export function MintForm() {
                 <FormItem>
                   <FormLabel>Token Description</FormLabel>
                   <FormControl>
-<<<<<<< HEAD
                     <Textarea
                       placeholder="This token verifies attendance at the Solana Hackathon 2025"
                       className="min-h-[100px]"
                       {...field}
-=======
-                    <Textarea 
-                      placeholder="This token verifies attendance at the Solana Hackathon 2025" 
-                      className="min-h-[100px]"
-                      {...field} 
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
             <FormField
               control={form.control}
               name="tokenImage"
@@ -794,24 +510,13 @@ export function MintForm() {
                 </FormItem>
               )}
             />
-<<<<<<< HEAD
-
-=======
-            
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
             <div className="flex justify-between mt-6">
               <Button type="button" variant="outline" onClick={() => setActiveTab("event")}>
                 Back to Event Details
               </Button>
-<<<<<<< HEAD
               <Button
                 type="submit"
                 disabled={isSubmitting}
-=======
-              <Button 
-                type="submit" 
-                disabled={isSubmitting} 
->>>>>>> a003aa168a1dff435b900e6bbc6f0737dcc484a1
                 className="relative transition-all bg-white text-black hover:bg-slate-100"
               >
                 {isSubmitting ? (

@@ -7,7 +7,7 @@
 
 This project enables event organisers to mint digital POP tokens that can be claimed by attendees through a simple scan of a QR code. These tokens are not just symbolic; they represent verifiable, compressed assets living entirely on-chain, making them ideal for airdrops, community rewards, or credentialing at scale. 
 
-For a detailed technical architecture and component flow diagrams, please refer to the [ARCHITECTURE.md](./ARCHITECTURE.md) document or [YouTube](https://youtu.be/V40mvlS0EkA?feature=shared) 
+For a detailed technical architecture and component flow diagrams, please refer to the [ARCHITECTURE.md](./docs/ARCHITECTURE.md) document or [YouTube](https://youtu.be/V40mvlS0EkA?feature=shared) 
 
 P.S. After 48 hours of coding, debugging, and more coffee than water—here’s the project. The backend isn’t quite where I want it yet—there’s still a lot of work ahead. Initially, I considered creating a mock data interface for the hackathon, but I’ve decided to connect to a real blockchain network instead. Writing the smart contract is taking some time.
 
@@ -25,7 +25,7 @@ Scalable cToken Distribution with Solana Pay and ZK Compression on Solana
 
 A high throughput solution for creating and distributing compressed proof-of-participation tokens at scale on Solana blockchain using Solana Pay and Light Protocol's compression technology.
 
-Check out [Presentation](./PRESENTATION.md) for a quick overview of the project's functionality.
+Check out [Presentation](./docs/PRESENTATION.md) for a quick overview of the project's functionality.
 
 ## Zero-Knowledge Compression Technology
 

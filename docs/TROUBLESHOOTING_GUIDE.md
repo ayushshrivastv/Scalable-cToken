@@ -8,10 +8,10 @@ If you're experiencing token creation failures, run these scripts in order:
 
 ```bash
 # 1. Apply all fixes automatically (recommended)
-node fix-token-creation.js
+node scripts/fix-token-creation.js
 
 # 2. Test token creation directly
-node test-token-creation.js
+node scripts/test-token-creation.js
 
 # 3. Start the application with the fixes applied
 npm run dev
@@ -29,9 +29,9 @@ bun run dev
 - RPC endpoint doesn't support all required Light Protocol methods
 
 **Solutions:**
-- Run `node fix-token-creation.js` to automatically fix these issues
-- Ensure admin wallet has at least 3 SOL (run `node fund-admin-wallet.js`)
-- Check that you're using Helius RPC endpoint (run `node update-rpc-endpoint.js`)
+- Run `node scripts/fix-token-creation.js` to automatically fix these issues
+- Ensure admin wallet has at least 3 SOL (run `node scripts/fund-admin-wallet.js`)
+- Check that you're using Helius RPC endpoint (run `node scripts/update-rpc-endpoint.js`)
 
 ### "Transaction simulation failed: Transaction results in an account with insufficient funds for rent."
 
@@ -51,7 +51,7 @@ bun run dev
 - Transaction isn't being signed with the correct keypair
 
 **Solutions:**
-- Run `node fix-token-creation.js` to fix keypair parsing
+- Run `node scripts/fix-token-creation.js` to fix keypair parsing
 - Check `.env` file for proper base64-encoded private key
 - Verify the admin is set as the mint authority
 
@@ -62,7 +62,7 @@ bun run dev
 - Using default Solana RPC endpoint instead of Helius
 
 **Solution:**
-- Run `node update-rpc-endpoint.js` to switch to Helius RPC endpoint
+- Run `node scripts/update-rpc-endpoint.js` to switch to Helius RPC endpoint
 - Update `.env` file to use `https://rpc-devnet.helius.xyz/?api-key=1d8740dc-e5f4-421c-b823-e1bad1889eff`
 
 ## Step-by-Step Troubleshooting
@@ -83,10 +83,10 @@ The admin wallet needs sufficient SOL for transaction fees:
 
 ```bash
 # Check admin public key
-node derive-public-key.js
+node scripts/derive-public-key.js
 
 # Fund admin wallet
-node fund-admin-wallet.js
+node scripts/fund-admin-wallet.js
 
 # Or use online faucets:
 # - https://faucet.solana.com/
@@ -98,7 +98,7 @@ node fund-admin-wallet.js
 Bypass the UI to test token creation directly:
 
 ```bash
-node test-token-creation.js
+node scripts/test-token-creation.js
 ```
 
 This will:
@@ -162,12 +162,12 @@ This project includes several utility scripts to help troubleshoot and fix token
 
 | Script | Purpose |
 |--------|---------|
-| `fix-token-creation.js` | Comprehensive fix for all token creation issues |
-| `setup-admin-wallet.js` | Generate new admin keypair and configure `.env` |
-| `fund-admin-wallet.js` | Request SOL airdrops for the admin wallet |
-| `update-rpc-endpoint.js` | Switch to Helius RPC endpoint |
-| `derive-public-key.js` | Extract admin public key from private key |
-| `test-token-creation.js` | Directly test token creation functionality |
+| `scripts/fix-token-creation.js` | Comprehensive fix for all token creation issues |
+| `scripts/setup-admin-wallet.js` | Generate new admin keypair and configure `.env` |
+| `scripts/fund-admin-wallet.js` | Request SOL airdrops for the admin wallet |
+| `scripts/update-rpc-endpoint.js` | Switch to Helius RPC endpoint |
+| `scripts/derive-public-key.js` | Extract admin public key from private key |
+| `scripts/test-token-creation.js` | Directly test token creation functionality |
 
 ## Additional Resources
 

@@ -16,7 +16,7 @@ The server-side admin wallet used for token creation doesn't have enough SOL to 
 1. Fund the admin wallet with SOL:
    ```bash
    # Update the admin public key in this file first
-   node fund-admin-wallet.js
+   node scripts/fund-admin-wallet.js
    ```
 2. Alternatively, use an online faucet:
    - [Solana Faucet](https://faucet.solana.com)
@@ -39,7 +39,7 @@ The admin wallet doesn't have enough SOL to cover the storage cost ("rent") for 
 1. Fund the admin wallet with at least 3 SOL
 2. Verify the RPC endpoint is working correctly:
    ```bash
-   node test-token-creation.js
+   node scripts/test-token-creation.js
    ```
 3. The fix has already been implemented to add a 50% safety margin to rent calculations
 
@@ -56,11 +56,11 @@ The admin keypair is invalid or not being correctly parsed from the environment 
 **Solution:**
 1. Regenerate the admin keypair:
    ```bash
-   node setup-admin-wallet.js
+   node scripts/setup-admin-wallet.js
    ```
 2. Verify the admin keypair is being correctly parsed:
    ```bash
-   node test-token-creation.js
+   node scripts/test-token-creation.js
    ```
 3. The fix has already been implemented to improve keypair parsing
 
@@ -77,11 +77,11 @@ The RPC endpoint doesn't support all the methods required by Light Protocol.
 **Solution:**
 1. Update to a compatible RPC endpoint:
    ```bash
-   node update-rpc-endpoint.js
+   node scripts/update-rpc-endpoint.js
    ```
 2. Test multiple RPC endpoints to find a working one:
    ```bash
-   node test-token-creation.js
+   node scripts/test-token-creation.js
    ```
 3. The fix has already been implemented to use Helius RPC endpoint with better Light Protocol support
 
@@ -109,11 +109,11 @@ This project includes several utility scripts to help troubleshoot token creatio
 
 | Script | Purpose |
 |--------|---------|
-| `test-token-creation.js` | Test admin keypair and RPC connection |
-| `setup-admin-wallet.js` | Generate new admin keypair |
-| `fund-admin-wallet.js` | Request SOL airdrops for admin wallet |
-| `update-rpc-endpoint.js` | Switch to a better RPC endpoint |
-| `fix-token-creation.js` | Apply all fixes automatically |
+| `scripts/test-token-creation.js` | Test admin keypair and RPC connection |
+| `scripts/setup-admin-wallet.js` | Generate new admin keypair |
+| `scripts/fund-admin-wallet.js` | Request SOL airdrops for admin wallet |
+| `scripts/update-rpc-endpoint.js` | Switch to a better RPC endpoint |
+| `scripts/fix-token-creation.js` | Apply all fixes automatically |
 
 ## Best Practices
 

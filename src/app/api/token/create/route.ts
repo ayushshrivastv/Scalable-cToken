@@ -6,8 +6,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { Keypair, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
+import { Connection, Keypair, PublicKey, LAMPORTS_PER_SOL } from '@solana/web3.js';
 import { createConnection, createCompressedTokenMint, mintCompressedTokens } from '@/lib/utils/solana';
+import { createStandardTokenMint, mintStandardTokens } from '@/lib/utils/standard-token';
 import { DEFAULT_TOKEN_DECIMALS } from '@/lib/constants';
 import type { MintFormData } from '@/lib/types';
 
@@ -25,6 +26,7 @@ const MIN_REQUIRED_SOL = 0.9; // 0.9 SOL
  */
 export async function POST(request: NextRequest) {
   try {
+    console.log('Token creation API called');
     // Parse the request body
     const data = await request.json() as {
       mintData: MintFormData;
@@ -32,6 +34,8 @@ export async function POST(request: NextRequest) {
     };
     
     const { mintData, destinationWallet } = data;
+    console.log('Received mint data:', JSON.stringify(mintData, null, 2));
+    console.log('Destination wallet:', destinationWallet);
     // Validate required data
     if (!mintData || !destinationWallet) {
       return NextResponse.json(
@@ -101,6 +105,7 @@ export async function POST(request: NextRequest) {
     const destinationPublicKey = new PublicKey(destinationWallet);
     
     // Create a connection to the Solana network
+    console.log('Creating Solana connection with:', { rpcEndpoint: RPC_ENDPOINT, cluster: CLUSTER });
     const connection = createConnection({
       rpcEndpoint: RPC_ENDPOINT,
       cluster: CLUSTER
@@ -150,19 +155,65 @@ export async function POST(request: NextRequest) {
     console.log("  Token Symbol:", tokenSymbol); 
     console.log("  Token Metadata URI:", tokenMetadataUri);
     
-    // 1. Create the compressed token mint
-    const { mint, signature: createSignature } = await createCompressedTokenMint(
-      connection,
-      adminKeypair, // Server-side admin keypair as payer
-      adminKeypair.publicKey, // Server-side admin keypair as mint authority
-      mintData.decimals || DEFAULT_TOKEN_DECIMALS,
-      tokenName, 
-      tokenSymbol, 
-      tokenMetadataUri, 
-    );
+    // Attempt to create a token mint - try compressed first, fall back to standard if needed
+    console.log('Attempting token mint creation...');
     
-    console.log("Token mint created with address:", mint.toBase58());
-    console.log("Creation signature:", createSignature);
+    let mint: PublicKey;
+    let createSignature: string;
+    let useCompressedToken = true;
+    
+    try {
+      console.log('Trying compressed token mint first...');
+      const result = await createCompressedTokenMint(
+        connection,
+        adminKeypair, // Server-side admin keypair as payer
+        adminKeypair.publicKey, // Server-side admin keypair as mint authority
+        mintData.decimals || DEFAULT_TOKEN_DECIMALS,
+        tokenName, 
+        tokenSymbol, 
+        tokenMetadataUri
+      );
+      
+      mint = result.mint;
+      createSignature = result.signature;
+      console.log("Compressed token mint created with address:", mint.toBase58());
+      console.log("Creation signature:", createSignature);
+    } catch (compressedError) {
+      console.error('Compressed token creation failed:', compressedError);
+      if (compressedError instanceof Error) {
+        console.error('Error message:', compressedError.message);
+      }
+      
+      // Fall back to standard token creation
+      console.log('Falling back to standard token creation...');
+      useCompressedToken = false;
+      
+      try {
+        // Create a standard Connection for the standard token functions
+        const standardConnection = new Connection(RPC_ENDPOINT, 'confirmed');
+        
+        const result = await createStandardTokenMint(
+          standardConnection,
+          adminKeypair, // Server-side admin keypair as payer
+          adminKeypair.publicKey, // Server-side admin keypair as mint authority
+          mintData.decimals || DEFAULT_TOKEN_DECIMALS,
+          tokenName, 
+          tokenSymbol, 
+          tokenMetadataUri
+        );
+        
+        mint = result.mint;
+        createSignature = result.signature;
+        console.log("Standard token mint created with address:", mint.toBase58());
+        console.log("Creation signature:", createSignature);
+      } catch (standardError) {
+        console.error('Standard token creation also failed:', standardError);
+        if (standardError instanceof Error) {
+          console.error('Error message:', standardError.message);
+        }
+        throw new Error('Both compressed and standard token creation methods failed');
+      }
+    }
     
     // 2. Mint tokens to the user's wallet
     console.log("Minting tokens to user wallet...");
@@ -173,17 +224,46 @@ export async function POST(request: NextRequest) {
     console.log("  Mint Authority (Admin):", adminKeypair.publicKey.toBase58());
     console.log("  Supply:", mintData.supply);
 
-    // 2. Mint tokens to the user's wallet
-    const { signature: mintSignature } = await mintCompressedTokens(
-      connection,
-      adminKeypair, // Server-side admin keypair
-      mint, // Mint address
-      destinationPublicKey, // Destination (user's wallet)
-      adminKeypair, // Mint authority (server-side)
-      mintData.supply, // Amount to mint
-    );
+    // 2. Mint tokens to the user's wallet - use appropriate method based on token type
+    console.log('Starting token minting process...');
+    let mintSignature: string;
     
-    console.log("Tokens minted successfully, signature:", mintSignature);
+    try {
+      if (useCompressedToken) {
+        console.log('Minting compressed tokens...');
+        const result = await mintCompressedTokens(
+          connection,
+          adminKeypair, // Server-side admin keypair
+          mint, // Mint address
+          destinationPublicKey, // Destination (user's wallet)
+          adminKeypair, // Mint authority (server-side)
+          mintData.supply // Amount to mint
+        );
+        mintSignature = result.signature;
+      } else {
+        console.log('Minting standard tokens...');
+        // Create a standard Connection for the standard token functions
+        const standardConnection = new Connection(RPC_ENDPOINT, 'confirmed');
+        
+        const result = await mintStandardTokens(
+          standardConnection,
+          adminKeypair, // Server-side admin keypair
+          mint, // Mint address
+          destinationPublicKey, // Destination (user's wallet)
+          adminKeypair, // Mint authority (server-side)
+          mintData.supply // Amount to mint
+        );
+        mintSignature = result.signature;
+      }
+      
+      console.log("Tokens minted successfully, signature:", mintSignature);
+    } catch (mintError) {
+      console.error('Error in token minting process:', mintError);
+      if (mintError instanceof Error) {
+        console.error('Error message:', mintError.message);
+      }
+      throw mintError;
+    }
     
     // Return the success response with mint information
     return NextResponse.json({
@@ -194,10 +274,19 @@ export async function POST(request: NextRequest) {
       supply: mintData.supply,
       tokenName: tokenName,
       tokenSymbol: tokenSymbol,
+      tokenType: useCompressedToken ? 'compressed' : 'standard'
     });
     
   } catch (error) {
-    console.error("Error in token creation API:", error);
+    console.error("Error in token creation API:");
+    
+    // Improved error logging
+    if (error instanceof Error) {
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+    } else {
+      console.error('Non-Error object thrown:', error);
+    }
     
     let errorDetails = "Token creation failed";
     let errorCode = "UNKNOWN_ERROR";
@@ -225,11 +314,14 @@ export async function POST(request: NextRequest) {
         // errorDetails += ` Logs: ${JSON.stringify((error as any).transactionLogs)}`; // Avoid making response too big
       }
     }
+    // Return a more detailed error response
     return NextResponse.json(
       {
         error: "Token creation failed",
         details: errorDetails,
-        code: errorCode
+        code: errorCode,
+        message: error instanceof Error ? error.message : 'Unknown error',
+        stack: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.stack : undefined) : undefined
       },
       { status: 500 }
     );

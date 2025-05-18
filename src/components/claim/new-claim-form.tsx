@@ -88,10 +88,25 @@ export function ClaimForm() {
       setIsSubmitting(true);
       
       // Get the mint address either from the URL parameters or the claim code input
-      const mintAddress = eventDetails?.mint || claimCode;
+      const mintAddress = eventDetails?.mint || claimCode.trim();
+      
+      // Validate the mint address format before creating a PublicKey
+      if (!mintAddress || !/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(mintAddress)) {
+        setError('Invalid token address format. Please enter a valid Solana address.');
+        setIsSubmitting(false);
+        return;
+      }
       
       // Validate the mint address is a valid Solana PublicKey
-      const mintPublicKey = new PublicKey(mintAddress);
+      let mintPublicKey: PublicKey;
+      try {
+        mintPublicKey = new PublicKey(mintAddress);
+      } catch (pubkeyError) {
+        console.error('Invalid public key format:', pubkeyError);
+        setError('Invalid token address. Please enter a valid Solana address.');
+        setIsSubmitting(false);
+        return;
+      }
       
       // Create a connection to the Solana cluster
       // Using type assertion to bypass TypeScript errors

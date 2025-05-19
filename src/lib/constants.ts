@@ -32,4 +32,5 @@ export const ROUTES = {
   PROFILE: "/profile",
   ADMIN: "/admin",
   CREATE_TOKEN: "/mint",
+  DOCUMENTATION: "/docs",
 };

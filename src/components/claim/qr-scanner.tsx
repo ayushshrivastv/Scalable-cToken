@@ -16,6 +16,7 @@ export function QrScanner({ onScanSuccess, onScanError, onClose }: QrScannerProp
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isCameraPermissionDenied, setIsCameraPermissionDenied] = useState<boolean>(false);
   const [isInitializing, setIsInitializing] = useState<boolean>(false);
+  const [scanDebug, setScanDebug] = useState<string | null>(null); // For debugging
 
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const scannerContainerId = 'qr-scanner-container';
@@ -61,6 +62,7 @@ export function QrScanner({ onScanSuccess, onScanError, onClose }: QrScannerProp
 
     setIsScanning(true);
     setErrorMessage(null);
+    setScanDebug(null);
 
     // Check for camera availability
     try {
@@ -79,19 +81,22 @@ export function QrScanner({ onScanSuccess, onScanError, onClose }: QrScannerProp
     const qrSuccessCallback = (decodedText: string) => {
       // Handle successful scan
       console.log('QR code scanned successfully:', decodedText);
+
+      // Set a debug message for troubleshooting
+      setScanDebug(`Scanned: ${decodedText.substring(0, 50)}${decodedText.length > 50 ? '...' : ''}`);
+
       if (scannerRef.current) {
         scannerRef.current.stop()
           .then(() => {
             setIsScanning(false);
 
-            // Check if the QR code is a URL
-            try {
-              new URL(decodedText); // Just validate it's a URL
-              // Pass the scanned content to the parent component
+            // Added basic validation to ensure we're passing a valid URL format
+            if (decodedText.startsWith('solana:') || decodedText.startsWith('http')) {
+              // Always pass the scan result to parent, let parent component handle validation
               onScanSuccess(decodedText);
-            } catch (error) {
-              console.error('Invalid QR code URL format:', error);
-              setErrorMessage('Invalid QR code. Please scan a valid Solana Pay QR code.');
+            } else {
+              // For non-URL formats, provide a more specific error
+              setErrorMessage('Invalid QR code format. Expected a Solana Pay URL or web URL.');
               if (onScanError) onScanError('Invalid QR code format');
             }
           })
@@ -111,6 +116,17 @@ export function QrScanner({ onScanSuccess, onScanError, onClose }: QrScannerProp
       } else if (error?.name !== 'NotFoundException') {
         // NotFoundException happens on every frame without a QR code, so we ignore it
         console.warn('QR scanner error:', error);
+
+        // For debugging, show parse errors but throttled to avoid flooding
+        if (error && typeof error === 'string' && error.includes('QR code parse error')) {
+          // Only update debug message every second to avoid overwhelming the UI
+          setTimeout(() => {
+            setScanDebug(prevDebug => {
+              if (prevDebug && prevDebug.startsWith('Trying to scan')) return prevDebug;
+              return 'Trying to scan... Position QR code in view';
+            });
+          }, 1000);
+        }
       }
     };
 
@@ -207,6 +223,13 @@ export function QrScanner({ onScanSuccess, onScanError, onClose }: QrScannerProp
           )}
         </div>
 
+        {/* Debug Info */}
+        {scanDebug && (
+          <div className="text-center text-blue-500 text-sm p-2 bg-blue-100/10 rounded-md">
+            <span className="font-semibold">Scan Debug:</span> {scanDebug}
+          </div>
+        )}
+
         {/* Error Message */}
         {errorMessage && (
           <div className="text-center text-red-500 text-sm p-2">
@@ -258,6 +281,11 @@ export function QrScanner({ onScanSuccess, onScanError, onClose }: QrScannerProp
           >
             Cancel
           </Button>
+        </div>
+
+        {/* Manual Input Tip */}
+        <div className="text-center text-sm text-muted-foreground mt-2">
+          <p>Tip: If scanning doesn't work, you can manually enter the token address</p>
         </div>
       </div>
     </Card>

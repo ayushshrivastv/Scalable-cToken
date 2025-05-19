@@ -30,4 +30,6 @@ export const ROUTES = {
   MINT: "/mint",
   CLAIM: "/claim",
   PROFILE: "/profile",
+  ADMIN: "/admin",
+  CREATE_TOKEN: "/mint",
 };

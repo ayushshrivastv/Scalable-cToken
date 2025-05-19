@@ -11,16 +11,26 @@ import { DEFAULT_CLUSTER, DEVNET_RPC_ENDPOINT, ROUTES } from '@/lib/constants';
 import { QrScanner } from './qr-scanner';
 
 /**
- * Extracts the mint address from a Solana Pay URL
- * @param url - The Solana Pay URL
- * @returns The mint address or null if not found
+ * Extracts or validates the mint address from different input formats
+ * @param input - The input which could be a URL, a claim code, or a direct token address
+ * @returns The mint address or null if not found/invalid
  */
-const extractMintFromSolanaPay = (url: string): string | null => {
+const extractOrValidateMintAddress = (input: string): string | null => {
   try {
+    // First, try to validate if it's already a valid Solana address
+    try {
+      const pubkey = new PublicKey(input.trim());
+      // If we can create a PublicKey without error, it's likely a valid Solana address
+      console.log('Input is a valid Solana public key:', pubkey.toBase58());
+      return pubkey.toBase58();
+    } catch (pubkeyErr) {
+      // Not a valid public key, continue with other checks
+    }
+
     // Check if it's a Solana Pay URL (solana:recipient?spl-token=MINT_ADDRESS&...)
-    if (url.startsWith('solana:')) {
+    if (input.startsWith('solana:')) {
       // Split by question mark to get the query string
-      const parts = url.split('?');
+      const parts = input.split('?');
       if (parts.length > 1) {
         // Create URLSearchParams from the query string
         const searchParams = new URLSearchParams(parts[1]);
@@ -35,21 +45,31 @@ const extractMintFromSolanaPay = (url: string): string | null => {
       return null;
     }
 
-    // For standard claim URLs (/claim?event=EVENT&mint=MINT_ADDRESS)
-    try {
-      // Check if the URL is a full URL with origin
-      const parsedUrl = new URL(url);
-      const searchParams = new URLSearchParams(parsedUrl.search);
-      const mintAddress = searchParams.get('mint');
-      return mintAddress;
-    } catch (err) {
-      // Might be just a query string portion, try direct parsing
-      const searchParams = new URLSearchParams(url);
-      const mintAddress = searchParams.get('mint');
-      return mintAddress;
+    // For standard claim URLs or query parameters
+    if (input.includes('?') || input.includes('=')) {
+      try {
+        // Check if the input is a full URL with origin
+        let searchParams: URLSearchParams;
+        try {
+          const parsedUrl = new URL(input);
+          searchParams = new URLSearchParams(parsedUrl.search);
+        } catch (urlErr) {
+          // Not a full URL, try parsing as query string directly
+          searchParams = new URLSearchParams(input);
+        }
+        
+        const mintAddress = searchParams.get('mint');
+        if (mintAddress) {
+          return mintAddress;
+        }
+      } catch (err) {
+        console.error('Error parsing URL or query params:', err);
+      }
     }
+    
+    return null;
   } catch (err) {
-    console.error('Error parsing URL:', err);
+    console.error('Error in extractOrValidateMintAddress:', err);
     return null;
   }
 };
@@ -156,19 +176,23 @@ export function ClaimForm({
       // Get the mint address either from the URL parameters or the claim code input
       let mintAddress = eventDetails?.mint || claimCode.trim();
 
-      // Check if the input might be a Solana Pay URL
-      if (mintAddress.startsWith('solana:')) {
-        const extractedMint = extractMintFromSolanaPay(mintAddress);
-        if (extractedMint) {
-          mintAddress = extractedMint;
-        } else {
-          const errMsg = 'Could not extract token address from Solana Pay URL';
+      // Process the input to extract or validate the token address
+      if (mintAddress) {
+        const processedMint = extractOrValidateMintAddress(mintAddress);
+        if (processedMint) {
+          mintAddress = processedMint;
+          console.log('Using processed mint address:', mintAddress);
+        } else if (mintAddress.startsWith('solana:') || mintAddress.includes('?') || mintAddress.includes('=')) {
+          // Only show error for inputs that look like URLs or query strings but failed to parse
+          const errMsg = 'Could not extract token address from the provided input';
           setError(errMsg);
           setIsSubmitting(false);
           setProcessingStage(null);
           if (onClaimAttempt) onClaimAttempt(false, errMsg);
           return;
         }
+        // If it's not a URL format and didn't parse as a valid address, we'll
+        // continue and let the PublicKey validation below catch any issues
       }
 
       // Try to create a PublicKey to validate the format
@@ -326,7 +350,7 @@ export function ClaimForm({
                   // Check if it's a Solana Pay URL
                   if (result.startsWith('solana:')) {
                     // Extract parameters from Solana Pay URL
-                    const extractedMint = extractMintFromSolanaPay(result);
+                    const extractedMint = extractOrValidateMintAddress(result);
 
                     if (extractedMint) {
                       try {

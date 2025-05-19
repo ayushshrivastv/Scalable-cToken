@@ -2,6 +2,7 @@
 
 import type { FC } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { WalletConnectButton } from '@/components/ui/wallet-connect-button';
 import { ThemeToggleButton } from '@/components/ui/theme-toggle-button';
@@ -23,6 +24,8 @@ interface HeaderProps {
 
 export const Header: FC<HeaderProps> = ({ activePage }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isActive = (path: string) => pathname === path;
 
   return (
     <header className="sticky top-0 z-40 w-full backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border/40">
@@ -39,37 +42,64 @@ export const Header: FC<HeaderProps> = ({ activePage }) => {
 
         {/* Desktop navigation */}
         <nav className="hidden md:flex items-center gap-6">
-          <Link 
+          <Link
             href="/"
             className={`text-sm font-medium transition-colors hover:text-primary ${activePage === '/' ? 'text-foreground' : 'text-muted-foreground'}`}
           >
             Home
           </Link>
-          <Link 
+          <Link
             href="/dashboard"
             className={`text-sm font-medium transition-colors hover:text-primary ${activePage === '/dashboard' ? 'text-foreground' : 'text-muted-foreground'}`}
           >
             Dashboard
           </Link>
-          <Link 
+          <Link
             href="/mint"
             className={`text-sm font-medium transition-colors hover:text-primary ${activePage === '/mint' ? 'text-foreground' : 'text-muted-foreground'}`}
           >
             Create Event
           </Link>
-          <Link 
+          <Link
             href="/claim"
             className={`text-sm font-medium transition-colors hover:text-primary ${activePage === '/claim' ? 'text-foreground' : 'text-muted-foreground'}`}
           >
             Claim Token
           </Link>
+
+          {/* Testing Links (only in development) */}
+          {process.env.NODE_ENV !== 'production' && (
+            <>
+              <div className="border-l h-5 border-border mx-1"></div>
+              <Link
+                href="/test-claim"
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  isActive("/test-claim")
+                    ? "text-lime-500"
+                    : "text-lime-700"
+                }`}
+              >
+                Test Claim
+              </Link>
+              <Link
+                href="/integration-test"
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  isActive("/integration-test")
+                    ? "text-lime-500"
+                    : "text-lime-700"
+                }`}
+              >
+                Integration Test
+              </Link>
+            </>
+          )}
         </nav>
 
         {/* Right section - actions */}
         <div className="flex items-center gap-4">
-          <Link 
-            href="https://www.linkedin.com/in/ayushshrivastv/" 
-            target="_blank" 
+          <Link
+            href="https://www.linkedin.com/in/ayushshrivastv/"
+            target="_blank"
             rel="noopener noreferrer"
             className="hidden sm:flex items-center justify-center text-white bg-[#0077b5] rounded-md p-2 hover:bg-[#0066a0] transition-colors"
             aria-label="Connect on LinkedIn"
@@ -80,11 +110,11 @@ export const Header: FC<HeaderProps> = ({ activePage }) => {
             <WalletConnectButton />
           </div>
           <ThemeToggleButton />
-          
+
           {/* Mobile menu button */}
-          <Button 
-            variant="ghost" 
-            size="icon" 
+          <Button
+            variant="ghost"
+            size="icon"
             className="md:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
@@ -98,39 +128,60 @@ export const Header: FC<HeaderProps> = ({ activePage }) => {
       {mobileMenuOpen && (
         <div className="md:hidden py-4 px-4 bg-background border-b border-border/40 animate-in slide-in-from-top-5 duration-300">
           <nav className="flex flex-col space-y-4 pb-4">
-            <Link 
+            <Link
               href="/"
               className={`text-sm font-medium transition-colors hover:text-primary ${activePage === '/' ? 'text-foreground' : 'text-muted-foreground'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               Home
             </Link>
-            <Link 
+            <Link
               href="/dashboard"
               className={`text-sm font-medium transition-colors hover:text-primary ${activePage === '/dashboard' ? 'text-foreground' : 'text-muted-foreground'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               Dashboard
             </Link>
-            <Link 
+            <Link
               href="/mint"
               className={`text-sm font-medium transition-colors hover:text-primary ${activePage === '/mint' ? 'text-foreground' : 'text-muted-foreground'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               Create Event
             </Link>
-            <Link 
+            <Link
               href="/claim"
               className={`text-sm font-medium transition-colors hover:text-primary ${activePage === '/claim' ? 'text-foreground' : 'text-muted-foreground'}`}
               onClick={() => setMobileMenuOpen(false)}
             >
               Claim Token
             </Link>
+
+            {/* Mobile Testing Links */}
+            {process.env.NODE_ENV !== 'production' && (
+              <>
+                <div className="border-t border-border/40 my-2"></div>
+                <Link
+                  href="/test-claim"
+                  className="text-sm font-medium text-lime-700 hover:text-lime-500"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Test Claim
+                </Link>
+                <Link
+                  href="/integration-test"
+                  className="text-sm font-medium text-lime-700 hover:text-lime-500"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Integration Test
+                </Link>
+              </>
+            )}
           </nav>
           <div className="flex items-center justify-between pt-4 border-t border-border/40">
-            <Link 
-              href="https://www.linkedin.com/in/ayushshrivastv/" 
-              target="_blank" 
+            <Link
+              href="https://www.linkedin.com/in/ayushshrivastv/"
+              target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center text-white bg-[#0077b5] rounded-md p-2 hover:bg-[#0066a0] transition-colors"
               aria-label="Connect on LinkedIn"
